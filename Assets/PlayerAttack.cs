@@ -18,7 +18,7 @@ public partial class PlayerScript : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            EnemyScript enemyScript = collision.GetComponent<EnemyScript>();
+            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
 
             if (enemyScript != null)
             {

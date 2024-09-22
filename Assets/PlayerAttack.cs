@@ -34,6 +34,12 @@ public partial class PlayerScript : MonoBehaviour
     }
 
 
+    private void CommitSuicide()
+    {
+       gameObject.SetActive(false);
+    }
+
+
     private IEnumerator LaserAttack()
     {
         RaycastHit2D hitInfo = Physics2D.Raycast(attackPoint.position, attackPoint.right);

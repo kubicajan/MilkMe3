@@ -18,6 +18,11 @@ public partial class PlayerScript : MonoBehaviour
                 BulletAttack();
             }
 
+            if (Input.GetKeyDown("r"))
+            {
+                CommitSuicide();
+            }
+
             if (Input.GetKeyDown("z"))
             {
                 StartCoroutine(LaserAttack());

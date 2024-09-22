@@ -33,10 +33,9 @@ public partial class PlayerScript : MonoBehaviour
         Instantiate(bulletPrefab, attackPoint.position, attackPoint.rotation);
     }
 
-
     private void CommitSuicide()
     {
-       gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
 

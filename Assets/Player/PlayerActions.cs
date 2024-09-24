@@ -11,6 +11,7 @@ public partial class PlayerScript : MonoBehaviour
     public LayerMask enemyLayers;
     public LayerMask buildingLayers;
     public LineRenderer laser;
+    public ParticleSystem suicideParticleEffect;
 
     private void MeeleAttack()
     {
@@ -51,6 +52,7 @@ public partial class PlayerScript : MonoBehaviour
 
     private void CommitSuicide()
     {
+        Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
 

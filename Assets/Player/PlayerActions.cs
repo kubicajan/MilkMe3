@@ -24,6 +24,7 @@ public partial class PlayerScript : MonoBehaviour
             if (enemyScript != null)
             {
                 enemyScript.TakeDamage(10);
+                enemyScript.GetKnockbacked(this.transform.position);
                 Debug.Log("hit enemy");
             }
         }
@@ -63,11 +64,12 @@ public partial class PlayerScript : MonoBehaviour
 
         if (hitInfo)
         {
-            EnemyScript enemy = hitInfo.transform.GetComponent<EnemyScript>();
-            if (enemy != null)
+            EnemyScript enemyScript = hitInfo.transform.GetComponent<EnemyScript>();
+            if (enemyScript != null)
             {
                 Debug.Log("hit enemy");
-                enemy.TakeDamage(10);
+                enemyScript.TakeDamage(10);
+                enemyScript.GetKnockbacked(this.transform.position);
                 laser.SetPosition(0, attackPoint.position);
                 laser.SetPosition(1, hitInfo.point);
             }

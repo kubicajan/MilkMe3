@@ -10,8 +10,10 @@ public partial class PlayerScript : MonoBehaviour
     public BoxCollider2D collision;
     public LayerMask enemyLayers;
     public LayerMask buildingLayers;
+    public LayerMask groundLayers;
     public LineRenderer laser;
     public ParticleSystem suicideParticleEffect;
+    public Transform groundCheck;
 
     private void MeeleAttack()
     {
@@ -32,6 +34,12 @@ public partial class PlayerScript : MonoBehaviour
 
     private void StompAttack()
     {
+        if(!IsGrounded())
+        {
+            StartCoroutine(StompDown());
+            return;
+        }
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 5, enemyLayers);
         Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
 
@@ -46,6 +54,33 @@ public partial class PlayerScript : MonoBehaviour
                 Debug.Log("hit enemy");
             }
         }
+    }
+
+    private IEnumerator StompDown()
+    {
+        DisableEnemyCollision(true);
+        rigidBody.velocity = new Vector2(0, -100);
+
+        while (!IsGrounded())
+        {
+            yield return null;
+        }
+        rigidBody.velocity = new Vector2();
+        Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 5, enemyLayers);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
+
+            if (enemyScript != null)
+            {
+                enemyScript.TakeDamage(10);
+                enemyScript.GetKnockbacked(this.transform.position);
+                Debug.Log("hit enemy");
+            }
+        }
+        DisableEnemyCollision(false);
     }
 
     private void Build()

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public partial class PlayerScript : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public partial class PlayerScript : MonoBehaviour
     private BoxCollider2D boxCollider;
     bool dashing = false;
     private float lastDirection = 1;
+    private int consecutiveJumps = 1;
 
     private void Start()
     {
@@ -34,23 +36,51 @@ public partial class PlayerScript : MonoBehaviour
 
     }
 
+    private bool IsGrounded()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 0.2f, groundLayers);
+        bool isGrounded = colliders.Length > 0;
+        if (isGrounded)
+        {
+            ResetJumps();
+        }
+        return isGrounded;
+    }
+
+    private void ResetJumps()
+    {
+        consecutiveJumps = 0;
+    }
+
     private void Jump()
     {
+        const int MAX_JUMPS = 5;
+        if (!IsGrounded() && MAX_JUMPS <= consecutiveJumps)
+        {
+            return;
+        }
+        consecutiveJumps++;
         rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
+    }
+
+    private void DisableEnemyCollision(bool disable)
+    {
+        Physics2D.IgnoreLayerCollision(gameObject.layer, Mathf.RoundToInt(Mathf.Log(enemyLayers.value, 2)), disable);
     }
 
     private IEnumerator Dash()
     {
+        ResetJumps();
+        DisableEnemyCollision(true);
         float originalGravity = rigidBody.gravityScale;
         dashing = true;
         rigidBody.gravityScale = 0;
-        boxCollider.enabled = false;
         rigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
         yield return new WaitForSeconds(0.1f);
         rigidBody.velocity = new Vector2();
         yield return new WaitForSeconds(0.1f);
         dashing = false;
         rigidBody.gravityScale = originalGravity;
-        boxCollider.enabled = true;
+        DisableEnemyCollision(false);
     }
 }

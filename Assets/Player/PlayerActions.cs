@@ -17,46 +17,24 @@ public partial class PlayerScript : MonoBehaviour
 
     private void MeeleAttack()
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
-
-            if (enemyScript != null)
-            {
-                enemyScript.TakeDamage(10);
-                enemyScript.GetKnockbacked(this.transform.position);
-                Debug.Log("hit enemy");
-            }
-        }
+        DetectAndDealDamage(attackPoint.position, attackRange);
     }
 
     private void StompAttack()
     {
-        if(!IsGrounded())
+        float areaOfEffect = 5;
+        if (!IsGrounded())
         {
-            StartCoroutine(StompDown());
+            StartCoroutine(StompDown(areaOfEffect));
             return;
         }
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 5, enemyLayers);
         Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
-
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
-
-            if (enemyScript != null)
-            {
-                enemyScript.TakeDamage(10);
-                enemyScript.GetKnockbacked(this.transform.position);
-                Debug.Log("hit enemy");
-            }
-        }
+        DetectAndDealDamage(transform.position, areaOfEffect);
     }
 
-    private IEnumerator StompDown()
+    private IEnumerator StompDown(float areaOfEffect)
     {
         DisableEnemyCollision(true);
         rigidBody.velocity = new Vector2(0, -100);
@@ -67,21 +45,10 @@ public partial class PlayerScript : MonoBehaviour
         }
         rigidBody.velocity = new Vector2();
         Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 5, enemyLayers);
-
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
-
-            if (enemyScript != null)
-            {
-                enemyScript.TakeDamage(10);
-                enemyScript.GetKnockbacked(this.transform.position);
-                Debug.Log("hit enemy");
-            }
-        }
+        DetectAndDealDamage(transform.position, areaOfEffect);
         DisableEnemyCollision(false);
     }
+
 
     private void Build()
     {
@@ -103,13 +70,11 @@ public partial class PlayerScript : MonoBehaviour
         Instantiate(bulletPrefab, attackPoint.position, attackPoint.rotation);
     }
 
-
     private void CommitSuicide()
     {
         Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
-
 
     private IEnumerator LaserAttack()
     {
@@ -135,6 +100,21 @@ public partial class PlayerScript : MonoBehaviour
         laser.enabled = true;
         yield return new WaitForSeconds(0.1f);
         laser.enabled = false;
+    }
+
+    private void DetectAndDealDamage(Vector2 hitPosition, float areaOfEffect)
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitPosition, areaOfEffect, enemyLayers);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
+            {
+                enemyScript.TakeDamage(10);
+                enemyScript.GetKnockbacked(this.transform.position);
+                Debug.Log("hit enemy");
+            }
+        }
     }
 
     void OnDrawGizmosSelected()

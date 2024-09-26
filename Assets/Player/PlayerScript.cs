@@ -13,6 +13,11 @@ public partial class PlayerScript : MonoBehaviour
                 MeeleAttack();
             }
 
+            if (Input.GetKeyDown("q"))
+            {
+                StompAttack();
+            }
+
             if (Input.GetKeyDown("b"))
             {
                 Build();

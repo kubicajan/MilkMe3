@@ -30,6 +30,24 @@ public partial class PlayerScript : MonoBehaviour
         }
     }
 
+    private void StompAttack()
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 5, enemyLayers);
+        Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
+
+            if (enemyScript != null)
+            {
+                enemyScript.TakeDamage(10);
+                enemyScript.GetKnockbacked(this.transform.position);
+                Debug.Log("hit enemy");
+            }
+        }
+    }
+
     private void Build()
     {
         Collider2D[] hitBuildings = Physics2D.OverlapCircleAll(gameObject.transform.position, 1, buildingLayers);

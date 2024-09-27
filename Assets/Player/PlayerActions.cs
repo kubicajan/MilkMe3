@@ -1,11 +1,11 @@
 using System.Collections;
+using System.Linq;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public partial class PlayerScript 
+public partial class PlayerScript
 {
     public Transform attackPoint;
-    public float attackRange = 100.0f;
     public GameObject bulletPrefab;
     public BoxCollider2D collision;
     public LayerMask enemyLayers;
@@ -14,24 +14,24 @@ public partial class PlayerScript
     public LineRenderer laser;
     public ParticleSystem suicideParticleEffect;
     public Transform groundCheck;
+    private const float MEELE_ATTACK_RANGE = 2f;
 
     private void MeeleAttack()
     {
-
-        DetectAndDealDamage(attackPoint.position, attackRange);
+        DealDamageTo(Detect(attackPoint.position, MEELE_ATTACK_RANGE, enemyLayers));
     }
 
     private void StompAttack()
     {
-        float areaOfEffect = 5;
+        const float AREA_OF_EFFECT = 5f;
         if (!IsGrounded())
         {
-            StartCoroutine(StompDown(areaOfEffect));
+            StartCoroutine(StompDown(AREA_OF_EFFECT));
             return;
         }
 
         Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
-        DetectAndDealDamage(transform.position, areaOfEffect);
+        DealDamageTo(Detect(transform.position, AREA_OF_EFFECT, enemyLayers));
     }
 
     private IEnumerator StompDown(float areaOfEffect)
@@ -45,24 +45,16 @@ public partial class PlayerScript
         }
         rigidBody.velocity = new Vector2();
         Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
-        DetectAndDealDamage(transform.position, areaOfEffect);
+        DealDamageTo(Detect(transform.position, areaOfEffect, enemyLayers));
         DisableEnemyCollision(false);
     }
 
-
     private void Build()
     {
-        Collider2D[] hitBuildings = Physics2D.OverlapCircleAll(gameObject.transform.position, 1, buildingLayers);
-
-        foreach (Collider2D building in hitBuildings)
-        {
-            BuildingScript buildingScript = building.GetComponent<BuildingScript>();
-
-            if (buildingScript != null)
-            {
-                buildingScript.Build();
-            }
-        }
+        BuildingScript hitBuilding = Detect(transform.position, 1, buildingLayers)
+            .First()
+            .GetComponent<BuildingScript>();
+        hitBuilding.Build();
     }
 
     private void BulletAttack()
@@ -102,11 +94,14 @@ public partial class PlayerScript
         laser.enabled = false;
     }
 
-    private void DetectAndDealDamage(Vector2 hitPosition, float areaOfEffect)
+    private Collider2D[] Detect(Vector2 hitPosition, float areaOfEffect, LayerMask layersToBeDetected)
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitPosition, areaOfEffect, enemyLayers);
+        return Physics2D.OverlapCircleAll(hitPosition, areaOfEffect, layersToBeDetected);
+    }
 
-        foreach (Collider2D enemy in hitEnemies)
+    private void DealDamageTo(Collider2D[] detectedEnemies)
+    {
+        foreach (Collider2D enemy in detectedEnemies)
         {
             if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
             {
@@ -120,6 +115,6 @@ public partial class PlayerScript
     void OnDrawGizmosSelected()
     {
         if (attackPoint == null) { return; }
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(attackPoint.position, MEELE_ATTACK_RANGE);
     }
 }

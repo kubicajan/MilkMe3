@@ -1,7 +1,14 @@
 using UnityEngine;
 
-public partial class PlayerScript : MonoBehaviour
+public partial class PlayerScript : LivingEntity
 {
+    private void Start()
+    {
+        Initialize(100, GetComponent<Rigidbody2D>());
+        boxCollider = GetComponent<BoxCollider2D>();
+    }
+
+
     private void Update()
     {
         if (!dashing)

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public partial class PlayerScript : MonoBehaviour
+public partial class PlayerScript 
 {
     public Transform attackPoint;
     public float attackRange = 100.0f;

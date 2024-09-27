@@ -4,23 +4,16 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public partial class PlayerScript : MonoBehaviour
+public partial class PlayerScript
 {
     private float moveSpeed = 10f;
     private float jumpForce = 20f;
     private float dashForce = 100f;
     private Vector2 movement;
-    private Rigidbody2D rigidBody;
     private BoxCollider2D boxCollider;
     bool dashing = false;
     private float lastDirection = 1;
     private int consecutiveJumps = 1;
-
-    private void Start()
-    {
-        rigidBody = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
-    }
 
     private void Move()
     {

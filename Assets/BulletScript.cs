@@ -19,7 +19,7 @@ public class BulletScript : MonoBehaviour
         if (enemyScript != null)
         {
             Debug.Log("hit enemy");
-            enemyScript.GetKnockbacked(this.transform.position);
+            enemyScript.GetKnockedBack(this.transform.position);
             enemyScript.TakeDamage(10);
             Destroy(gameObject);
         }

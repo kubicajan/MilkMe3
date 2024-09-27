@@ -24,8 +24,8 @@ public partial class PlayerScript
         }
 
         Vector3 m_Velocity = Vector3.zero;
-        Vector3 targetVelocity = new Vector2(movement.x * moveSpeed, rigidBody.velocity.y);
-        rigidBody.velocity = Vector3.SmoothDamp(rigidBody.velocity, targetVelocity, ref m_Velocity, .05f);
+        Vector3 targetVelocity = new Vector2(movement.x * moveSpeed, RigidBody.velocity.y);
+        RigidBody.velocity = Vector3.SmoothDamp(RigidBody.velocity, targetVelocity, ref m_Velocity, .05f);
 
     }
 
@@ -53,7 +53,7 @@ public partial class PlayerScript
             return;
         }
         consecutiveJumps++;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
+        RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
     }
 
     private void DisableEnemyCollision(bool disable)
@@ -65,15 +65,15 @@ public partial class PlayerScript
     {
         ResetJumps();
         DisableEnemyCollision(true);
-        float originalGravity = rigidBody.gravityScale;
+        float originalGravity = RigidBody.gravityScale;
         dashing = true;
-        rigidBody.gravityScale = 0;
-        rigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
+        RigidBody.gravityScale = 0;
+        RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
         yield return new WaitForSeconds(0.1f);
-        rigidBody.velocity = new Vector2();
+        RigidBody.velocity = new Vector2();
         yield return new WaitForSeconds(0.1f);
         dashing = false;
-        rigidBody.gravityScale = originalGravity;
+        RigidBody.gravityScale = originalGravity;
         DisableEnemyCollision(false);
     }
 }

@@ -4,10 +4,10 @@ public partial class PlayerScript : LivingEntity
 {
     private void Start()
     {
-        Initialize(100, GetComponent<Rigidbody2D>());
-        boxCollider = GetComponent<BoxCollider2D>();
+        Init(_health: 100,
+            _rigidBody2D: GetComponent<Rigidbody2D>(),
+            _boxCollider: GetComponent<BoxCollider2D>());
     }
-
 
     private void Update()
     {

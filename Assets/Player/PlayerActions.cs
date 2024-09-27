@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Linq;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public partial class PlayerScript
 {
-    public Transform attackPoint;
-    public GameObject bulletPrefab;
-    public BoxCollider2D collision;
-    public LayerMask enemyLayers;
-    public LayerMask buildingLayers;
-    public LayerMask groundLayers;
     public LineRenderer laser;
-    public ParticleSystem suicideParticleEffect;
+    public GameObject bulletPrefab;
+    public Transform attackPoint;
     public Transform groundCheck;
+    public LayerMask enemyLayers;
+    public LayerMask groundLayers;
+    public LayerMask buildingLayers;
+
     private const float MEELE_ATTACK_RANGE = 2f;
 
     private void MeeleAttack()
@@ -30,21 +28,21 @@ public partial class PlayerScript
             return;
         }
 
-        Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
+        Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
         DealDamageTo(Detect(transform.position, AREA_OF_EFFECT, enemyLayers));
     }
 
     private IEnumerator StompDown(float areaOfEffect)
     {
         DisableEnemyCollision(true);
-        rigidBody.velocity = new Vector2(0, -100);
+        RigidBody.velocity = new Vector2(0, -100);
 
         while (!IsGrounded())
         {
             yield return null;
         }
-        rigidBody.velocity = new Vector2();
-        Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
+        RigidBody.velocity = new Vector2();
+        Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
         DealDamageTo(Detect(transform.position, areaOfEffect, enemyLayers));
         DisableEnemyCollision(false);
     }
@@ -64,8 +62,7 @@ public partial class PlayerScript
 
     private void CommitSuicide()
     {
-        Instantiate(suicideParticleEffect, transform.position, Quaternion.identity);
-        gameObject.SetActive(false);
+        TakeDamage(GetCurrentHealth());
     }
 
     private IEnumerator LaserAttack()
@@ -79,7 +76,7 @@ public partial class PlayerScript
             {
                 Debug.Log("hit enemy");
                 enemyScript.TakeDamage(10);
-                enemyScript.GetKnockbacked(this.transform.position);
+                enemyScript.GetKnockedBack(this.transform.position);
                 laser.SetPosition(0, attackPoint.position);
                 laser.SetPosition(1, hitInfo.point);
             }
@@ -106,7 +103,7 @@ public partial class PlayerScript
             if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
             {
                 enemyScript.TakeDamage(10);
-                enemyScript.GetKnockbacked(this.transform.position);
+                enemyScript.GetKnockedBack(this.transform.position);
                 Debug.Log("hit enemy");
             }
         }

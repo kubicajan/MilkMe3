@@ -1,29 +1,59 @@
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class LivingEntity : MonoBehaviour
 {
-    private int health;
-    protected Rigidbody2D rigidBody;
+    protected Rigidbody2D RigidBody { get; private set; }
+    protected BoxCollider2D BoxCollider { get; private set; }
 
-    public void Initialize(int _health, Rigidbody2D _rigidBody2D)
+    public ParticleSystem deathParticleEffect;
+
+    private int currentHealth;
+    private int maximumHealth;
+    private int CurrentHealth
     {
-        health = _health;
-        rigidBody = _rigidBody2D;
+        get { return currentHealth; }
+        set
+        {
+            currentHealth = value;
+            Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
+            if (currentHealth <= 0)
+            {
+                Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
+                gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
+    {
+        maximumHealth = _health;
+        currentHealth = maximumHealth;
+        BoxCollider = _boxCollider;
+        RigidBody = _rigidBody2D;
     }
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        Debug.Log($"{health} health remaining");
+        CurrentHealth -= damage;
     }
 
-    public void GetKnockbacked(Vector3 perpetratorPosition)
+    protected int GetCurrentHealth()
+    {
+        return CurrentHealth;
+    }
+
+    private void Heal(int heal)
+    {
+        CurrentHealth += heal;
+    }
+
+    public void GetKnockedBack(Vector3 perpetratorPosition)
     {
         Vector2 direction = (transform.position - perpetratorPosition).normalized;
-        Debug.Log(direction);
         Vector2 force = direction * 2;
         force.y = 10;
-        rigidBody.AddForce(force, ForceMode2D.Impulse); //if you don't want to take into consideration enemy's mass then use ForceMode.VelocityChange
+        RigidBody.AddForce(force, ForceMode2D.Impulse); //if you don't want to take into consideration enemy's mass then use ForceMode.VelocityChange
     }
 }

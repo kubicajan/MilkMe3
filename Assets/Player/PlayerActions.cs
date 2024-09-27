@@ -19,6 +19,22 @@ public partial class PlayerScript
         DealDamageTo(Detect(attackPoint.position, MEELE_ATTACK_RANGE, enemyLayers));
     }
 
+    private void PushBack()
+    {
+        const float DISTANCE_LIMIT = 10f;
+        Collider2D[] enemiestDetected = Detect(gameObject.transform.position, DISTANCE_LIMIT/2, enemyLayers);
+        foreach (Collider2D enemy in enemiestDetected)
+        {
+            if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
+            {
+                float currentDistance = Vector2.Distance(enemy.transform.position, transform.position);
+
+                StartCoroutine(enemyScript.MoveEnemyCoroutine(this.transform.position, DISTANCE_LIMIT));
+                Debug.Log("enemy pushed");
+            }
+        }
+    }
+
     private void StompAttack()
     {
         const float AREA_OF_EFFECT = 5f;
@@ -76,7 +92,7 @@ public partial class PlayerScript
             {
                 Debug.Log("hit enemy");
                 enemyScript.TakeDamage(10);
-                enemyScript.GetKnockedBack(this.transform.position);
+                enemyScript.GetKnockedBack(this.transform.position, 0.5f);
                 laser.SetPosition(0, attackPoint.position);
                 laser.SetPosition(1, hitInfo.point);
             }
@@ -103,7 +119,7 @@ public partial class PlayerScript
             if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
             {
                 enemyScript.TakeDamage(10);
-                enemyScript.GetKnockedBack(this.transform.position);
+                enemyScript.GetKnockedBack(this.transform.position, 2);
                 Debug.Log("hit enemy");
             }
         }

@@ -1,7 +1,14 @@
 using UnityEngine;
 
-public partial class PlayerScript : MonoBehaviour
+public partial class PlayerScript : LivingEntity
 {
+    private void Start()
+    {
+        Init(_health: 100,
+            _rigidBody2D: GetComponent<Rigidbody2D>(),
+            _boxCollider: GetComponent<BoxCollider2D>());
+    }
+
     private void Update()
     {
         if (!dashing)
@@ -11,6 +18,11 @@ public partial class PlayerScript : MonoBehaviour
             if (Input.GetKeyDown("c"))
             {
                 MeeleAttack();
+            }
+
+            if (Input.GetKeyDown("q"))
+            {
+                StompAttack();
             }
 
             if (Input.GetKeyDown("b"))

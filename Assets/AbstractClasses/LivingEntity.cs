@@ -72,26 +72,24 @@ public abstract class LivingEntity : MonoBehaviour
             yield break;
         }
 
-        float targetDistance = knockbackDistance;
         float timer = 0.3f;
         immuneToKnockBackX = true;
 
         while (timer > 0)
         {
-            timer -= Time.deltaTime;
-            Vector2 directionToEnemy = (Vector2)transform.position - perpetratorPosition;
-            float currentDistance = directionToEnemy.x;
+            Vector2 objectPosition = transform.position;
+            Vector2 distanceToEnemy = objectPosition - perpetratorPosition;
 
-            if (Mathf.Abs(currentDistance - targetDistance) < 0.2f)
+            if (Mathf.Abs(distanceToEnemy.x - knockbackDistance) < 0.2f)
             {
                 immuneToKnockBackX = false;
                 yield break;
             }
-            Vector2 directionNormalized = directionToEnemy.normalized;
-            Vector2 targetPosition = perpetratorPosition + directionNormalized * targetDistance;
-            targetPosition.y = transform.position.y;
-            float speed = (Mathf.Abs(targetDistance) - Mathf.Abs(currentDistance)) * 10;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+            Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
+            targetPosition.y = objectPosition.y;
+            float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
+            transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
+            timer -= Time.deltaTime;
             yield return null;
         }
         immuneToKnockBackX = false;

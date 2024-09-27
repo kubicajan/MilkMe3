@@ -15,11 +15,12 @@ public class BulletScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        EnemyScript enemy = collision.GetComponent<EnemyScript>();
-        if (enemy != null)
+        EnemyScript enemyScript = collision.GetComponent<EnemyScript>();
+        if (enemyScript != null)
         {
             Debug.Log("hit enemy");
-            enemy.TakeDamage(10);
+            enemyScript.GetKnockedBack(this.transform.position);
+            enemyScript.TakeDamage(10);
             Destroy(gameObject);
         }
     }

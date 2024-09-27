@@ -562,7 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f377e36d4ba9547b4caad6184e5d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidBody2D: {fileID: 614723969}
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
 --- !u!50 &614723969
 Rigidbody2D:
   serializedVersion: 4
@@ -733,22 +733,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac8a431ca2aa3040a85ec1920a916da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPoint: {fileID: 276902811}
-  attackRange: 1
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  laser: {fileID: 1043541796}
   bulletPrefab: {fileID: 264234619582631049, guid: 3e99fd477ca701c428251d39cdbf9af6, type: 3}
-  collision: {fileID: 825198582}
+  attackPoint: {fileID: 276902811}
+  groundCheck: {fileID: 1403300807}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
-  buildingLayers:
-    serializedVersion: 2
-    m_Bits: 256
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
-  laser: {fileID: 1043541796}
-  suicideParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
-  groundCheck: {fileID: 1403300807}
+  buildingLayers:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &979388094
 GameObject:
   m_ObjectHideFlags: 0

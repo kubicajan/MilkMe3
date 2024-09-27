@@ -1,4 +1,5 @@
 
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public abstract class LivingEntity : MonoBehaviour
 
     public ParticleSystem deathParticleEffect;
 
+    private bool immuneToKnockBackX = false;
     private int currentHealth;
     private int maximumHealth;
     private int CurrentHealth
@@ -49,11 +51,49 @@ public abstract class LivingEntity : MonoBehaviour
         CurrentHealth += heal;
     }
 
-    public void GetKnockedBack(Vector3 perpetratorPosition)
+    public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
     {
-        Vector2 direction = (transform.position - perpetratorPosition).normalized;
-        Vector2 force = direction * 2;
-        force.y = 10;
-        RigidBody.AddForce(force, ForceMode2D.Impulse); //if you don't want to take into consideration enemy's mass then use ForceMode.VelocityChange
+        Vector2 direction = ((Vector2)transform.position - perpetratorPosition).normalized;
+        Vector2 force = new Vector2();
+
+        if (!immuneToKnockBackX)
+        {
+            force.x = direction.x * knockbackDistance;
+            Debug.Log(knockbackDistance);
+        }
+        force.y = knockbackDistance * RigidBody.gravityScale;
+        RigidBody.AddForce(force, ForceMode2D.Impulse);
+    }
+
+    public IEnumerator MoveEnemyCoroutine(Vector2 perpetratorPosition, float knockbackDistance)
+    {
+        if (immuneToKnockBackX)
+        {
+            yield break;
+        }
+
+        float targetDistance = knockbackDistance;
+        float timer = 0.3f;
+        immuneToKnockBackX = true;
+
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            Vector2 directionToEnemy = (Vector2)transform.position - perpetratorPosition;
+            float currentDistance = directionToEnemy.x;
+
+            if (Mathf.Abs(currentDistance - targetDistance) < 0.2f)
+            {
+                immuneToKnockBackX = false;
+                yield break;
+            }
+            Vector2 directionNormalized = directionToEnemy.normalized;
+            Vector2 targetPosition = perpetratorPosition + directionNormalized * targetDistance;
+            targetPosition.y = transform.position.y;
+            float speed = (Mathf.Abs(targetDistance) - Mathf.Abs(currentDistance)) * 10;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+            yield return null;
+        }
+        immuneToKnockBackX = false;
     }
 }

@@ -20,6 +20,11 @@ public partial class PlayerScript : LivingEntity
                 MeeleAttack();
             }
 
+            if (Input.GetKeyDown("e"))
+            {
+                PushBack();
+            }
+
             if (Input.GetKeyDown("q"))
             {
                 StompAttack();

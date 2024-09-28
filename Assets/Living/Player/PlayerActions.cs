@@ -2,7 +2,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
-public partial class PlayerScript
+public partial class PlayerController
 {
     public LineRenderer laser;
     public GameObject bulletPrefab;

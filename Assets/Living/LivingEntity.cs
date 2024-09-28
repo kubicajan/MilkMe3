@@ -13,6 +13,7 @@ public abstract class LivingEntity : MonoBehaviour
     private bool immuneToKnockBackX = false;
     private int currentHealth;
     private int maximumHealth;
+
     private int CurrentHealth
     {
         get { return currentHealth; }

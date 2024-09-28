@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public partial class PlayerScript
+public partial class PlayerController
 {
     private float moveSpeed = 10f;
     private float jumpForce = 20f;

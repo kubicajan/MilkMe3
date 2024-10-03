@@ -9,7 +9,8 @@ public class Mage : PersonaAbstract
 
     public override void BaseAttack()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Unfinished");
+        return;
     }
 
     public override void FirstAttack()
@@ -19,7 +20,8 @@ public class Mage : PersonaAbstract
 
     public override void SecondAttack()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Unfinished");
+        return;
     }
 
 

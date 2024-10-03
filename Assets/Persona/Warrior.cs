@@ -21,7 +21,8 @@ public class Warrior : PersonaAbstract
 
     public override void SecondAttack()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Unfinished");
+        return;
     }
 
     private void MeeleAttack()

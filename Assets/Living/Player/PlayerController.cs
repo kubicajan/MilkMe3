@@ -16,13 +16,12 @@ public class PlayerController : MonoBehaviour
         mage = GetComponent<Mage>();
         warrior = GetComponent<Warrior>();
         playerBase = GetComponent<PlayerBase>();
-        currentPersona = farmer;
-        gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
-
+        SwapToPersona(farmer);
         farmer.Initialize(playerBase);
         mage.Initialize(playerBase);
         warrior.Initialize(playerBase);
     }
+
 
     private void Update()
     {
@@ -31,16 +30,13 @@ public class PlayerController : MonoBehaviour
             switch (currentPersonaNumber % 3)
             {
                 case 1:
-                    currentPersona = warrior;
-                    gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+                    SwapToPersona(warrior);
                     break;
                 case 2:
-                    currentPersona = mage;
-                    gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+                    SwapToPersona(mage);
                     break;
                 case 0:
-                    currentPersona = farmer;
-                    gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+                    SwapToPersona(farmer);
                     break;
             }
             currentPersonaNumber++;
@@ -93,6 +89,12 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(currentPersona.Dash());
         }
+    }
+
+    private void SwapToPersona(PersonaAbstract persona)
+    {
+        currentPersona = persona;
+        gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
     }
 
     private void FixedUpdate()

@@ -14,11 +14,13 @@ public class Farmer : PersonaAbstract
 
     public override void FirstAttack()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Unfinished");
+        return;
     }
 
     public override void SecondAttack()
     {
+        return;
         throw new System.NotImplementedException();
     }
 

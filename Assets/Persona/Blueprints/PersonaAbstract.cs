@@ -13,7 +13,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     private float dashForce = 100f;
     private Vector2 movement;
     //public bool dashing = false;
-    private float lastDirection = 1;
+    private static float lastDirection = 1;
     private int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
 
@@ -75,7 +75,6 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     {
         movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
     }
-
     public void Build()
     {
         BuildingScript hitBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)

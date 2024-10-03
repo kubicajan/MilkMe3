@@ -1,93 +1,106 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public partial class PlayerController : LivingEntity
+public class PlayerController : MonoBehaviour
 {
+    private PlayerBase playerBase;
     private Farmer farmer;
     private Mage mage;
+    private Warrior warrior;
     private PersonaAbstract currentPersona;
+    private int currentPersonaNumber = 1;
 
     private void Start()
     {
         farmer = GetComponent<Farmer>();
         mage = GetComponent<Mage>();
+        warrior = GetComponent<Warrior>();
+        playerBase = GetComponent<PlayerBase>();
         currentPersona = farmer;
+        gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
 
-        Init(_health: 100,
-            _rigidBody2D: GetComponent<Rigidbody2D>(),
-            _boxCollider: GetComponent<BoxCollider2D>());
+        farmer.Initialize(playerBase);
+        mage.Initialize(playerBase);
+        warrior.Initialize(playerBase);
     }
 
     private void Update()
     {
-        if (!dashing)
+        if (Input.GetKeyDown("o"))
         {
-            if (Input.GetKeyDown("o"))
+            Debug.Log("asd");
+            switch (currentPersonaNumber % 3)
             {
-                if (currentPersona != farmer)
-                {
-                    currentPersona = farmer;
-                }
-                else
-                {
+                case 1:
+                    currentPersona = warrior;
+                    gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+                    break;
+                case 2:
                     currentPersona = mage;
-                }
-                Debug.Log("switched to" + currentPersona.PersonaName);
+                    gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+                    break;
+                case 0:
+                    currentPersona = farmer;
+                    gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+                    break;
             }
+        }
+        currentPersonaNumber++;
+        Debug.Log("switched to" + currentPersona.PersonaName);
 
-            movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
+        currentPersona.MovePotentially();
 
-            if (Input.GetKeyDown("c"))
-            {
-                MeeleAttack();
-            }
+        if (Input.GetKeyDown("c"))
+        {
+            currentPersona.BaseAttack();
+        }
 
-            if (Input.GetKeyDown("e"))
-            {
-                PushBack();
-            }
+        if (Input.GetKeyDown("e"))
+        {
+            currentPersona.SecondAttack();
+        }
 
-            if (Input.GetKeyDown("q"))
-            {
-                StompAttack();
-            }
+        if (Input.GetKeyDown("q"))
+        {
+            currentPersona.FirstAttack();
+        }
 
-            if (Input.GetKeyDown("b"))
-            {
-                Build();
-            }
+        if (Input.GetKeyDown("b"))
+        {
+            currentPersona.Build();
+        }
 
-            if (Input.GetKeyDown("x"))
-            {
-                BulletAttack();
-            }
+        if (Input.GetKeyDown("x"))
+        {
+            //BulletAttack();
+        }
 
-            if (Input.GetKeyDown("r"))
-            {
-                CommitSuicide();
-            }
+        if (Input.GetKeyDown("r"))
+        {
+            currentPersona.CommitSuicide();
+        }
 
-            if (Input.GetKeyDown("z"))
-            {
-                StartCoroutine(LaserAttack());
-            }
+        if (Input.GetKeyDown("z"))
+        {
+            //StartCoroutine(LaserAttack());
+        }
 
-            if (Input.GetButtonDown("Jump"))
-            {
-                Jump();
-            }
+        if (Input.GetButtonDown("Jump"))
+        {
+            currentPersona.Jump();
+        }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                StartCoroutine(Dash());
-            }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            StartCoroutine(currentPersona.Dash());
         }
     }
 
     private void FixedUpdate()
     {
-        if (movement.x != 0)
+        if (currentPersona.GetMovement().x != 0)
         {
-            Move();
+            currentPersona.Move();
         }
     }
 }

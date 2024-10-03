@@ -14,11 +14,28 @@ public class Mage : PersonaAbstract
 
     public override void FirstAttack()
     {
-        throw new System.NotImplementedException();
+        PushBack();
     }
 
     public override void SecondAttack()
     {
         throw new System.NotImplementedException();
+    }
+
+
+    private void PushBack()
+    {
+        const float DISTANCE_LIMIT = 10f;
+        Collider2D[] enemiestDetected = Utility.DetectByLayers(gameObject.transform.position, DISTANCE_LIMIT / 2, playerBase.enemyLayers);
+        foreach (Collider2D enemy in enemiestDetected)
+        {
+            if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
+            {
+                float currentDistance = Vector2.Distance(enemy.transform.position, transform.position);
+
+                StartCoroutine(enemyScript.MoveEnemyCoroutine(this.transform.position, DISTANCE_LIMIT));
+                Debug.Log("enemy pushed");
+            }
+        }
     }
 }

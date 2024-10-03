@@ -74,8 +74,8 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     public void MovePotentially()
     {
         movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
-        Debug.Log(movement.x);
     }
+
     public void Build()
     {
         BuildingScript hitBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)

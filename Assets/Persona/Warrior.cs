@@ -62,6 +62,5 @@ public class Warrior : PersonaAbstract
         Instantiate(stompParticle, transform.position, Quaternion.identity);
         DealDamageTo(Utility.DetectByLayers(transform.position, areaOfEffect, playerBase.enemyLayers));
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
-
     }
 }

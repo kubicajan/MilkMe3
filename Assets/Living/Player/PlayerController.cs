@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown("o"))
         {
-            Debug.Log("asd");
             switch (currentPersonaNumber % 3)
             {
                 case 1:
@@ -44,9 +43,9 @@ public class PlayerController : MonoBehaviour
                     gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
                     break;
             }
+            currentPersonaNumber++;
+            Debug.Log("switched to" + currentPersona.PersonaName);
         }
-        currentPersonaNumber++;
-        Debug.Log("switched to" + currentPersona.PersonaName);
 
         currentPersona.MovePotentially();
 

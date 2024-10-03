@@ -38,7 +38,7 @@ public class Warrior : PersonaAbstract
     private void StompAttack()
     {
         const float AREA_OF_EFFECT = 5f;
-        if (IsGrounded())
+        if (!IsGrounded())
         {
             StartCoroutine(StompDown(AREA_OF_EFFECT));
             return;
@@ -54,7 +54,7 @@ public class Warrior : PersonaAbstract
 
         RigidBody.velocity = new Vector2(0, -100);
 
-        while (IsGrounded())
+        while (!IsGrounded())
         {
             yield return null;
         }

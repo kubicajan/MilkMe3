@@ -14,7 +14,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     private Vector2 movement;
     //public bool dashing = false;
     private static float lastDirection = 1;
-    private int consecutiveJumps = 1;
+    private static int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
 
     [SerializeField]

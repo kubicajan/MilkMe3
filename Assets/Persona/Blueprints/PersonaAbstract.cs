@@ -25,6 +25,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         playerBase = _playerBase;
         RigidBody = playerBase.GetRigidBody();
     }
+
     protected bool IsGrounded()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(playerBase.groundCheck.position, 0.2f, playerBase.groundLayers);

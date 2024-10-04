@@ -13,8 +13,9 @@ public class PlayerBase : LivingEntity
     public LayerMask buildingLayers;
     public LayerMask enemyLayers;
 
-    void Start()
+    void Awake()
     {
+       var gg = GetComponent<Rigidbody2D>();
         Init(_health: 100,
             _rigidBody2D: GetComponent<Rigidbody2D>(),
             _boxCollider: GetComponent<BoxCollider2D>());

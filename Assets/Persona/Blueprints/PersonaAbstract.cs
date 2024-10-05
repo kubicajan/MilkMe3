@@ -28,24 +28,21 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     protected bool IsGrounded()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(playerBase.groundCheck.position, 0.2f, playerBase.groundLayers);
-        bool isGrounded = colliders.Length > 0;
-        return isGrounded;
+        return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
     }
 
     public IEnumerator Dash()
     {
         ResetJumps();
         Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
-        float originalGravity = RigidBody.gravityScale;
+        Common.TurnOffGravity(RigidBody, true);
         //dashing = true;
-        RigidBody.gravityScale = 0;
         RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
         yield return new WaitForSeconds(0.1f);
-        RigidBody.velocity = new Vector2();
+        RigidBody.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.1f);
         //dashing = false;
-        RigidBody.gravityScale = originalGravity;
+        Common.TurnOffGravity(RigidBody, false);
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
     }
 

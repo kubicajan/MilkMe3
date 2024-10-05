@@ -21,8 +21,7 @@ public class Warrior : PersonaAbstract
 
     public override void SecondAttack()
     {
-        Debug.Log("Unfinished");
-        return;
+        LiftAttack();
     }
 
     private void MeeleAttack()
@@ -34,6 +33,26 @@ public class Warrior : PersonaAbstract
     {
         if (playerBase.attackPoint.position == null) { return; }
         Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+    }
+
+    private void LiftAttack()
+    {
+        Collider2D[] detectedEnemies = Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers);
+        int liftByThisMuch = 5;
+
+        foreach (Collider2D enemyCollider in detectedEnemies)
+        {
+            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
+            {
+                enemyScript.LiftMeUp(liftByThisMuch);
+            }
+        }
+        LiftMeUp(liftByThisMuch);
+    }
+
+    public void LiftMeUp(int liftByThisMuch)
+    {
+        StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform));
     }
 
     private void StompAttack()
@@ -53,10 +72,9 @@ public class Warrior : PersonaAbstract
     {
         Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
 
-        RigidBody.velocity = new Vector2(0, -100);
-
         while (!IsGrounded())
         {
+            RigidBody.velocity = new Vector2(0, -100);
             yield return null;
         }
         RigidBody.velocity = new Vector2();

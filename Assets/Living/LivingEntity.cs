@@ -1,6 +1,5 @@
 
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class LivingEntity : MonoBehaviour
@@ -13,6 +12,7 @@ public abstract class LivingEntity : MonoBehaviour
     private bool immuneToKnockBackX = false;
     private int currentHealth;
     private int maximumHealth;
+
     private int CurrentHealth
     {
         get { return currentHealth; }
@@ -41,7 +41,7 @@ public abstract class LivingEntity : MonoBehaviour
         CurrentHealth -= damage;
     }
 
-    protected int GetCurrentHealth()
+    public int GetCurrentHealth()
     {
         return CurrentHealth;
     }

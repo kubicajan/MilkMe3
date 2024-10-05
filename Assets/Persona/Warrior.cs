@@ -8,6 +8,9 @@ public class Warrior : PersonaAbstract
 {
     private const float MEELE_ATTACK_RANGE = 2f;
     public ParticleSystem stompParticle;
+    private float timeSinceLastHit = 0;
+    private bool alreadyAirborneAttacking = false;
+
     public override string PersonaName { get; set; } = "Warrior";
 
     public override void BaseAttack()
@@ -27,8 +30,33 @@ public class Warrior : PersonaAbstract
 
     private void MeeleAttack()
     {
-        DealDamageTo(Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers));
+        const float KNOCKBACK = 0.2f;
+        Collider2D[] detectedEntities = Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers);
+        bool isAnyEnemyHit = DealDamageTo(detectedEntities, KNOCKBACK);
+        if (isAnyEnemyHit)
+        {
+            timeSinceLastHit = 0;
+            if (!alreadyAirborneAttacking)
+            {
+                alreadyAirborneAttacking = true;
+                StartCoroutine(KeepAirborne());
+            }
+        }
     }
+
+    private IEnumerator KeepAirborne()
+    {
+        Common.TurnOffGravity(RigidBody, true);
+        while (timeSinceLastHit < 0.3f)
+        {
+            timeSinceLastHit += Time.deltaTime;
+            RigidBody.velocity = Vector2.zero;
+            yield return null;
+        }
+        Common.TurnOffGravity(RigidBody, false);
+        alreadyAirborneAttacking = false;
+    }
+
 
     void OnDrawGizmosSelected()
     {
@@ -59,6 +87,7 @@ public class Warrior : PersonaAbstract
     private void StompAttack()
     {
         const float AREA_OF_EFFECT = 5f;
+        const float KNOCKBACK = 2;
         const int STOMP_SPEED = -100;
 
         if (!IsGrounded())
@@ -72,16 +101,16 @@ public class Warrior : PersonaAbstract
                     enemyScript.StompMeDown(STOMP_SPEED);
                 }
             }
-            StartCoroutine(StompDown(AREA_OF_EFFECT, STOMP_SPEED));
+            StartCoroutine(StompDown(AREA_OF_EFFECT, STOMP_SPEED, KNOCKBACK));
 
             return;
         }
 
         Instantiate(stompParticle, transform.position, Quaternion.identity);
-        DealDamageTo(Utility.DetectByLayers(transform.position, AREA_OF_EFFECT, playerBase.enemyLayers));
+        DealDamageTo(Utility.DetectByLayers(transform.position, AREA_OF_EFFECT, playerBase.enemyLayers), KNOCKBACK);
     }
 
-    private IEnumerator StompDown(float areaOfEffect, int stompSpeed)
+    private IEnumerator StompDown(float areaOfEffect, int stompSpeed, float landingKnockBack)
     {
         Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
 
@@ -93,7 +122,7 @@ public class Warrior : PersonaAbstract
         RigidBody.velocity = new Vector2();
         yield return new WaitForSeconds(0.05f);
         Instantiate(stompParticle, transform.position, Quaternion.identity);
-        DealDamageTo(Utility.DetectByLayers(transform.position, areaOfEffect, playerBase.enemyLayers));
+        DealDamageTo(Utility.DetectByLayers(transform.position, areaOfEffect, playerBase.enemyLayers), landingKnockBack);
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
     }
 }

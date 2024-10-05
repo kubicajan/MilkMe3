@@ -24,10 +24,10 @@ public class Farmer : PersonaAbstract
         throw new System.NotImplementedException();
     }
 
-
     private void MeeleAttack()
     {
-        DealDamageTo(Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers));
+        const float KNOCKBACK = 2;
+        DealDamageTo(Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers), KNOCKBACK);
     }
 
     void OnDrawGizmosSelected()

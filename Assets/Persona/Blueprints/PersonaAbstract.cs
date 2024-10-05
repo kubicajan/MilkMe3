@@ -136,24 +136,25 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
     }
 
-
-
     public Sprite GetSkin()
     {
         return skin;
     }
 
-    protected void DealDamageTo(Collider2D[] detectedEnemies)
+    protected bool DealDamageTo(Collider2D[] detectedEnemies, float knockback)
     {
+        int count = 0;
         foreach (Collider2D enemy in detectedEnemies)
         {
             if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
             {
                 enemyScript.TakeDamage(10);
-                enemyScript.GetKnockedBack(this.transform.position, 2);
+                enemyScript.GetKnockedBack(this.transform.position, knockback);
+                count++;
                 Debug.Log("hit enemy");
             }
         }
+        return count > 0;
     }
 
     public abstract void BaseAttack();

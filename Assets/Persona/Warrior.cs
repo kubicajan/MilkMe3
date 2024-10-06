@@ -34,7 +34,7 @@ public class Warrior : PersonaAbstract
         const int MOVE_BY = 2;
         Collider2D[] detectedEntities = Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers);
         bool isAnyEnemyHit = DealDamageTo(detectedEntities, KNOCKBACK);
-        StartCoroutine(MoveAttack(this.transform.position.x, MOVE_BY));
+        StartCoroutine(Common.MoveAttack(this.transform.position.x, MOVE_BY, lastDirection, transform, RigidBody));
 
         foreach (Collider2D enemyCollider in detectedEntities)
         {
@@ -43,52 +43,7 @@ public class Warrior : PersonaAbstract
                 enemyScript.AttackMoveMe(MOVE_BY, lastDirection);
             }
         }
-
-        //if (isAnyEnemyHit && !IsGrounded())
-        //{
-        //    timeSinceLastHit = 0;
-        //    if (!alreadyAirborneAttacking)
-        //    {
-        //        alreadyAirborneAttacking = true;
-        //        StartCoroutine(KeepAirborne());
-        //    }
-        //}
     }
-
-    private IEnumerator MoveAttack(float positionBeforeMoveX, int moveBy)
-    {
-        if (lastDirection > 0)
-        {
-            while (positionBeforeMoveX + moveBy > transform.position.x)
-            {
-                RigidBody.velocity = new Vector2(15, 0);
-                yield return null;
-            }
-        }
-        else
-        {
-            while (positionBeforeMoveX - moveBy < transform.position.x)
-            {
-                RigidBody.velocity = new Vector2(-15, 0);
-                yield return null;
-            }
-        }
-
-        RigidBody.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.1f);
-    }
-    //private IEnumerator KeepAirborne()
-    //{
-    //    Common.TurnOffGravity(RigidBody, true);
-    //    while (timeSinceLastHit < 0.3f)
-    //    {
-    //        timeSinceLastHit += Time.deltaTime;
-    //        RigidBody.velocity = Vector2.zero;
-    //        yield return null;
-    //    }
-    //    Common.TurnOffGravity(RigidBody, false);
-    //    alreadyAirborneAttacking = false;
-    //}
 
 
     void OnDrawGizmosSelected()

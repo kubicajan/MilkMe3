@@ -25,31 +25,8 @@ public class EnemyScript : LivingEntity
 
     public void AttackMoveMe(int moveBy, float directionToMove)
     {
-        StartCoroutine(MoveAttack(transform.position.x, moveBy, directionToMove));
-    }
+        StartCoroutine(Common.MoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody));
 
-
-    private IEnumerator MoveAttack(float positionBeforeMoveX, int moveBy, float directionToMove)
-    {
-        if (directionToMove > 0)
-        {
-            while (positionBeforeMoveX + moveBy > transform.position.x)
-            {
-                RigidBody.velocity = new Vector2(15, 0);
-                yield return null;
-            }
-        }
-        else
-        {
-            while (positionBeforeMoveX - moveBy < transform.position.x)
-            {
-                RigidBody.velocity = new Vector2(-15, 0);
-                yield return null;
-            }
-        }
-
-        RigidBody.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.1f);
     }
 
     public void StompMeDown(int stompSpeed)

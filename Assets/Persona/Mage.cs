@@ -1,6 +1,4 @@
 
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Mage : PersonaAbstract
@@ -16,13 +14,13 @@ public class Mage : PersonaAbstract
 
     public override void FirstAttack()
     {
-        PushBack();
+        Debug.Log("Unfinished");
+        return;
     }
 
     public override void SecondAttack()
     {
-        Debug.Log("Unfinished");
-        return;
+        MagicPushBack();
     }
 
     public override void SwapToMe()
@@ -45,19 +43,14 @@ public class Mage : PersonaAbstract
         shieldParticleEffect.Stop();
     }
 
-    private void PushBack()
+    private void MagicPushBack()
     {
         const float DISTANCE_LIMIT = 10f;
-        Collider2D[] enemiestDetected = Utility.DetectByLayers(gameObject.transform.position, DISTANCE_LIMIT / 2, playerBase.enemyLayers);
-        foreach (Collider2D enemy in enemiestDetected)
-        {
-            if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
-            {
-                float currentDistance = Vector2.Distance(enemy.transform.position, transform.position);
+        MagicPushAllEnemies(DetectEnemiesInRange(DISTANCE_LIMIT / 2), transform.position, DISTANCE_LIMIT);
+    }
 
-                StartCoroutine(enemyScript.MoveEnemyCoroutine(this.transform.position, DISTANCE_LIMIT));
-                Debug.Log("enemy pushed");
-            }
-        }
+    private void MagicPushAllEnemies(Collider2D[] detectedEntities, Vector2 perpetratorPosition, float distanceLimit)
+    {
+        ProcessEnemies(detectedEntities, enemyScript => enemyScript.MagicPushMe(perpetratorPosition, distanceLimit));
     }
 }

@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class Farmer : PersonaAbstract
@@ -17,12 +16,10 @@ public class Farmer : PersonaAbstract
     {
         if (!isAngry)
         {
-            isAngry = true;
             AngerHim();
         }
         else
         {
-            isAngry = false;
             CalmHim();
         }
     }
@@ -45,18 +42,20 @@ public class Farmer : PersonaAbstract
 
     private void CalmHim()
     {
+        isAngry = false;
         angryParticleEffect.Stop();
     }
 
     private void AngerHim()
     {
+        isAngry = true;
         angryParticleEffect.Play();
     }
 
     private void MeeleAttack()
     {
         const float KNOCKBACK = 2;
-        DealDamageTo(Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers), KNOCKBACK);
+        DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
     }
 
     void OnDrawGizmosSelected()

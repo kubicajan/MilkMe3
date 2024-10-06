@@ -49,7 +49,7 @@ public class Warrior : PersonaAbstract
 
     private void MoveAttackMeBy(int moveBy)
     {
-        StartCoroutine(Common.MoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody));
+        StartCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody));
     }
 
     private void LiftAttack()
@@ -100,28 +100,17 @@ public class Warrior : PersonaAbstract
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
     }
 
-    public void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)
-    {
-        foreach (Collider2D enemyCollider in detectedEntities)
-        {
-            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
-            {
-                action?.Invoke(enemyScript);
-            }
-        }
-    }
-
-    public void AttackMoveAllEnemiesHit(Collider2D[] detectedEntities, int moveBy)
+    private void AttackMoveAllEnemiesHit(Collider2D[] detectedEntities, int moveBy)
     {
         ProcessEnemies(detectedEntities, enemyScript => enemyScript.AttackMoveMe(moveBy, lastDirection));
     }
 
-    public void LiftUpAllEnemiesHit(Collider2D[] detectedEntities, int liftByThisMuch)
+    private void LiftUpAllEnemiesHit(Collider2D[] detectedEntities, int liftByThisMuch)
     {
         ProcessEnemies(detectedEntities, enemyScript => enemyScript.LiftMeUp(liftByThisMuch));
     }
 
-    public void StompDownAllEnemiesHit(Collider2D[] detectedEntities, int stompSpeed)
+    private void StompDownAllEnemiesHit(Collider2D[] detectedEntities, int stompSpeed)
     {
         ProcessEnemies(detectedEntities, enemyScript => enemyScript.StompMeDown(stompSpeed));
     }
@@ -130,10 +119,5 @@ public class Warrior : PersonaAbstract
     {
         if (playerBase.attackPoint.position == null) { return; }
         Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
-    }
-
-    private Collider2D[] DetectEnemiesInRange(float range)
-    {
-        return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
     }
 }

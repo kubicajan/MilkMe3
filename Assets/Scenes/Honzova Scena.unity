@@ -985,7 +985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skin: {fileID: 21300000, guid: 748ae8b33df036b46a86e0387f1602cf, type: 3}
-  shieldParticleEffect: {fileID: 0}
+  shieldParticleEffect: {fileID: 1914821725}
 --- !u!114 &825198587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,6 +1680,11 @@ BoxCollider2D:
 --- !u!4 &1914821723 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6631254545747707019, guid: 7a1897e114e5dbc45b64887e9611c497, type: 3}
+  m_PrefabInstance: {fileID: 1511860874}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1914821725 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6631254545747707018, guid: 7a1897e114e5dbc45b64887e9611c497, type: 3}
   m_PrefabInstance: {fileID: 1511860874}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1963737572

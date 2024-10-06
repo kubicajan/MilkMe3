@@ -13,7 +13,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     private float dashForce = 100f;
     private Vector2 movement;
     //public bool dashing = false;
-    private static float lastDirection = 1;
+    protected static float lastDirection = 1;
     private static int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
 

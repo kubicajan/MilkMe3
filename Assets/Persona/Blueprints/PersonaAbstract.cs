@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 {
-
     protected PlayerBase playerBase;
     public abstract string PersonaName { get; set; }
 
@@ -162,4 +161,9 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     public abstract void FirstAttack();
 
     public abstract void SecondAttack();
+
+    public abstract void SwapToMe();
+
+    public abstract void SwapFromMe();
+
 }

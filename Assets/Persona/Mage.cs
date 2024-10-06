@@ -6,6 +6,7 @@ using UnityEngine;
 public class Mage : PersonaAbstract
 {
     public override string PersonaName { get; set; } = "Mage";
+    public ParticleSystem shieldParticleEffect;
 
     public override void BaseAttack()
     {
@@ -24,6 +25,25 @@ public class Mage : PersonaAbstract
         return;
     }
 
+    public override void SwapToMe()
+    {
+        ActivateShield();
+    }
+
+    public override void SwapFromMe()
+    {
+        DeactivateShield();
+    }
+
+    private void ActivateShield()
+    {
+        shieldParticleEffect.Play();
+    }
+
+    private void DeactivateShield()
+    {
+        shieldParticleEffect.Stop();
+    }
 
     private void PushBack()
     {

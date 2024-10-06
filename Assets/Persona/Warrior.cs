@@ -28,6 +28,18 @@ public class Warrior : PersonaAbstract
         LiftAttack();
     }
 
+    public override void SwapToMe()
+    {
+        Debug.Log("Unfinished");
+        return;
+    }
+
+    public override void SwapFromMe()
+    {
+        Debug.Log("Unfinished");
+        return;
+    }
+
     private void MeeleAttack()
     {
         const float KNOCKBACK = 0.2f;

@@ -93,7 +93,12 @@ public class PlayerController : MonoBehaviour
 
     private void SwapToPersona(PersonaAbstract persona)
     {
+        if (currentPersona != null)
+        {
+            currentPersona.SwapFromMe();
+        }
         currentPersona = persona;
+        currentPersona.SwapToMe();
         gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
     }
 

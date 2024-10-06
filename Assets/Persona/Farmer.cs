@@ -17,10 +17,12 @@ public class Farmer : PersonaAbstract
     {
         if (!isAngry)
         {
+            isAngry = true;
             AngerHim();
         }
         else
         {
+            isAngry = false;
             CalmHim();
         }
     }

@@ -25,7 +25,7 @@ public class EnemyScript : LivingEntity
 
     public void AttackMoveMe(int moveBy, float directionToMove)
     {
-        StartCoroutine(Common.MoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody));
+        StartCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody));
 
     }
 

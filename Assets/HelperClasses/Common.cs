@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -20,13 +19,7 @@ public static class Common
         TurnOffGravity(rigidBody, false);
     }
 
-    public static void TurnOffGravity(Rigidbody2D rigidBody, bool turnOffGravity)
-    {
-        const int DEFAULT_GRAVITY = 8;
-        rigidBody.gravityScale = turnOffGravity ? 0 : DEFAULT_GRAVITY;
-    }
-
-    public static IEnumerator MoveAttack(float positionBeforeMoveX, int moveBy, float moveToDirection, UnityEngine.Transform transform, Rigidbody2D rigidBody)
+    public static IEnumerator WarriorMoveAttack(float positionBeforeMoveX, int moveBy, float moveToDirection, UnityEngine.Transform transform, Rigidbody2D rigidBody)
     {
         float elapsedTime = 0f;
         TurnOffGravity(rigidBody, true);
@@ -52,6 +45,11 @@ public static class Common
         rigidBody.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.3f);
         TurnOffGravity(rigidBody, false);
+    }
 
+    public static void TurnOffGravity(Rigidbody2D rigidBody, bool turnOffGravity)
+    {
+        const int DEFAULT_GRAVITY = 8;
+        rigidBody.gravityScale = turnOffGravity ? 0 : DEFAULT_GRAVITY;
     }
 }

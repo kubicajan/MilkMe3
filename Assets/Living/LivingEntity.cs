@@ -65,7 +65,12 @@ public abstract class LivingEntity : MonoBehaviour
         RigidBody.AddForce(force, ForceMode2D.Impulse);
     }
 
-    public IEnumerator MoveEnemyCoroutine(Vector2 perpetratorPosition, float knockbackDistance)
+    public void MagicPushMe(Vector2 perpetratorPosition, float knockbackDistance)
+    {
+        StartCoroutine(MagicPushMeCoroutine(perpetratorPosition, knockbackDistance));
+    }
+
+    private IEnumerator MagicPushMeCoroutine(Vector2 perpetratorPosition, float knockbackDistance)
     {
         if (immuneToKnockBackX)
         {

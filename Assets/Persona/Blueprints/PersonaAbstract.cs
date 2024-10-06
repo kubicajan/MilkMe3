@@ -13,7 +13,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     private float dashForce = 100f;
     private Vector2 movement;
     //public bool dashing = false;
-    private static float lastDirection = 1;
+    protected static float lastDirection = 1;
     private static int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
 
@@ -28,24 +28,21 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     protected bool IsGrounded()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(playerBase.groundCheck.position, 0.2f, playerBase.groundLayers);
-        bool isGrounded = colliders.Length > 0;
-        return isGrounded;
+        return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
     }
 
     public IEnumerator Dash()
     {
         ResetJumps();
         Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
-        float originalGravity = RigidBody.gravityScale;
+        Common.TurnOffGravity(RigidBody, true);
         //dashing = true;
-        RigidBody.gravityScale = 0;
         RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
         yield return new WaitForSeconds(0.1f);
-        RigidBody.velocity = new Vector2();
+        RigidBody.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.1f);
         //dashing = false;
-        RigidBody.gravityScale = originalGravity;
+        Common.TurnOffGravity(RigidBody, false);
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
     }
 
@@ -139,24 +136,25 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
     }
 
-
-
     public Sprite GetSkin()
     {
         return skin;
     }
 
-    protected void DealDamageTo(Collider2D[] detectedEnemies)
+    protected bool DealDamageTo(Collider2D[] detectedEnemies, float knockback)
     {
+        int count = 0;
         foreach (Collider2D enemy in detectedEnemies)
         {
             if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
             {
                 enemyScript.TakeDamage(10);
-                enemyScript.GetKnockedBack(this.transform.position, 2);
+                enemyScript.GetKnockedBack(this.transform.position, knockback);
+                count++;
                 Debug.Log("hit enemy");
             }
         }
+        return count > 0;
     }
 
     public abstract void BaseAttack();

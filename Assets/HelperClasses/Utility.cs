@@ -13,4 +13,10 @@ public static class Utility
     {
         Physics2D.IgnoreLayerCollision(currentLayer, Mathf.RoundToInt(Mathf.Log(maskLayersToIgnore.value, 2)), disable);
     }
+
+    public static bool IsGroundedOnLayers(Vector2 position, LayerMask groundLayers)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.2f, groundLayers);
+        return colliders.Length > 0;
+    }
 }

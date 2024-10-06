@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 {
-
     protected PlayerBase playerBase;
     public abstract string PersonaName { get; set; }
 
@@ -73,6 +73,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     {
         movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
     }
+
     public void Build()
     {
         BuildingScript hitBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)
@@ -157,9 +158,30 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         return count > 0;
     }
 
+    protected Collider2D[] DetectEnemiesInRange(float range)
+    {
+        return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
+    }
+
+    protected void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)
+    {
+        foreach (Collider2D enemyCollider in detectedEntities)
+        {
+            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
+            {
+                action?.Invoke(enemyScript);
+            }
+        }
+    }
+
     public abstract void BaseAttack();
 
     public abstract void FirstAttack();
 
     public abstract void SecondAttack();
+
+    public abstract void SwapToMe();
+
+    public abstract void SwapFromMe();
+
 }

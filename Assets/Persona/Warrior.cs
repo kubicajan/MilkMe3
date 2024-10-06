@@ -1,15 +1,12 @@
 
+using System;
 using System.Collections;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Warrior : PersonaAbstract
 {
     private const float MEELE_ATTACK_RANGE = 2f;
     public ParticleSystem stompParticle;
-    private float timeSinceLastHit = 0;
-    private bool alreadyAirborneAttacking = false;
 
     public override string PersonaName { get; set; } = "Warrior";
 
@@ -44,42 +41,26 @@ public class Warrior : PersonaAbstract
     {
         const float KNOCKBACK = 0.2f;
         const int MOVE_BY = 2;
-        Collider2D[] detectedEntities = Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers);
-        bool isAnyEnemyHit = DealDamageTo(detectedEntities, KNOCKBACK);
-        StartCoroutine(Common.MoveAttack(this.transform.position.x, MOVE_BY, lastDirection, transform, RigidBody));
-
-        foreach (Collider2D enemyCollider in detectedEntities)
-        {
-            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
-            {
-                enemyScript.AttackMoveMe(MOVE_BY, lastDirection);
-            }
-        }
+        Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+        DealDamageTo(detectedEnemies, KNOCKBACK);
+        AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
+        MoveAttackMeBy(MOVE_BY);
     }
 
-
-    void OnDrawGizmosSelected()
+    private void MoveAttackMeBy(int moveBy)
     {
-        if (playerBase.attackPoint.position == null) { return; }
-        Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+        StartCoroutine(Common.MoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody));
     }
 
     private void LiftAttack()
     {
-        Collider2D[] detectedEnemies = Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers);
         const int LIFT_BY_THIS_MUCH = 5;
-
-        foreach (Collider2D enemyCollider in detectedEnemies)
-        {
-            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
-            {
-                enemyScript.LiftMeUp(LIFT_BY_THIS_MUCH);
-            }
-        }
-        LiftMeUp(LIFT_BY_THIS_MUCH);
+        Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+        LiftUpAllEnemiesHit(detectedEnemies, LIFT_BY_THIS_MUCH);
+        LiftMeUpBy(LIFT_BY_THIS_MUCH);
     }
 
-    public void LiftMeUp(int liftByThisMuch)
+    private void LiftMeUpBy(int liftByThisMuch)
     {
         StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform));
     }
@@ -92,22 +73,15 @@ public class Warrior : PersonaAbstract
 
         if (!IsGrounded())
         {
-            Collider2D[] detectedEnemies = Utility.DetectByLayers(playerBase.attackPoint.position, MEELE_ATTACK_RANGE, playerBase.enemyLayers);
-
-            foreach (Collider2D enemyCollider in detectedEnemies)
-            {
-                if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
-                {
-                    enemyScript.StompMeDown(STOMP_SPEED);
-                }
-            }
+            StompDownAllEnemiesHit(DetectEnemiesInRange(MEELE_ATTACK_RANGE), STOMP_SPEED);
             StartCoroutine(StompDown(AREA_OF_EFFECT, STOMP_SPEED, KNOCKBACK));
-
             return;
         }
-
-        Instantiate(stompParticle, transform.position, Quaternion.identity);
-        DealDamageTo(Utility.DetectByLayers(transform.position, AREA_OF_EFFECT, playerBase.enemyLayers), KNOCKBACK);
+        else
+        {
+            Instantiate(stompParticle, transform.position, Quaternion.identity);
+            DealDamageTo(DetectEnemiesInRange(AREA_OF_EFFECT), KNOCKBACK);
+        }
     }
 
     private IEnumerator StompDown(float areaOfEffect, int stompSpeed, float landingKnockBack)
@@ -122,7 +96,44 @@ public class Warrior : PersonaAbstract
         RigidBody.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.05f);
         Instantiate(stompParticle, transform.position, Quaternion.identity);
-        DealDamageTo(Utility.DetectByLayers(transform.position, areaOfEffect, playerBase.enemyLayers), landingKnockBack);
+        DealDamageTo(DetectEnemiesInRange(areaOfEffect), landingKnockBack);
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
+    }
+
+    public void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)
+    {
+        foreach (Collider2D enemyCollider in detectedEntities)
+        {
+            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
+            {
+                action?.Invoke(enemyScript);
+            }
+        }
+    }
+
+    public void AttackMoveAllEnemiesHit(Collider2D[] detectedEntities, int moveBy)
+    {
+        ProcessEnemies(detectedEntities, enemyScript => enemyScript.AttackMoveMe(moveBy, lastDirection));
+    }
+
+    public void LiftUpAllEnemiesHit(Collider2D[] detectedEntities, int liftByThisMuch)
+    {
+        ProcessEnemies(detectedEntities, enemyScript => enemyScript.LiftMeUp(liftByThisMuch));
+    }
+
+    public void StompDownAllEnemiesHit(Collider2D[] detectedEntities, int stompSpeed)
+    {
+        ProcessEnemies(detectedEntities, enemyScript => enemyScript.StompMeDown(stompSpeed));
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (playerBase.attackPoint.position == null) { return; }
+        Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+    }
+
+    private Collider2D[] DetectEnemiesInRange(float range)
+    {
+        return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
     }
 }

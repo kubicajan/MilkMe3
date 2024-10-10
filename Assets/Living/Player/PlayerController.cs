@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown("f"))
         {
-            currentPersona.DoDialog();
+            currentPersona.DoDialogWithNPC();
         }
 
         if (Input.GetKeyDown("c"))

@@ -22,7 +22,7 @@ public class DialogManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void CreateTextMessage(string textToDisplay, Vector2 parentPosition)
+    public void PopUpDialog(string textToDisplay, Vector2 parentPosition)
     {
         GameObject duplicatedObject = Instantiate(dialogComponent);
         //duplicatedObject.transform.SetParent(parent.transform, false);

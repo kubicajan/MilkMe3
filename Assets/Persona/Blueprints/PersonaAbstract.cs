@@ -76,15 +76,28 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public void Build()
     {
-        BuildingScript hitBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)
-            .First()
-            .GetComponent<BuildingScript>();
-        hitBuilding.Build();
+        Collider2D closestBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)
+            .FirstOrDefault();
+
+        closestBuilding?.GetComponent<BuildingScript>().Build();
+    }
+
+    public void DoDialogWithNPC()
+    {
+        Collider2D closestNpc = Utility.DetectByLayers(transform.position, 5, playerBase.npcLayers)
+            .FirstOrDefault();
+
+        closestNpc?.GetComponent<NpcScript>().DoDialog();
     }
 
     public void CommitSuicide()
     {
         playerBase.TakeDamage(playerBase.GetCurrentHealth());
+    }
+
+    public void DoDialog()
+    {
+        DialogManager.Instance.PopUpDialog("Ambatakaaaaaam", gameObject.transform.position);
     }
 
     private void BulletAttack()

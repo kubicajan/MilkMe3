@@ -87,6 +87,11 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         playerBase.TakeDamage(playerBase.GetCurrentHealth());
     }
 
+    public void DoDialog()
+    {
+        DialogManager.Instance.CreateTextMessage("Ambatakaaaaaam", gameObject);
+    }
+
     private void BulletAttack()
     {
         Debug.Log("pew");

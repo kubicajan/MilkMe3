@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour
 
         currentPersona.MovePotentially();
 
+        if (Input.GetKeyDown("f"))
+        {
+            currentPersona.DoDialog();
+        }
+
         if (Input.GetKeyDown("c"))
         {
             currentPersona.BaseAttack();

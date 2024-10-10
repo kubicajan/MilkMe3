@@ -12,6 +12,7 @@ public class PlayerBase : LivingEntity
     public LayerMask groundLayers;
     public LayerMask buildingLayers;
     public LayerMask enemyLayers;
+    public LayerMask npcLayers;
 
     void Awake()
     {

@@ -22,15 +22,11 @@ public class DialogManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void CreateTextMessage(string textToDisplay, GameObject parent)
+    public void CreateTextMessage(string textToDisplay, Vector2 parentPosition)
     {
         GameObject duplicatedObject = Instantiate(dialogComponent);
-        //todo: tady se to jebe trochu
         //duplicatedObject.transform.SetParent(parent.transform, false);
-        Vector2 parentPosition = parent.transform.position;
-        duplicatedObject.transform.position = new Vector2(parentPosition.x, parentPosition.y + 2);
-        var gg = duplicatedObject.GetComponentInChildren<TextMeshProUGUI>();
-        gg.text = textToDisplay;
-
+        duplicatedObject.transform.position = new Vector2(parentPosition.x, parentPosition.y);
+        duplicatedObject.GetComponentInChildren<TextMeshProUGUI>().text = textToDisplay;
     }
 }

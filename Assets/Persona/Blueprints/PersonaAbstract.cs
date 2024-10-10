@@ -89,7 +89,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public void DoDialog()
     {
-        DialogManager.Instance.CreateTextMessage("Ambatakaaaaaam", gameObject);
+        DialogManager.Instance.CreateTextMessage("Ambatakaaaaaam", gameObject.transform.position);
     }
 
     private void BulletAttack()

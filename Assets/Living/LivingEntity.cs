@@ -8,6 +8,7 @@ public abstract class LivingEntity : MonoBehaviour
     protected BoxCollider2D BoxCollider { get; private set; }
 
     public ParticleSystem deathParticleEffect;
+    private bool Immobilized = false;
 
     private bool immuneToKnockBackX = false;
     private int currentHealth;
@@ -26,6 +27,16 @@ public abstract class LivingEntity : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    public void Immobilize(bool immobilize)
+    {
+        Immobilized = immobilize;
+    }
+
+    public bool IsImmobilized()
+    {
+        return Immobilized;
     }
 
     public void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
@@ -53,6 +64,7 @@ public abstract class LivingEntity : MonoBehaviour
 
     public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
     {
+        Immobilize(true);
         Vector2 direction = ((Vector2)transform.position - perpetratorPosition).normalized;
         Vector2 force = new Vector2();
 

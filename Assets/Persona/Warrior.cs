@@ -49,7 +49,7 @@ public class Warrior : PersonaAbstract
 
     private void MoveAttackMeBy(int moveBy)
     {
-        StartCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody));
+        StartCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody, null));
     }
 
     private void LiftAttack()
@@ -62,7 +62,7 @@ public class Warrior : PersonaAbstract
 
     private void LiftMeUpBy(int liftByThisMuch)
     {
-        StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform));
+        StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, null));
     }
 
     private void StompAttack()

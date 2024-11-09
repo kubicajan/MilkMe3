@@ -494,6 +494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   groundCheck: {fileID: 203043307}
+  playerLocation: {fileID: 825198581}
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -870,6 +871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   groundCheck: {fileID: 733296916}
+  playerLocation: {fileID: 825198581}
   groundLayers:
     serializedVersion: 2
     m_Bits: 64

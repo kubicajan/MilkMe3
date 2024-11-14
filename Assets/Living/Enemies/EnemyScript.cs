@@ -46,9 +46,10 @@ public class EnemyScript : LivingEntity
         StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
     }
 
-    public void AttackMoveMe(int moveBy, float directionToMove)
+    public void AttackMoveMe(float moveBy, float directionToMove)
     {
-        StartCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody, this));
+        const float MOVE_FURTHER = 1.2f;
+        StartCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy * MOVE_FURTHER, directionToMove, transform, RigidBody, this));
     }
 
     public void StompMeDown(int stompSpeed)

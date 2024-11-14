@@ -20,7 +20,7 @@ public static class Common
         TurnOffGravity(rigidBody, false);
     }
 
-    public static IEnumerator WarriorMoveAttack(float positionBeforeMoveX, int moveBy, float moveToDirection, Transform transform, Rigidbody2D rigidBody, LivingEntity affectedEntity)
+    public static IEnumerator WarriorMoveAttack(float positionBeforeMoveX, float moveBy, float moveToDirection, Transform transform, Rigidbody2D rigidBody, LivingEntity affectedEntity)
     {
         affectedEntity?.Immobilize(true);
         float elapsedTime = 0f;

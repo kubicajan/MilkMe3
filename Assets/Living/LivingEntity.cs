@@ -88,7 +88,7 @@ public abstract class LivingEntity : MonoBehaviour
         {
             yield break;
         }
-
+        float originalY = gameObject.transform.position.y;
         float timer = 0.3f;
         immuneToKnockBackX = true;
 
@@ -103,7 +103,7 @@ public abstract class LivingEntity : MonoBehaviour
                 yield break;
             }
             Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
-            targetPosition.y = objectPosition.y;
+            targetPosition.y = originalY;
             float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
             transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
             timer -= Time.deltaTime;

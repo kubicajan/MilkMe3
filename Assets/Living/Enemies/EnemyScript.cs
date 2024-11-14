@@ -7,6 +7,7 @@ public class EnemyScript : LivingEntity
     public Transform playerLocation;
     public LayerMask groundLayers;
     private float speed = 1f;
+    public ParticleSystem explosionParticles;
 
     private void Start()
     {
@@ -28,6 +29,15 @@ public class EnemyScript : LivingEntity
             {
                 Immobilize(false);
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            Instantiate(explosionParticles, transform.position, Quaternion.identity);
+            MagicPushMe(collision.gameObject.transform.position, 5);
         }
     }
 

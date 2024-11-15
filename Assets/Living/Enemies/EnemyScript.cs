@@ -34,11 +34,11 @@ public class EnemyScript : LivingEntity
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Instantiate(explosionParticles, transform.position, Quaternion.identity);
-            MagicPushMe(collision.gameObject.transform.position, 5);
-        }
+        //if (collision.gameObject.CompareTag("Player"))
+        //{
+        //    Instantiate(explosionParticles, transform.position, Quaternion.identity);
+        //    MagicPushMe(collision.gameObject.transform.position, 5);
+        //}
     }
 
     public void LiftMeUp(int liftByThisMuch)
@@ -48,8 +48,7 @@ public class EnemyScript : LivingEntity
 
     public void AttackMoveMe(float moveBy, float directionToMove)
     {
-        const float MOVE_FURTHER = 1.2f;
-        StartCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy * MOVE_FURTHER, directionToMove, transform, RigidBody, this));
+        StartCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody, this));
     }
 
     public void StompMeDown(int stompSpeed)

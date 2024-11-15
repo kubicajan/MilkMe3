@@ -7,10 +7,11 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 {
     protected PlayerBase playerBase;
     public abstract string PersonaName { get; set; }
+    public virtual int maxNumberOfJumps => 5;
 
     private float moveSpeed = 10f;
     private float jumpForce = 20f;
-    private float dashForce = 100f;
+    protected float dashForce = 100f;
     private Vector2 movement;
     //public bool dashing = false;
     protected static float lastDirection = 1;
@@ -31,7 +32,12 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
     }
 
-    public IEnumerator Dash()
+    public virtual void Dash()
+    {
+        StartCoroutine(DashCoroutine());
+    }
+
+    protected virtual IEnumerator DashCoroutine()
     {
         ResetJumps();
         Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
@@ -46,7 +52,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
     }
 
-    private void ResetJumps()
+    protected void ResetJumps()
     {
         consecutiveJumps = 0;
     }
@@ -134,14 +140,13 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         //laser.enabled = false;
     }
 
-    public virtual void Jump()
+    public void Jump(int maxJumps = 5)
     {
-        const int MAX_JUMPS = 5;
         if (IsGrounded())
         {
             ResetJumps();
         }
-        else if (!IsGrounded() && MAX_JUMPS <= consecutiveJumps)
+        else if (!IsGrounded() && maxNumberOfJumps <= consecutiveJumps)
         {
             return;
         }

@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            StartCoroutine(currentPersona.Dash());
+            currentPersona.Dash();
         }
     }
 

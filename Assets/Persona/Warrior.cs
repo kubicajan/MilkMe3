@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Warrior : PersonaAbstract
@@ -9,6 +10,7 @@ public class Warrior : PersonaAbstract
     public ParticleSystem stompParticle;
     private int attackCounter = 0;
     private bool canAttack = true;
+    public override int maxNumberOfJumps => 1;
 
     public override string PersonaName { get; set; } = "Warrior";
 
@@ -39,10 +41,27 @@ public class Warrior : PersonaAbstract
         return;
     }
 
-    public override void Jump()
-    {
-      //no jumps for you buddy
-    }
+    //protected override IEnumerator DashCoroutine()
+    //{
+    //    ResetJumps();
+    //    Common.TurnOffGravity(RigidBody, true);
+    //    float distanceToDash = lastDirection * 50;
+    //    RigidBody.velocity = new Vector2(distanceToDash, 0);
+    //    Collider2D[] detectedEnemies = DetectEnemiesInRange(distanceToDash);
+
+    //    foreach (Collider2D enemy in detectedEnemies)
+    //    {
+    //        float distance = Math.Abs(Math.Abs(Math.Abs(transform.position.x) - Math.Abs(enemy.transform.position.x)) - distanceToDash);
+    //        Debug.Log(distance);
+            
+    //        ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, distance));
+    //    }
+
+    //    yield return new WaitForSeconds(0.1f);
+    //    RigidBody.velocity = Vector2.zero;
+    //    yield return new WaitForSeconds(0.1f);
+    //    Common.TurnOffGravity(RigidBody, false);
+    //}
 
     private void MeeleAttack()
     {
@@ -71,7 +90,7 @@ public class Warrior : PersonaAbstract
     private void KickAttack()
     {
         Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
-        DealDamageTo(detectedEnemies, 0);
+        DealDamageTo(detectedEnemies, 10);
         ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, 10));
     }
 

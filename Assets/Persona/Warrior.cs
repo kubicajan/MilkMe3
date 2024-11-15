@@ -7,6 +7,8 @@ public class Warrior : PersonaAbstract
 {
     private const float MEELE_ATTACK_RANGE = 2f;
     public ParticleSystem stompParticle;
+    private int attackCounter = 0;
+    private bool canAttack = true;
 
     public override string PersonaName { get; set; } = "Warrior";
 
@@ -17,7 +19,7 @@ public class Warrior : PersonaAbstract
 
     public override void FirstAttack()
     {
-        StompAttack();
+        KickAttack();
     }
 
     public override void SecondAttack()
@@ -37,14 +39,47 @@ public class Warrior : PersonaAbstract
         return;
     }
 
+    public override void Jump()
+    {
+      //no jumps for you buddy
+    }
+
     private void MeeleAttack()
     {
-        const float KNOCKBACK = 0.2f;
-        const int MOVE_BY = 2;
+        if (canAttack)
+        {
+            StartCoroutine(MakeAttackGoOnCoodlown());
+            const float KNOCKBACK = 0.2f;
+            const int MOVE_BY = 2;
+            attackCounter++;
+
+            if (attackCounter >= 3)
+            {
+                attackCounter = 0;
+                StompAttack();
+            }
+            else
+            {
+                Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+                DealDamageTo(detectedEnemies, KNOCKBACK);
+                AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
+                MoveAttackMeBy(MOVE_BY);
+            }
+        }
+    }
+
+    private void KickAttack()
+    {
         Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
-        DealDamageTo(detectedEnemies, KNOCKBACK);
-        AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
-        MoveAttackMeBy(MOVE_BY);
+        DealDamageTo(detectedEnemies, 0);
+        ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, 10));
+    }
+
+    private IEnumerator MakeAttackGoOnCoodlown()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(0.25f);
+        canAttack = true;
     }
 
     private void MoveAttackMeBy(int moveBy)

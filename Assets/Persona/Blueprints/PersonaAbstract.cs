@@ -134,7 +134,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         //laser.enabled = false;
     }
 
-    public void Jump()
+    public virtual void Jump()
     {
         const int MAX_JUMPS = 5;
         if (IsGrounded())

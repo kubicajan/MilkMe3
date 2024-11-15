@@ -34,11 +34,11 @@ public class EnemyScript : LivingEntity
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (collision.gameObject.CompareTag("Player"))
-        //{
-        //    Instantiate(explosionParticles, transform.position, Quaternion.identity);
-        //    MagicPushMe(collision.gameObject.transform.position, 5);
-        //}
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Instantiate(explosionParticles, transform.position, Quaternion.identity);
+            MagicPushMe(collision.gameObject.transform.position, 5);
+        }
     }
 
     public void LiftMeUp(int liftByThisMuch)

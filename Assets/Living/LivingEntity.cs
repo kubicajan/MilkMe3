@@ -7,6 +7,7 @@ public abstract class LivingEntity : MonoBehaviour
 {
     protected Rigidbody2D RigidBody { get; private set; }
     protected BoxCollider2D BoxCollider { get; private set; }
+    public Coroutine movementCoroutine;
 
     public ParticleSystem deathParticleEffect;
     private bool Immobilized = false;

@@ -7,17 +7,22 @@ public class PlayerController : MonoBehaviour
     private Farmer farmer;
     private Mage mage;
     private Warrior warrior;
+    private Archer archer;
     private PersonaAbstract currentPersona;
     private int currentPersonaNumber = 1;
+
+    const int NUMBER_OF_PERSONAS = 4;
 
     private void Start()
     {
         farmer = GetComponent<Farmer>();
         mage = GetComponent<Mage>();
         warrior = GetComponent<Warrior>();
+        archer = GetComponent<Archer>();
         playerBase = GetComponent<PlayerBase>();
         SwapToPersona(farmer);
         farmer.Initialize(playerBase);
+        archer.Initialize(playerBase);
         mage.Initialize(playerBase);
         warrior.Initialize(playerBase);
     }
@@ -27,13 +32,16 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown("o"))
         {
-            switch (currentPersonaNumber % 3)
+            switch (currentPersonaNumber % NUMBER_OF_PERSONAS)
             {
                 case 1:
                     SwapToPersona(warrior);
                     break;
                 case 2:
                     SwapToPersona(mage);
+                    break;
+                case 3:
+                    SwapToPersona(archer);
                     break;
                 case 0:
                     SwapToPersona(farmer);
@@ -57,12 +65,12 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown("e"))
         {
-            currentPersona.SecondAttack();
+            currentPersona.SecondAbility();
         }
 
         if (Input.GetKeyDown("q"))
         {
-            currentPersona.FirstAttack();
+            currentPersona.FirstAbility();
         }
 
         if (Input.GetKeyDown("b"))

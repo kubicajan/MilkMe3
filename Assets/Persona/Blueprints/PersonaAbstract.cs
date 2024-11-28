@@ -14,10 +14,11 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     protected float dashForce = 100f;
     private Vector2 movement;
     //public bool dashing = false;
+
+    //TODO: tohle nesmi byt static, jinak nebude multiplier fungovat vubec.
     protected static float lastDirection = 1;
     private static int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
-    private static Coroutine movementCoroutine;
 
     [SerializeField]
     private Sprite skin;
@@ -31,14 +32,14 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     protected void RunMovementCoroutine(IEnumerator coroutine)
     {
         StopMovementCoroutine();
-        movementCoroutine = StartCoroutine(coroutine);
+        playerBase.movementCoroutine = StartCoroutine(coroutine);
     }
 
     protected void StopMovementCoroutine()
     {
-        if (movementCoroutine != null)
+        if (playerBase.movementCoroutine != null)
         {
-            StopCoroutine(movementCoroutine);
+            StopCoroutine(playerBase.movementCoroutine);
         }
     }
 
@@ -127,34 +128,6 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         //Instantiate(bulletPrefab, attackPoint.position, attackPoint.rotation);
     }
 
-    private IEnumerator LaserAttack()
-    {
-        Debug.Log("laser pew");
-        yield return null;
-        //RaycastHit2D hitInfo = Physics2D.Raycast(attackPoint.position, attackPoint.right, Mathf.Infinity, enemyLayers);
-
-        //if (hitInfo)
-        //{
-        //    EnemyScript enemyScript = hitInfo.transform.GetComponent<EnemyScript>();
-        //    if (enemyScript != null)
-        //    {
-        //        Debug.Log("hit enemy");
-        //        enemyScript.TakeDamage(10);
-        //        enemyScript.GetKnockedBack(this.transform.position, 0.5f);
-        //        laser.SetPosition(0, attackPoint.position);
-        //        laser.SetPosition(1, hitInfo.point);
-        //    }
-        //}
-        //else
-        //{
-        //    laser.SetPosition(0, attackPoint.position);
-        //    laser.SetPosition(1, new Vector2(lastDirection * 200, attackPoint.position.y));
-        //}
-        //laser.enabled = true;
-        //yield return new WaitForSeconds(0.1f);
-        //laser.enabled = false;
-    }
-
     public void Jump(int maxJumps = 5)
     {
         if (IsGrounded())
@@ -209,9 +182,9 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public abstract void BaseAttack();
 
-    public abstract void FirstAttack();
+    public abstract void FirstAbility();
 
-    public abstract void SecondAttack();
+    public abstract void SecondAbility();
 
     public abstract void SwapToMe();
 

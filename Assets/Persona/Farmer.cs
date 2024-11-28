@@ -12,7 +12,7 @@ public class Farmer : PersonaAbstract
         MeeleAttack();
     }
 
-    public override void FirstAttack()
+    public override void FirstAbility()
     {
         if (!isAngry)
         {
@@ -24,7 +24,7 @@ public class Farmer : PersonaAbstract
         }
     }
 
-    public override void SecondAttack()
+    public override void SecondAbility()
     {
         Debug.Log("Unfinished");
         return;

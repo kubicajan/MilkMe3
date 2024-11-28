@@ -8,8 +8,7 @@ public class EnemyScript : LivingEntity
     public LayerMask groundLayers;
     private float speed = 1f;
     public ParticleSystem explosionParticles;
-    private Coroutine movementCoroutine;
-
+    
     private void Start()
     {
         Init(_health: 500,

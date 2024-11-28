@@ -20,12 +20,12 @@ public class Warrior : PersonaAbstract
         MeeleAttack();
     }
 
-    public override void FirstAttack()
+    public override void FirstAbility()
     {
         KickAttack();
     }
 
-    public override void SecondAttack()
+    public override void SecondAbility()
     {
         LiftAttack();
     }

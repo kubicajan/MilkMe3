@@ -12,13 +12,13 @@ public class Mage : PersonaAbstract
         return;
     }
 
-    public override void FirstAttack()
+    public override void FirstAbility()
     {
         Debug.Log("Unfinished");
         return;
     }
 
-    public override void SecondAttack()
+    public override void SecondAbility()
     {
         MagicPushBack();
     }

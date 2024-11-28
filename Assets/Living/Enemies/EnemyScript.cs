@@ -8,6 +8,7 @@ public class EnemyScript : LivingEntity
     public LayerMask groundLayers;
     private float speed = 1f;
     public ParticleSystem explosionParticles;
+    private Coroutine movementCoroutine;
 
     private void Start()
     {
@@ -43,12 +44,12 @@ public class EnemyScript : LivingEntity
 
     public void LiftMeUp(int liftByThisMuch)
     {
-        StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
+        RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
     }
 
     public void AttackMoveMe(float moveBy, float directionToMove)
     {
-        StartCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody, this));
+        RunMovementCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody, this));
     }
 
     public void StompMeDown(int stompSpeed)
@@ -66,6 +67,20 @@ public class EnemyScript : LivingEntity
             yield return null;
         }
         RigidBody.velocity = Vector2.zero;
+    }
+
+    protected void RunMovementCoroutine(IEnumerator coroutine)
+    {
+        StopMovementCoroutine();
+        movementCoroutine = StartCoroutine(coroutine);
+    }
+
+    protected void StopMovementCoroutine()
+    {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
     }
 
     protected bool IsGrounded()

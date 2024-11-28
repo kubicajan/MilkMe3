@@ -17,6 +17,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     protected static float lastDirection = 1;
     private static int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
+    private static Coroutine movementCoroutine;
 
     [SerializeField]
     private Sprite skin;
@@ -27,6 +28,20 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         RigidBody = playerBase.GetRigidBody();
     }
 
+    protected void RunMovementCoroutine(IEnumerator coroutine)
+    {
+        StopMovementCoroutine();
+        movementCoroutine = StartCoroutine(coroutine);
+    }
+
+    protected void StopMovementCoroutine()
+    {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+    }
+
     protected bool IsGrounded()
     {
         return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
@@ -34,7 +49,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public virtual void Dash()
     {
-        StartCoroutine(DashCoroutine());
+        RunMovementCoroutine(DashCoroutine());
     }
 
     protected virtual IEnumerator DashCoroutine()

@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerBase : LivingEntity
 {
     public Transform attackPoint;
-    public GameObject bulletPrefab;
     public Transform groundCheck;
     public LayerMask groundLayers;
     public LayerMask buildingLayers;

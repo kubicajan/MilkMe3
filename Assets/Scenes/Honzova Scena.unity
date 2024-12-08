@@ -1048,6 +1048,7 @@ GameObject:
   - component: {fileID: 825198585}
   - component: {fileID: 825198587}
   - component: {fileID: 825198588}
+  - component: {fileID: 825198589}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -1200,6 +1201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skin: {fileID: 21300000, guid: bb51334c6930f864abac38001f7bdf6e, type: 3}
   angryParticleEffect: {fileID: 1087101648}
+  pitchForkPrefab: {fileID: 264234619582631049, guid: 3e99fd477ca701c428251d39cdbf9af6, type: 3}
 --- !u!114 &825198586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1242,8 +1244,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   attackPoint: {fileID: 276902811}
-  laser: {fileID: 1043541796}
-  bulletPrefab: {fileID: 0}
   groundCheck: {fileID: 1403300807}
   groundLayers:
     serializedVersion: 2
@@ -1257,6 +1257,20 @@ MonoBehaviour:
   npcLayers:
     serializedVersion: 2
     m_Bits: 1024
+--- !u!114 &825198589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825198577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e533d434bbf64846977c0f442d7bab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skin: {fileID: 21300000, guid: e5600378dd761e64d9423790c482bf36, type: 3}
+  laser: {fileID: 1043541796}
 --- !u!4 &942819759 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3078803741686854976, guid: 7de6ab4f70a0052419ad1a81b0531344, type: 3}

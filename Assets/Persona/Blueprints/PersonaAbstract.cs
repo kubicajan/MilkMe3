@@ -122,12 +122,6 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         DialogManager.Instance.PopUpDialog("Ambatakaaaaaam", gameObject.transform.position);
     }
 
-    private void BulletAttack()
-    {
-        Debug.Log("pew");
-        //Instantiate(bulletPrefab, attackPoint.position, attackPoint.rotation);
-    }
-
     public void Jump(int maxJumps = 5)
     {
         if (IsGrounded())

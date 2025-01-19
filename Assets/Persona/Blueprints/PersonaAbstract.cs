@@ -2,17 +2,21 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 {
     protected PlayerBase playerBase;
     public abstract string PersonaName { get; set; }
+    public virtual int maxNumberOfJumps => 5;
 
     private float moveSpeed = 10f;
     private float jumpForce = 20f;
-    private float dashForce = 100f;
+    protected float dashForce = 100f;
     private Vector2 movement;
     //public bool dashing = false;
+
+    //TODO: tohle nesmi byt static, jinak nebude multiplier fungovat vubec.
     protected static float lastDirection = 1;
     private static int consecutiveJumps = 1;
     protected Rigidbody2D RigidBody;
@@ -26,12 +30,31 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         RigidBody = playerBase.GetRigidBody();
     }
 
+    protected void RunMovementCoroutine(IEnumerator coroutine)
+    {
+        StopMovementCoroutine();
+        playerBase.movementCoroutine = StartCoroutine(coroutine);
+    }
+
+    protected void StopMovementCoroutine()
+    {
+        if (playerBase.movementCoroutine != null)
+        {
+            StopCoroutine(playerBase.movementCoroutine);
+        }
+    }
+
     protected bool IsGrounded()
     {
         return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
     }
 
-    public IEnumerator Dash()
+    public virtual void Dash()
+    {
+        RunMovementCoroutine(DashCoroutine());
+    }
+
+    protected virtual IEnumerator DashCoroutine()
     {
         ResetJumps();
         Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
@@ -46,7 +69,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
     }
 
-    private void ResetJumps()
+    protected void ResetJumps()
     {
         consecutiveJumps = 0;
     }
@@ -76,18 +99,22 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public void Build()
     {
-        Collider2D closestBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)
-            .FirstOrDefault();
+        Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-        closestBuilding?.GetComponent<BuildingScript>().Build();
+        closestBuilding?.GetComponent<BuildingAbstract>().Build();
     }
 
-    public void DoDialogWithNPC()
+    public void Interact()
     {
-        Collider2D closestNpc = Utility.DetectByLayers(transform.position, 5, playerBase.npcLayers)
-            .FirstOrDefault();
+        Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
+        if (closestNpc != null)
+        {
+            closestNpc?.GetComponent<NpcScript>().DoDialog();
+            return;
+        }
+        Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-        closestNpc?.GetComponent<NpcScript>().DoDialog();
+        closestBuilding?.GetComponent<BuildingAbstract>().Use();
     }
 
     public void CommitSuicide()
@@ -100,48 +127,13 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         DialogManager.Instance.PopUpDialog("Ambatakaaaaaam", gameObject.transform.position);
     }
 
-    private void BulletAttack()
+    public void Jump(int maxJumps = 5)
     {
-        Debug.Log("pew");
-        //Instantiate(bulletPrefab, attackPoint.position, attackPoint.rotation);
-    }
-
-    private IEnumerator LaserAttack()
-    {
-        Debug.Log("laser pew");
-        yield return null;
-        //RaycastHit2D hitInfo = Physics2D.Raycast(attackPoint.position, attackPoint.right, Mathf.Infinity, enemyLayers);
-
-        //if (hitInfo)
-        //{
-        //    EnemyScript enemyScript = hitInfo.transform.GetComponent<EnemyScript>();
-        //    if (enemyScript != null)
-        //    {
-        //        Debug.Log("hit enemy");
-        //        enemyScript.TakeDamage(10);
-        //        enemyScript.GetKnockedBack(this.transform.position, 0.5f);
-        //        laser.SetPosition(0, attackPoint.position);
-        //        laser.SetPosition(1, hitInfo.point);
-        //    }
-        //}
-        //else
-        //{
-        //    laser.SetPosition(0, attackPoint.position);
-        //    laser.SetPosition(1, new Vector2(lastDirection * 200, attackPoint.position.y));
-        //}
-        //laser.enabled = true;
-        //yield return new WaitForSeconds(0.1f);
-        //laser.enabled = false;
-    }
-
-    public void Jump()
-    {
-        const int MAX_JUMPS = 5;
         if (IsGrounded())
         {
             ResetJumps();
         }
-        else if (!IsGrounded() && MAX_JUMPS <= consecutiveJumps)
+        else if (!IsGrounded() && maxNumberOfJumps <= consecutiveJumps)
         {
             return;
         }
@@ -176,6 +168,11 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
     }
 
+    private Collider2D DetectClosest(LayerMask layers)
+    {
+        return Utility.DetectByLayers(transform.position, 1, layers).FirstOrDefault();
+    }
+
     protected void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)
     {
         foreach (Collider2D enemyCollider in detectedEntities)
@@ -189,9 +186,9 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public abstract void BaseAttack();
 
-    public abstract void FirstAttack();
+    public abstract void FirstAbility();
 
-    public abstract void SecondAttack();
+    public abstract void SecondAbility();
 
     public abstract void SwapToMe();
 

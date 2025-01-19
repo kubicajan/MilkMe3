@@ -3,8 +3,9 @@ using UnityEngine;
 
 public static class Common
 {
-    public static IEnumerator LiftUp(int liftByThisMuch, float positionBeforeLiftUpY, Rigidbody2D rigidBody, UnityEngine.Transform transform)
+    public static IEnumerator LiftUp(int liftByThisMuch, float positionBeforeLiftUpY, Rigidbody2D rigidBody, Transform transform, LivingEntity affectedEntity)
     {
+        affectedEntity?.Immobilize(true);
         float elapsedTime = 0f;
         TurnOffGravity(rigidBody, true);
 
@@ -19,8 +20,9 @@ public static class Common
         TurnOffGravity(rigidBody, false);
     }
 
-    public static IEnumerator WarriorMoveAttack(float positionBeforeMoveX, int moveBy, float moveToDirection, UnityEngine.Transform transform, Rigidbody2D rigidBody)
+    public static IEnumerator WarriorMoveAttack(float positionBeforeMoveX, float moveBy, float moveToDirection, Transform transform, Rigidbody2D rigidBody, LivingEntity affectedEntity)
     {
+        affectedEntity?.Immobilize(true);
         float elapsedTime = 0f;
         TurnOffGravity(rigidBody, true);
 
@@ -43,10 +45,10 @@ public static class Common
             }
         }
         rigidBody.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.35f);
         TurnOffGravity(rigidBody, false);
     }
-
+    
     public static void TurnOffGravity(Rigidbody2D rigidBody, bool turnOffGravity)
     {
         const int DEFAULT_GRAVITY = 8;

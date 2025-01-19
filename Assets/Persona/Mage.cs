@@ -12,13 +12,13 @@ public class Mage : PersonaAbstract
         return;
     }
 
-    public override void FirstAttack()
+    public override void FirstAbility()
     {
         Debug.Log("Unfinished");
         return;
     }
 
-    public override void SecondAttack()
+    public override void SecondAbility()
     {
         MagicPushBack();
     }
@@ -36,11 +36,13 @@ public class Mage : PersonaAbstract
     private void ActivateShield()
     {
         shieldParticleEffect.Play();
+        shieldParticleEffect.GetComponent<CircleCollider2D>().enabled = true;
     }
 
     private void DeactivateShield()
     {
         shieldParticleEffect.Stop();
+        shieldParticleEffect.GetComponent<CircleCollider2D>().enabled = false;
     }
 
     private void MagicPushBack()

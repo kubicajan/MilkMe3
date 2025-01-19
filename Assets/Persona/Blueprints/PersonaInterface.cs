@@ -1,8 +1,8 @@
 public interface PersonaInterface
 {
     void BaseAttack();
-    void FirstAttack();
-    void SecondAttack();
+    void FirstAbility();
+    void SecondAbility();
     void SwapToMe();
     void SwapFromMe();
 }

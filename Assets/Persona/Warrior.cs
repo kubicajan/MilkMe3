@@ -1,12 +1,17 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Warrior : PersonaAbstract
 {
     private const float MEELE_ATTACK_RANGE = 2f;
     public ParticleSystem stompParticle;
+    private int attackCounter = 0;
+    private bool canAttack = true;
+    public override int maxNumberOfJumps => 1;
 
     public override string PersonaName { get; set; } = "Warrior";
 
@@ -15,12 +20,12 @@ public class Warrior : PersonaAbstract
         MeeleAttack();
     }
 
-    public override void FirstAttack()
+    public override void FirstAbility()
     {
-        StompAttack();
+        KickAttack();
     }
 
-    public override void SecondAttack()
+    public override void SecondAbility()
     {
         LiftAttack();
     }
@@ -37,19 +42,64 @@ public class Warrior : PersonaAbstract
         return;
     }
 
+
+    //todo: jako to funguje, ale ne uplne. musel bych vypnout vsechnu gravitaci pro ty debily a movement
+    //protected override IEnumerator DashCoroutine()
+    //{
+    //    ResetJumps();
+    //    Common.TurnOffGravity(RigidBody, true);
+    //    float distanceToDash = lastDirection * 30;
+    //    RigidBody.velocity = new Vector2(distanceToDash, 0);
+    //    Collider2D[] detectedEnemies = DetectEnemiesInRange(distanceToDash);
+    //    ProcessEnemies(detectedEnemies, enemyScript => enemyScript.Immobilize(true));
+    //    yield return new WaitForSeconds(0.3f);
+    //    RigidBody.velocity = Vector2.zero;
+    //    yield return new WaitForSeconds(0.1f);
+    //    Common.TurnOffGravity(RigidBody, false);
+    //}
+
+
     private void MeeleAttack()
     {
-        const float KNOCKBACK = 0.2f;
-        const int MOVE_BY = 2;
+        if (canAttack)
+        {
+            StartCoroutine(MakeAttackGoOnCoodlown());
+            const float KNOCKBACK = 0.2f;
+            const int MOVE_BY = 2;
+            attackCounter++;
+
+            if (attackCounter >= 3)
+            {
+                attackCounter = 0;
+                StompAttack();
+            }
+            else
+            {
+                Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+                DealDamageTo(detectedEnemies, KNOCKBACK);
+                AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
+                MoveAttackMeBy(MOVE_BY);
+            }
+        }
+    }
+
+    private void KickAttack()
+    {
         Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
-        DealDamageTo(detectedEnemies, KNOCKBACK);
-        AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
-        MoveAttackMeBy(MOVE_BY);
+        DealDamageTo(detectedEnemies, 0);
+        ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, 10));
+    }
+
+    private IEnumerator MakeAttackGoOnCoodlown()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(0.25f);
+        canAttack = true;
     }
 
     private void MoveAttackMeBy(int moveBy)
     {
-        StartCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody));
+        RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody, null));
     }
 
     private void LiftAttack()
@@ -62,7 +112,7 @@ public class Warrior : PersonaAbstract
 
     private void LiftMeUpBy(int liftByThisMuch)
     {
-        StartCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform));
+        RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, null));
     }
 
     private void StompAttack()

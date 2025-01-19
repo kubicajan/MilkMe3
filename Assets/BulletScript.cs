@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-    private float speed = 20f;
+    private float speed = 25f;
     public Rigidbody2D rigidBody;
+    public AnimationCurve curve;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.velocity = transform.right * speed;
+        rigidBody.velocity = new Vector2((transform.right * speed).x, 15);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1,13 +1,16 @@
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class LivingEntity : MonoBehaviour
 {
     protected Rigidbody2D RigidBody { get; private set; }
     protected BoxCollider2D BoxCollider { get; private set; }
+    public Coroutine movementCoroutine;
 
     public ParticleSystem deathParticleEffect;
+    private bool Immobilized = false;
 
     private bool immuneToKnockBackX = false;
     private int currentHealth;
@@ -26,6 +29,16 @@ public abstract class LivingEntity : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    public void Immobilize(bool immobilize)
+    {
+        Immobilized = immobilize;
+    }
+
+    public bool IsImmobilized()
+    {
+        return Immobilized;
     }
 
     public void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
@@ -53,6 +66,7 @@ public abstract class LivingEntity : MonoBehaviour
 
     public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
     {
+        Immobilize(true);
         Vector2 direction = ((Vector2)transform.position - perpetratorPosition).normalized;
         Vector2 force = new Vector2();
 
@@ -76,7 +90,7 @@ public abstract class LivingEntity : MonoBehaviour
         {
             yield break;
         }
-
+        float originalY = gameObject.transform.position.y;
         float timer = 0.3f;
         immuneToKnockBackX = true;
 
@@ -91,7 +105,7 @@ public abstract class LivingEntity : MonoBehaviour
                 yield break;
             }
             Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
-            targetPosition.y = objectPosition.y;
+            targetPosition.y = originalY;
             float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
             transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
             timer -= Time.deltaTime;

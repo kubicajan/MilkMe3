@@ -1,13 +1,8 @@
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class PlayerBase : LivingEntity
 {
     public Transform attackPoint;
-    public LineRenderer laser;
-    public GameObject bulletPrefab;
     public Transform groundCheck;
     public LayerMask groundLayers;
     public LayerMask buildingLayers;

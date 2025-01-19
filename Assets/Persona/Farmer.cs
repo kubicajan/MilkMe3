@@ -5,6 +5,8 @@ public class Farmer : PersonaAbstract
     private const float MEELE_ATTACK_RANGE = 2f;
     private bool isAngry = false;
     public ParticleSystem angryParticleEffect;
+    public GameObject pitchForkPrefab;
+
     public override string PersonaName { get; set; } = "Farmer";
 
     public override void BaseAttack()
@@ -12,7 +14,7 @@ public class Farmer : PersonaAbstract
         MeeleAttack();
     }
 
-    public override void FirstAttack()
+    public override void FirstAbility()
     {
         if (!isAngry)
         {
@@ -24,11 +26,17 @@ public class Farmer : PersonaAbstract
         }
     }
 
-    public override void SecondAttack()
+    public override void SecondAbility()
     {
-        Debug.Log("Unfinished");
+        BulletAttack();
         return;
     }
+
+    private void BulletAttack()
+    {
+        Instantiate(pitchForkPrefab, playerBase.attackPoint.position, playerBase.attackPoint.rotation);
+    }
+
     public override void SwapToMe()
     {
         Debug.Log("Unfinished");

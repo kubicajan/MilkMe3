@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 {
@@ -98,18 +99,22 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 
     public void Build()
     {
-        Collider2D closestBuilding = Utility.DetectByLayers(transform.position, 1, playerBase.buildingLayers)
-            .FirstOrDefault();
+        Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-        closestBuilding?.GetComponent<BuildingScript>().Build();
+        closestBuilding?.GetComponent<BuildingAbstract>().Build();
     }
 
-    public void DoDialogWithNPC()
+    public void Interact()
     {
-        Collider2D closestNpc = Utility.DetectByLayers(transform.position, 5, playerBase.npcLayers)
-            .FirstOrDefault();
+        Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
+        if (closestNpc != null)
+        {
+            closestNpc?.GetComponent<NpcScript>().DoDialog();
+            return;
+        }
+        Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-        closestNpc?.GetComponent<NpcScript>().DoDialog();
+        closestBuilding?.GetComponent<BuildingAbstract>().Use();
     }
 
     public void CommitSuicide()
@@ -161,6 +166,11 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
     protected Collider2D[] DetectEnemiesInRange(float range)
     {
         return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
+    }
+
+    private Collider2D DetectClosest(LayerMask layers)
+    {
+        return Utility.DetectByLayers(transform.position, 1, layers).FirstOrDefault();
     }
 
     protected void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)

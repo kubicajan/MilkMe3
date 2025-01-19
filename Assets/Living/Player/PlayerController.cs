@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown("f"))
         {
-            currentPersona.DoDialogWithNPC();
+            currentPersona.Interact();
         }
 
         if (Input.GetKeyDown("c"))

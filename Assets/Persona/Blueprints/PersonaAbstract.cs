@@ -114,7 +114,7 @@ public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
         }
         Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-        closestBuilding?.GetComponent<BuildingAbstract>().Use();
+        closestBuilding?.GetComponent<BuildingAbstract>().Use(playerBase);
     }
 
     public void CommitSuicide()

@@ -1,14 +1,18 @@
-using System.Collections;
-using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Church : BuildingAbstract
 {
     [SerializeField] private ChurchPopUp popUp;
 
-    public override void Use()
+    public override void Use(PlayerBase pBase)
     {
-        popUp.gameObject.SetActive(true);
+        base.Use(pBase);
+        playerBase.canMove = false;
+        popUp.OpenPopUp(this);
+    }
+
+    public void OnPopUpClosed()
+    {
+        playerBase.canMove = true;
     }
 }

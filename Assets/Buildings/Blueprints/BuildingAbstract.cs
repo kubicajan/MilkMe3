@@ -2,13 +2,18 @@ using UnityEngine;
 
 public abstract class BuildingAbstract : MonoBehaviour
 {
+    protected PlayerBase playerBase;
+
     public virtual void Build()
     {
         Debug.Log("I AM BUILDING");
     }
 
-    public virtual void Use()
+    public virtual void Use(PlayerBase pBase)
     {
-        return;
+        if (!playerBase)
+        {
+            playerBase = pBase;
+        }
     }
 }

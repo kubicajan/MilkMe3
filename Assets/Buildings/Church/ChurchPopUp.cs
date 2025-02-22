@@ -9,13 +9,17 @@ public class ChurchPopUp : MonoBehaviour
     public Button rightChoice;
     public Button cancelButton;
 
-    public void OpenPopUp()
+    private Church church;
+
+    public void OpenPopUp(Church churchRef)
     {
-       gameObject.SetActive(true);
+        gameObject.SetActive(true);
+        church = churchRef;
     }
 
     public void ClosePopUp()
     {
+        church?.OnPopUpClosed();
         gameObject.SetActive(false);
     }
 }

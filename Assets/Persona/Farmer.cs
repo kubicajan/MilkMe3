@@ -1,11 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class Farmer : PersonaAbstract
 {
+	[SerializeField] private ParticleSystem angryParticleEffect;
+	[SerializeField] private LineRenderer laser;
+	[SerializeField] private GameObject pitchForkPrefab;
 	private const float MEELE_ATTACK_RANGE = 2f;
 	private bool isAngry = false;
-	public ParticleSystem angryParticleEffect;
-	[SerializeField] private GameObject pitchForkPrefab;
 
 	public override string PersonaName { get; set; } = "Farmer";
 
@@ -18,23 +20,61 @@ public class Farmer : PersonaAbstract
 	{
 		if (!isAngry)
 		{
-			AngerHim();
+			MakeAngry();
 		}
 		else
 		{
-			CalmHim();
+			CalmDown();
 		}
 	}
 
 	public override void SecondAbility()
 	{
-		BulletAttack();
-		return;
+		StartCoroutine(PitchforkThrow());
 	}
 
-	private void BulletAttack()
+	private IEnumerator PitchforkThrow()
 	{
-		Instantiate(pitchForkPrefab, playerBase.attackPoint.position, playerBase.attackPoint.rotation);
+		//charge it
+		yield return new WaitForSeconds(1f);
+		const float RANGE_ATTACK_DISTANCE = 25f;
+		Transform playerAttackPoint = playerBase.attackPoint;
+		RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+			RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+		RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+			RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
+
+		GameObject projectile = new GameObject();
+		projectile.SetActive(false);
+
+		if (enemyHitInfo)
+		{
+			EnemyScript enemyScript = enemyHitInfo.transform.GetComponent<EnemyScript>();
+			if (enemyScript != null)
+			{
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
+				projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+				projectile.transform.parent = enemyHitInfo.transform;
+				enemyScript.TakeDamage(10);
+				enemyScript.MagicPushMe(enemyHitInfo.point, 5);
+			}
+		}
+		else if (groundHitInfo)
+		{
+			Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
+			projectile = Instantiate(pitchForkPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+		}
+		else
+		{
+			Vector2 secondPosition = new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+				playerAttackPoint.position.y);
+			Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
+		}
+
+		laser.enabled = true;
+		projectile.SetActive(true);
+		yield return new WaitForSeconds(0.05f);
+		laser.enabled = false;
 	}
 
 	public override void SwapToMe()
@@ -45,16 +85,16 @@ public class Farmer : PersonaAbstract
 
 	public override void SwapFromMe()
 	{
-		CalmHim();
+		CalmDown();
 	}
 
-	private void CalmHim()
+	private void CalmDown()
 	{
 		isAngry = false;
 		angryParticleEffect.Stop();
 	}
 
-	private void AngerHim()
+	private void MakeAngry()
 	{
 		isAngry = true;
 		angryParticleEffect.Play();

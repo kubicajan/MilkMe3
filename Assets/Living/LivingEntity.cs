@@ -64,6 +64,8 @@ public abstract class LivingEntity : MonoBehaviour
         CurrentHealth += heal;
     }
 
+    //TODO:
+    //ten knockback to picuje s tema projektilama, mozna to udelat jako magicPush, ten funguje
     public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
     {
         Immobilize(true);

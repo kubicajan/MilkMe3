@@ -19,4 +19,12 @@ public static class Utility
         Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.2f, groundLayers);
         return colliders.Length > 0;
     }
+
+    public static void SetLaserPosition(LineRenderer line, params Vector2[] positions)
+    {
+        for (int i = 0; i < line.positionCount; i++)
+        {
+            line.SetPosition(i, positions[i]);
+        }
+    }
 }

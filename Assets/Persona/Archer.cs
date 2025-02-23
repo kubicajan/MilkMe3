@@ -16,41 +16,41 @@ public class Archer : PersonaAbstract
 
 	private IEnumerator RangeAttack()
 	{
+		Transform playerAttackPoint = playerBase.attackPoint;
 		RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 			RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
 		RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 			RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
+		GameObject projectile = new GameObject();
+		projectile.SetActive(false);
 
 		if (enemyHitInfo)
 		{
 			EnemyScript enemyScript = enemyHitInfo.transform.GetComponent<EnemyScript>();
 			if (enemyScript != null)
 			{
-				Debug.Log("hit enemy");
 				enemyScript.TakeDamage(10);
 				enemyScript.GetKnockedBack(this.transform.position, 0.5f);
-				laser.SetPosition(0, playerBase.attackPoint.position);
-				laser.SetPosition(1, enemyHitInfo.point);
-				GameObject arrow = Instantiate(arrowPrefab, enemyHitInfo.point, playerBase.attackPoint.rotation);
-				arrow.transform.parent = enemyHitInfo.transform;
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
+				projectile = Instantiate(arrowPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+				projectile.transform.parent = enemyHitInfo.transform;
 			}
 		}
 		else if (groundHitInfo)
 		{
-			laser.SetPosition(0, playerBase.attackPoint.position);
-			laser.SetPosition(1, groundHitInfo.point);
-			Instantiate(arrowPrefab, groundHitInfo.point, playerBase.attackPoint.rotation);
+			Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
+			projectile = Instantiate(arrowPrefab, groundHitInfo.point, playerAttackPoint.rotation);
 		}
 		else
 		{
-			laser.SetPosition(0, playerBase.attackPoint.position);
-			laser.SetPosition(1,
-				new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerBase.attackPoint.position.x,
-					playerBase.attackPoint.position.y));
+			Vector2 secondPosition = new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+				playerAttackPoint.position.y);
+			Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
 		}
 
 		laser.enabled = true;
-		yield return new WaitForSeconds(0.1f);
+		projectile.SetActive(true);
+		yield return new WaitForSeconds(0.05f);
 		laser.enabled = false;
 	}
 

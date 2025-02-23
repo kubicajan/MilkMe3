@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class PitchforkScript : MonoBehaviour
 {
     private float speed = 25f;
     public Rigidbody2D rigidBody;
@@ -25,9 +25,9 @@ public class BulletScript : MonoBehaviour
         //     Destroy(gameObject);
         // }
     }
-    void OnBecameInvisible()
-    {
-        enabled = false;
-        Destroy(gameObject);
-    }
+    // void OnBecameInvisible()
+    // {
+    //     enabled = false;
+    //     Destroy(gameObject);
+    // }
 }

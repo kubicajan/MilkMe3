@@ -21,8 +21,8 @@ public class Archer : PersonaAbstract
 			RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
 		RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 			RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
-		GameObject projectile = new GameObject();
-		projectile.SetActive(false);
+		RaycastHit2D npcHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+			RANGE_ATTACK_DISTANCE, playerBase.npcLayers);
 
 		if (enemyHitInfo)
 		{
@@ -32,14 +32,20 @@ public class Archer : PersonaAbstract
 				enemyScript.TakeDamage(10);
 				enemyScript.GetKnockedBack(this.transform.position, 0.5f);
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
-				projectile = Instantiate(arrowPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+				GameObject projectile = Instantiate(arrowPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
 				projectile.transform.parent = enemyHitInfo.transform;
 			}
+		}
+		else if (npcHitInfo)
+		{
+			Utility.SetLaserPosition(laser, playerAttackPoint.position, npcHitInfo.point);
+			GameObject projectile = Instantiate(arrowPrefab, npcHitInfo.point, playerAttackPoint.rotation);
+			projectile.transform.parent = npcHitInfo.transform;
 		}
 		else if (groundHitInfo)
 		{
 			Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
-			projectile = Instantiate(arrowPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+			Instantiate(arrowPrefab, groundHitInfo.point, playerAttackPoint.rotation);
 		}
 		else
 		{
@@ -49,7 +55,6 @@ public class Archer : PersonaAbstract
 		}
 
 		laser.enabled = true;
-		projectile.SetActive(true);
 		yield return new WaitForSeconds(0.05f);
 		laser.enabled = false;
 	}

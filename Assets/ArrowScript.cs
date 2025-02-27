@@ -25,9 +25,9 @@ public class ArrowScript : MonoBehaviour
         //     Destroy(gameObject);
         // }
     }
-    void OnBecameInvisible()
-    {
-        enabled = false;
-        Destroy(gameObject);
-    }
+    // void OnBecameInvisible()
+    // {
+    //     enabled = false;
+    //     Destroy(gameObject);
+    // }
 }

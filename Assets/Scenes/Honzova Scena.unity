@@ -3344,9 +3344,10 @@ GameObject:
   - component: {fileID: 1835650348}
   - component: {fileID: 1835650347}
   - component: {fileID: 1835650346}
+  - component: {fileID: 1835650350}
   - component: {fileID: 1835650349}
   m_Layer: 10
-  m_Name: NPC
+  m_Name: Capybara_NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3406,12 +3407,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 1795150211, guid: 6073ef299277b21479091f1d9240d8ea, type: 3}
   m_Color: {r: 0.9579071, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.8666666, y: 5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -3425,7 +3426,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1835650345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23.09, y: -1.41, z: 0}
+  m_LocalPosition: {x: -29.63, y: 2.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3446,18 +3447,44 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 2.4283705, y: -3.4261985}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 3.8666666, y: 5}
+    newSize: {x: 3.8666666, y: 5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.1100826, y: 2.0617151}
+  m_EdgeRadius: 0
+--- !u!61 &1835650350
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835650345}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.4382963, y: -1.6696151}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 1}
+    oldSize: {x: 3.8666666, y: 5}
+    newSize: {x: 3.8666666, y: 5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.3655872, y: 2.1894667}
   m_EdgeRadius: 0
 --- !u!1 &1868472802
 GameObject:
@@ -3827,11 +3854,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7544479077245740952, guid: cdbe650375889914e883b897e7244d9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.6
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: 7544479077245740952, guid: cdbe650375889914e883b897e7244d9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3.97
       objectReference: {fileID: 0}
     - target: {fileID: 7544479077245740952, guid: cdbe650375889914e883b897e7244d9c, type: 3}
       propertyPath: m_LocalPosition.z

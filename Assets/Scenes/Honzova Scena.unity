@@ -3344,8 +3344,9 @@ GameObject:
   - component: {fileID: 1835650348}
   - component: {fileID: 1835650347}
   - component: {fileID: 1835650346}
-  - component: {fileID: 1835650350}
-  - component: {fileID: 1835650349}
+  - component: {fileID: 1835650351}
+  - component: {fileID: 1835650353}
+  - component: {fileID: 1835650352}
   m_Layer: 10
   m_Name: Capybara_NPC
   m_TagString: Untagged
@@ -3426,7 +3427,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1835650345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -29.63, y: 2.04, z: 0}
+  m_LocalPosition: {x: -27.28, y: -0.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3434,7 +3435,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1835650349
+--- !u!95 &1835650351
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835650345}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c8a8fe61e54f05f40985494a2322df58, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!61 &1835650352
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3447,20 +3468,20 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 2.4283705, y: -3.6178257}
+  m_Offset: {x: 0.5855112, y: -1.1710228}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 1}
-    oldSize: {x: 3.8666666, y: 5}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.4, y: 3.9}
     newSize: {x: 3.8666666, y: 5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.1100826, y: 1.6784606}
+  m_Size: {x: 2.0988674, y: 1.5579545}
   m_EdgeRadius: 0
---- !u!61 &1835650350
+--- !u!61 &1835650353
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3473,18 +3494,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.4382963, y: -1.6696151}
+  m_Offset: {x: -0.5041914, y: 0.5855113}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 1}
-    oldSize: {x: 3.8666666, y: 5}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.4, y: 3.9}
     newSize: {x: 3.8666666, y: 5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.3655872, y: 2.1894667}
+  m_Size: {x: 2.261507, y: 1.8832386}
   m_EdgeRadius: 0
 --- !u!1 &1868472802
 GameObject:
@@ -3854,11 +3875,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7544479077245740952, guid: cdbe650375889914e883b897e7244d9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.28
+      value: -0.74
       objectReference: {fileID: 0}
     - target: {fileID: 7544479077245740952, guid: cdbe650375889914e883b897e7244d9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.97
+      value: -1.73
       objectReference: {fileID: 0}
     - target: {fileID: 7544479077245740952, guid: cdbe650375889914e883b897e7244d9c, type: 3}
       propertyPath: m_LocalPosition.z

@@ -43,7 +43,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 1
+  spriteExtrude: 10
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -120,12 +120,12 @@ TextureImporter:
       name: actual_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 500
-        width: 386.66666
-        height: 500
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        x: 20
+        y: 560
+        width: 340
+        height: 390
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -141,12 +141,12 @@ TextureImporter:
       name: actual_1
       rect:
         serializedVersion: 2
-        x: 386
-        y: 500
-        width: 386.66666
-        height: 500
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        x: 410
+        y: 560
+        width: 340
+        height: 370
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,12 +162,12 @@ TextureImporter:
       name: actual_2
       rect:
         serializedVersion: 2
-        x: 772
-        y: 500
-        width: 386.66666
-        height: 500
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        x: 800
+        y: 560
+        width: 340
+        height: 350
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,12 +183,12 @@ TextureImporter:
       name: actual_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 386.66666
-        height: 500
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        x: 20
+        y: 60
+        width: 340
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -204,12 +204,12 @@ TextureImporter:
       name: actual_4
       rect:
         serializedVersion: 2
-        x: 386
-        y: 0
-        width: 386.66666
-        height: 500
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        x: 400
+        y: 60
+        width: 340
+        height: 370
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -225,12 +225,12 @@ TextureImporter:
       name: actual_5
       rect:
         serializedVersion: 2
-        x: 772
-        y: 0
-        width: 386.66666
-        height: 500
-      alignment: 1
-      pivot: {x: 0, y: 1}
+        x: 800
+        y: 60
+        width: 340
+        height: 390
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

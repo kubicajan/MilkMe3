@@ -44,8 +44,6 @@ public class Farmer : PersonaAbstract
 		RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 			RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
 
-		GameObject projectile = new GameObject();
-		projectile.SetActive(false);
 
 		if (enemyHitInfo)
 		{
@@ -53,7 +51,7 @@ public class Farmer : PersonaAbstract
 			if (enemyScript != null)
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
-				projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+				GameObject projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
 				projectile.transform.parent = enemyHitInfo.transform;
 				enemyScript.TakeDamage(10);
 				enemyScript.MagicPushMe(enemyHitInfo.point, 5);
@@ -62,7 +60,7 @@ public class Farmer : PersonaAbstract
 		else if (groundHitInfo)
 		{
 			Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
-			projectile = Instantiate(pitchForkPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+			Instantiate(pitchForkPrefab, groundHitInfo.point, playerAttackPoint.rotation);
 		}
 		else
 		{
@@ -72,7 +70,6 @@ public class Farmer : PersonaAbstract
 		}
 
 		laser.enabled = true;
-		projectile.SetActive(true);
 		yield return new WaitForSeconds(0.05f);
 		laser.enabled = false;
 	}

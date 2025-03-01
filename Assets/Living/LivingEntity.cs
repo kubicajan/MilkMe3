@@ -18,7 +18,7 @@ public abstract class LivingEntity : MonoBehaviour
 
     private int CurrentHealth
     {
-        get { return currentHealth; }
+        get => currentHealth;
         set
         {
             currentHealth = value;
@@ -31,22 +31,22 @@ public abstract class LivingEntity : MonoBehaviour
         }
     }
 
-    public void Immobilize(bool immobilize)
-    {
-        Immobilized = immobilize;
-    }
-
-    public bool IsImmobilized()
-    {
-        return Immobilized;
-    }
-
-    public void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
+    protected void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
     {
         maximumHealth = _health;
         currentHealth = maximumHealth;
         BoxCollider = _boxCollider;
         RigidBody = _rigidBody2D;
+    }
+
+    public void Immobilize(bool immobilize)
+    {
+        Immobilized = immobilize;
+    }
+
+    protected bool IsImmobilized()
+    {
+        return Immobilized;
     }
 
     public void TakeDamage(int damage)

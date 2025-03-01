@@ -6,192 +6,192 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public abstract class PersonaAbstract : MonoBehaviour, PersonaInterface
 {
-    protected PlayerBase playerBase;
-    public abstract string PersonaName { get; set; }
-    public virtual int maxNumberOfJumps => 5;
+	protected PlayerBase playerBase;
+	public abstract string PersonaName { get; set; }
+	public virtual int maxNumberOfJumps => 5;
 
-    private float moveSpeed = 10f;
-    private float jumpForce = 20f;
-    protected float dashForce = 100f;
-    private Vector2 movement;
-    //public bool dashing = false;
+	private float moveSpeed = 10f;
+	private float jumpForce = 20f;
+	protected float dashForce = 100f;
+	private Vector2 movement;
+	//public bool dashing = false;
 
-    //TODO: tohle nesmi byt static, jinak nebude multiplier fungovat vubec.
-    protected static float lastDirection = 1;
-    private static int consecutiveJumps = 1;
-    protected Rigidbody2D RigidBody;
+	//TODO: tohle nesmi byt static, jinak nebude multiplier fungovat vubec.
+	protected static float lastDirection = 1;
+	private static int consecutiveJumps = 1;
+	protected Rigidbody2D RigidBody;
 
-    [SerializeField]
-    private Sprite skin;
+	[SerializeField] private Sprite skin;
 
-    public void Initialize(PlayerBase _playerBase)
-    {
-        playerBase = _playerBase;
-        RigidBody = playerBase.GetRigidBody();
-    }
+	public void Initialize(PlayerBase _playerBase)
+	{
+		playerBase = _playerBase;
+		RigidBody = playerBase.GetRigidBody();
+	}
 
-    protected void RunMovementCoroutine(IEnumerator coroutine)
-    {
-        StopMovementCoroutine();
-        playerBase.movementCoroutine = StartCoroutine(coroutine);
-    }
+	protected void RunMovementCoroutine(IEnumerator coroutine)
+	{
+		StopMovementCoroutine();
+		playerBase.movementCoroutine = StartCoroutine(coroutine);
+	}
 
-    protected void StopMovementCoroutine()
-    {
-        if (playerBase.movementCoroutine != null)
-        {
-            StopCoroutine(playerBase.movementCoroutine);
-        }
-    }
+	private void StopMovementCoroutine()
+	{
+		if (playerBase.movementCoroutine != null)
+		{
+			StopCoroutine(playerBase.movementCoroutine);
+		}
+	}
 
-    protected bool IsGrounded()
-    {
-        return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
-    }
+	protected bool IsGrounded()
+	{
+		return Utility.IsGroundedOnLayers(playerBase.groundCheck.position, playerBase.groundLayers);
+	}
 
-    public virtual void Dash()
-    {
-        RunMovementCoroutine(DashCoroutine());
-    }
+	public virtual void Dash()
+	{
+		RunMovementCoroutine(DashCoroutine());
+	}
 
-    protected virtual IEnumerator DashCoroutine()
-    {
-        ResetJumps();
-        Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
-        Common.TurnOffGravity(RigidBody, true);
-        //dashing = true;
-        RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
-        yield return new WaitForSeconds(0.1f);
-        RigidBody.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.1f);
-        //dashing = false;
-        Common.TurnOffGravity(RigidBody, false);
-        Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
-    }
+	protected virtual IEnumerator DashCoroutine()
+	{
+		ResetJumps();
+		Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
+		Common.TurnOffGravity(RigidBody, true);
+		//dashing = true;
+		RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
+		yield return new WaitForSeconds(0.1f);
+		RigidBody.velocity = Vector2.zero;
+		yield return new WaitForSeconds(0.1f);
+		//dashing = false;
+		Common.TurnOffGravity(RigidBody, false);
+		Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
+	}
 
-    protected void ResetJumps()
-    {
-        consecutiveJumps = 0;
-    }
+	protected void ResetJumps()
+	{
+		consecutiveJumps = 0;
+	}
 
-    public Vector2 GetMovement()
-    {
-        return movement;
-    }
+	public Vector2 GetMovement()
+	{
+		return movement;
+	}
 
-    public void Move()
-    {
-        if (lastDirection != movement.x)
-        {
-            lastDirection = movement.x;
-            transform.Rotate(0f, 180f, 0f);
-        }
+	public void Move()
+	{
+		if (lastDirection != movement.x)
+		{
+			lastDirection = movement.x;
+			transform.Rotate(0f, 180f, 0f);
+		}
 
-        Vector3 m_Velocity = Vector3.zero;
-        Vector3 targetVelocity = new Vector2(movement.x * moveSpeed, RigidBody.velocity.y);
-        RigidBody.velocity = Vector3.SmoothDamp(RigidBody.velocity, targetVelocity, ref m_Velocity, .05f);
-    }
+		Vector3 m_Velocity = Vector3.zero;
+		Vector3 targetVelocity = new Vector2(movement.x * moveSpeed, RigidBody.velocity.y);
+		RigidBody.velocity = Vector3.SmoothDamp(RigidBody.velocity, targetVelocity, ref m_Velocity, .05f);
+	}
 
-    public void MovePotentially()
-    {
-        movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
-    }
+	public void MovePotentially()
+	{
+		movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
+	}
 
-    public void Build()
-    {
-        Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
+	public void Heal()
+	{
+		playerBase.Heal(10);
+	}
 
-        closestBuilding?.GetComponent<BuildingAbstract>().Build();
-    }
+	public void Build()
+	{
+		Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-    public void Interact()
-    {
-        Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
-        if (closestNpc != null)
-        {
-            closestNpc?.GetComponent<NpcScript>().DoDialog();
-            return;
-        }
-        Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
+		closestBuilding?.GetComponent<BuildingAbstract>().Build();
+	}
 
-        closestBuilding?.GetComponent<BuildingAbstract>().Use(playerBase);
-    }
+	public void Interact()
+	{
+		Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
+		if (closestNpc != null)
+		{
+			closestNpc?.GetComponent<NpcScript>().DoDialog();
+			return;
+		}
 
-    public void CommitSuicide()
-    {
-        playerBase.TakeDamage(playerBase.GetCurrentHealth());
-    }
+		Collider2D closestBuilding = DetectClosest(playerBase.buildingLayers);
 
-    public void DoDialog()
-    {
-        DialogManager.Instance.PopUpDialog("Ambatakaaaaaam", gameObject.transform.position);
-    }
+		closestBuilding?.GetComponent<BuildingAbstract>().Use(playerBase);
+	}
 
-    public void Jump(int maxJumps = 5)
-    {
-        if (IsGrounded())
-        {
-            ResetJumps();
-        }
-        else if (!IsGrounded() && maxNumberOfJumps <= consecutiveJumps)
-        {
-            return;
-        }
+	public void CommitSuicide()
+	{
+		playerBase.TakeDamage(playerBase.GetCurrentHealth());
+	}
 
-        consecutiveJumps++;
-        RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
-    }
+	public void Jump(int maxJumps = 5)
+	{
+		if (IsGrounded())
+		{
+			ResetJumps();
+		}
+		else if (!IsGrounded() && maxNumberOfJumps <= consecutiveJumps)
+		{
+			return;
+		}
 
-    public Sprite GetSkin()
-    {
-        return skin;
-    }
+		consecutiveJumps++;
+		RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
+	}
 
-    protected bool DealDamageTo(Collider2D[] detectedEnemies, float knockback)
-    {
-        int count = 0;
-        foreach (Collider2D enemy in detectedEnemies)
-        {
-            if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
-            {
-                enemyScript.TakeDamage(10);
-                enemyScript.GetKnockedBack(this.transform.position, knockback);
-                count++;
-                Debug.Log("hit enemy");
-            }
-        }
-        return count > 0;
-    }
+	public Sprite GetSkin()
+	{
+		return skin;
+	}
 
-    protected Collider2D[] DetectEnemiesInRange(float range)
-    {
-        return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
-    }
+	protected bool DealDamageTo(Collider2D[] detectedEnemies, float knockback)
+	{
+		int count = 0;
+		foreach (Collider2D enemy in detectedEnemies)
+		{
+			if (enemy.TryGetComponent<EnemyScript>(out var enemyScript))
+			{
+				enemyScript.TakeDamage(10);
+				enemyScript.GetKnockedBack(this.transform.position, knockback);
+				count++;
+				Debug.Log("hit enemy");
+			}
+		}
 
-    private Collider2D DetectClosest(LayerMask layers)
-    {
-        return Utility.DetectByLayers(transform.position, 1, layers).FirstOrDefault();
-    }
+		return count > 0;
+	}
 
-    protected void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)
-    {
-        foreach (Collider2D enemyCollider in detectedEntities)
-        {
-            if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
-            {
-                action?.Invoke(enemyScript);
-            }
-        }
-    }
+	protected Collider2D[] DetectEnemiesInRange(float range)
+	{
+		return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
+	}
 
-    public abstract void BaseAttack();
+	private Collider2D DetectClosest(LayerMask layers)
+	{
+		return Utility.DetectByLayers(transform.position, 1, layers).FirstOrDefault();
+	}
 
-    public abstract void FirstAbility();
+	protected void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)
+	{
+		foreach (Collider2D enemyCollider in detectedEntities)
+		{
+			if (enemyCollider.TryGetComponent<EnemyScript>(out var enemyScript))
+			{
+				action?.Invoke(enemyScript);
+			}
+		}
+	}
 
-    public abstract void SecondAbility();
+	public abstract void BaseAttack();
 
-    public abstract void SwapToMe();
+	public abstract void FirstAbility();
 
-    public abstract void SwapFromMe();
+	public abstract void SecondAbility();
 
+	public abstract void SwapToMe();
+
+	public abstract void SwapFromMe();
 }

@@ -61,6 +61,11 @@ public class PlayerController : MonoBehaviour
 				currentPersona.Interact();
 			}
 
+			if (Input.GetKeyDown("x"))
+			{
+				currentPersona.Heal();
+			}
+
 			if (Input.GetKeyDown("c"))
 			{
 				currentPersona.BaseAttack();
@@ -81,20 +86,11 @@ public class PlayerController : MonoBehaviour
 				currentPersona.Build();
 			}
 
-			if (Input.GetKeyDown("x"))
-			{
-				//BulletAttack();
-			}
-
 			if (Input.GetKeyDown("r"))
 			{
 				currentPersona.CommitSuicide();
 			}
 
-			if (Input.GetKeyDown("z"))
-			{
-				//StartCoroutine(LaserAttack());
-			}
 
 			if (Input.GetButtonDown("Jump"))
 			{

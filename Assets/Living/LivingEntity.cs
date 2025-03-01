@@ -59,7 +59,7 @@ public abstract class LivingEntity : MonoBehaviour
         return CurrentHealth;
     }
 
-    private void Heal(int heal)
+    public void Heal(int heal)
     {
         CurrentHealth += heal;
     }

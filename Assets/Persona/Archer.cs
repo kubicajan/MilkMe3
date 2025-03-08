@@ -1,4 +1,5 @@
 using System.Collections;
+using Living.Player;
 using Persona.Blueprints;
 using UnityEngine;
 
@@ -18,12 +19,19 @@ namespace Persona
 			StartCoroutine(RangeAttack());
 		}
 
+		public override void Initialize(PlayerBase _playerBase)
+		{
+			base.Initialize(_playerBase);
+			laser.GetComponent<LineRenderer>().positionCount = 2;
+		}
+
 		private IEnumerator RangeAttack()
 		{
 			Transform playerAttackPoint = playerBase.attackPoint;
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
-			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
+				playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
 			RaycastHit2D npcHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.npcLayers);
@@ -53,7 +61,8 @@ namespace Persona
 			}
 			else
 			{
-				Vector2 secondPosition = new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+				Vector2 secondPosition = new Vector2(
+					(lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
 					playerAttackPoint.position.y);
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
 			}

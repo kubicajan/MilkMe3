@@ -25,7 +25,7 @@ namespace Persona.Blueprints
 
 		[SerializeField] private Sprite skin;
 
-		public void Initialize(PlayerBase _playerBase)
+		public virtual void Initialize(PlayerBase _playerBase)
 		{
 			playerBase = _playerBase;
 			RigidBody = playerBase.GetRigidBody();

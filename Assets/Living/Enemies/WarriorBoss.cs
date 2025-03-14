@@ -21,9 +21,26 @@ namespace Living.Enemies
 			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
 		}
 
-		public bool ShouldAttack()
+		public string ShouldAttack()
 		{
-			return Vector2.Distance(playerLocation.position, attackPoint.position) < 5f;
+			if (Vector2.Distance(playerLocation.position, attackPoint.position) < 5f)
+			{
+				if (GetRandomOneOrTwo() == 1)
+				{
+					return "Heavy_attack";
+				}
+				else
+				{
+					return "Double_attack";
+				}
+			}
+
+			return null;
+		}
+
+		public int GetRandomOneOrTwo()
+		{
+			return Random.Range(1, 3); // Random.Range with (1,3) returns either 1 or 2
 		}
 
 		private void DealDamageTo(Collider2D[] detectedEnemies, float knockBack)

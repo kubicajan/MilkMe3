@@ -9,6 +9,11 @@ namespace Living.Enemies
 
 		private const float MEELE_ATTACK_RANGE = 3f;
 
+		private void Awake()
+		{
+			speed = 4f;
+		}
+
 		public void MeeleAttack()
 		{
 			const float KNOCKBACK = 2;

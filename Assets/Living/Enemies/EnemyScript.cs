@@ -6,7 +6,7 @@ public class EnemyScript : LivingEntity
     public Transform groundCheck;
     public Transform playerLocation;
     public LayerMask groundLayers;
-    private float speed = 1f;
+    protected float speed = 1f;
     public ParticleSystem explosionParticles;
     
     private void Start()

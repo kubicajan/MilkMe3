@@ -35,7 +35,6 @@ public class EnemyScript : LivingEntity
 				transform.Rotate(0f, 180f, 0f);
 			}
 
-
 			Vector3 targetPosition = new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
 			if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
 			{

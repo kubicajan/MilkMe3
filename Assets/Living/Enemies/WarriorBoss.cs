@@ -14,7 +14,6 @@ namespace Living.Enemies
 			speed = 4f;
 		}
 
-
 		public void MeeleAttack()
 		{
 			const float KNOCKBACK = 2;

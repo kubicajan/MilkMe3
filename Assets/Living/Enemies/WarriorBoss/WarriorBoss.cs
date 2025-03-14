@@ -1,19 +1,18 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Living.Enemies
+namespace Living.Enemies.WarriorBoss
 {
 	public class WarriorBoss : EnemyScript
 	{
 		[SerializeField] private Transform attackPoint;
 		public LayerMask enemyLayers;
-
 		private const float MEELE_ATTACK_RANGE = 3f;
 
 		private void Awake()
 		{
-			speed = 9f;
+			movementSpeed = 9f;
 		}
-
 
 		public void MeeleAttack()
 		{
@@ -21,24 +20,23 @@ namespace Living.Enemies
 			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
 		}
 
-		public string ShouldAttack()
+		public string SelectAttack()
 		{
-			if (Vector2.Distance(playerLocation.position, attackPoint.position) < 5f)
+			if (Vector2.Distance(playerLocation.position, attackPoint.position) <= MEELE_ATTACK_RANGE)
 			{
-				if (GetRandomOneOrTwo() == 1)
+				if (GetRandomOneOrTwo() != 1)
 				{
-					return "Heavy_attack";
+					return nameof(WarriorBossTriggersEnum.HEAVY_ATTACK);
 				}
 				else
 				{
-					return "Double_attack";
+					return nameof(WarriorBossTriggersEnum.DOUBLE_ATTACK);
 				}
 			}
-
 			return null;
 		}
 
-		public int GetRandomOneOrTwo()
+		private int GetRandomOneOrTwo()
 		{
 			return Random.Range(1, 3); // Random.Range with (1,3) returns either 1 or 2
 		}
@@ -51,7 +49,6 @@ namespace Living.Enemies
 				{
 					enemyScript.TakeDamage(10);
 					enemyScript.GetKnockedBack(this.transform.position, knockBack);
-					Debug.Log("hit something");
 				}
 			}
 		}

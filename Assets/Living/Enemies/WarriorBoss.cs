@@ -11,7 +11,7 @@ namespace Living.Enemies
 
 		private void Awake()
 		{
-			speed = 4f;
+			speed = 9f;
 		}
 
 
@@ -19,6 +19,11 @@ namespace Living.Enemies
 		{
 			const float KNOCKBACK = 2;
 			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
+		}
+
+		public bool ShouldAttack()
+		{
+			return Vector2.Distance(playerLocation.position, attackPoint.position) < 5f;
 		}
 
 		private void DealDamageTo(Collider2D[] detectedEnemies, float knockBack)

@@ -22,29 +22,29 @@ public class EnemyScript : LivingEntity
 
 	public void Update()
 	{
-		Move();
+		if (!Mathf.Approximately(lastDirection, movement.x))
+		{
+			lastDirection = movement.x;
+			transform.Rotate(0f, 180f, 0f);
+		}
+
+
+		if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
+		{
+			movement.x = -1;
+		}
+		else
+		{
+			movement.x = 1;
+		}
 	}
 
-	protected void Move()
+	public void Move()
 	{
+		Debug.Log("helo");
 		if (!IsImmobilized())
 		{
-			if (!Mathf.Approximately(lastDirection, movement.x))
-			{
-				lastDirection = movement.x;
-				transform.Rotate(0f, 180f, 0f);
-			}
-
 			Vector3 targetPosition = new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
-			if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
-			{
-				movement.x = -1;
-			}
-			else
-			{
-				movement.x = 1;
-			}
-
 			transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 		}
 		else

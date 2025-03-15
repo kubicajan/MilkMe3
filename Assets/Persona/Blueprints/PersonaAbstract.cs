@@ -175,7 +175,7 @@ namespace Persona.Blueprints
 
 		private Collider2D DetectClosest(LayerMask layers)
 		{
-			return Utility.DetectByLayers(transform.position, 5, layers).FirstOrDefault();
+			return Utility.DetectByLayers(transform.position, 1, layers).FirstOrDefault();
 		}
 
 		protected void ProcessEnemies(Collider2D[] detectedEntities, Action<EnemyScript> action)

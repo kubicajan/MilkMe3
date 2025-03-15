@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using Helpers.CommonEnums;
 using UnityEngine;
 
 namespace Living.Enemies.WarriorBoss
@@ -12,6 +12,7 @@ namespace Living.Enemies.WarriorBoss
 		private void Awake()
 		{
 			movementSpeed = 9f;
+			gameObject.tag = GameTag.Npc;
 		}
 
 		public void MeeleAttack()
@@ -23,7 +24,8 @@ namespace Living.Enemies.WarriorBoss
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			GetComponent<Animator>().SetTrigger(nameof(WarriorBossTriggerEnum.ANNOYED));
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			gameObject.tag = GameTag.Boss;
 		}
 
 		public string SelectAttack()
@@ -32,11 +34,11 @@ namespace Living.Enemies.WarriorBoss
 			{
 				if (GetRandomOneOrTwo() != 1)
 				{
-					return nameof(WarriorBossTriggerEnum.HEAVY_ATTACK);
+					return WarriorBossTrigger.HeavyAttack;
 				}
 				else
 				{
-					return nameof(WarriorBossTriggerEnum.DOUBLE_ATTACK);
+					return WarriorBossTrigger.DoubleAttack;
 				}
 			}
 			return null;

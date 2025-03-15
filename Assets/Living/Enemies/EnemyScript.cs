@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Helpers.CommonEnums;
 using UnityEngine;
 
 namespace Living.Enemies
@@ -71,10 +72,13 @@ namespace Living.Enemies
 
 		private void OnCollisionEnter2D(Collision2D collision)
 		{
-			if (collision.gameObject.CompareTag("Player"))
+			if (CompareTag(GameTag.Enemy) || CompareTag(GameTag.Boss))
 			{
-				Instantiate(explosionParticles, transform.position, Quaternion.identity);
-				MagicPushMe(collision.gameObject.transform.position, 5);
+				if (collision.gameObject.CompareTag(GameTag.Player))
+				{
+					Instantiate(explosionParticles, transform.position, Quaternion.identity);
+					MagicPushMe(collision.gameObject.transform.position, 5);
+				}
 			}
 		}
 

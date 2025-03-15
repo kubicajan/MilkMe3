@@ -15,7 +15,6 @@ namespace Living.Enemies
 		protected static float lastDirection = 1;
 		private int movementDirection;
 
-
 		private void Start()
 		{
 			Init(_health: 500,

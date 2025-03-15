@@ -42,15 +42,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Complete_background
+    uniqueID: 1407188155
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
+  - name: Grid_Background
     uniqueID: 2883993119
     locked: 0
-  - name: Middle
+  - name: Grid_Middle
     uniqueID: 2600448533
     locked: 0
-  - name: Foreground
+  - name: Grid_Foreground
     uniqueID: 1078415951
     locked: 0

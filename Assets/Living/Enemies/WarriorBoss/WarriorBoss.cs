@@ -20,17 +20,23 @@ namespace Living.Enemies.WarriorBoss
 			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
 		}
 
+		public override void DoDialog()
+		{
+			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
+			GetComponent<Animator>().SetTrigger(nameof(WarriorBossTriggerEnum.ANNOYED));
+		}
+
 		public string SelectAttack()
 		{
 			if (Vector2.Distance(playerLocation.position, attackPoint.position) <= MEELE_ATTACK_RANGE)
 			{
 				if (GetRandomOneOrTwo() != 1)
 				{
-					return nameof(WarriorBossTriggersEnum.HEAVY_ATTACK);
+					return nameof(WarriorBossTriggerEnum.HEAVY_ATTACK);
 				}
 				else
 				{
-					return nameof(WarriorBossTriggersEnum.DOUBLE_ATTACK);
+					return nameof(WarriorBossTriggerEnum.DOUBLE_ATTACK);
 				}
 			}
 			return null;

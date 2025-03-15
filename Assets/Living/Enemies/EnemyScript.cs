@@ -46,6 +46,11 @@ namespace Living.Enemies
 			}
 		}
 
+		public virtual void DoDialog()
+		{
+			return;
+		}
+
 		public void Move()
 		{
 			if (!IsImmobilized())

@@ -36,6 +36,7 @@ namespace Living.Enemies
 				transform.Rotate(0f, 180f, 0f);
 			}
 
+			//todo: tady toto nefunguje, protoze kdyz jich je vic, tak se stridaji. Musi to byt locked na jednoho.
 			if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
 			{
 				movementDirection = -1;

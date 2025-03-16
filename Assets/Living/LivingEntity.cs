@@ -1,118 +1,125 @@
-
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class LivingEntity : MonoBehaviour
+namespace Living
 {
-    protected Rigidbody2D RigidBody { get; private set; }
-    protected BoxCollider2D BoxCollider { get; private set; }
-    public Coroutine movementCoroutine;
+	public abstract class LivingEntity : MonoBehaviour
+	{
+		[SerializeField] public LayerMask hostileLayers;
+		[SerializeField] public LayerMask groundLayers;
+		protected Rigidbody2D RigidBody { get; private set; }
+		protected BoxCollider2D BoxCollider { get; private set; }
+		public Coroutine movementCoroutine;
 
-    public ParticleSystem deathParticleEffect;
-    private bool Immobilized = false;
+		public ParticleSystem deathParticleEffect;
+		private bool Immobilized = false;
 
-    private bool immuneToKnockBackX = false;
-    private int currentHealth;
-    private int maximumHealth;
+		private bool immuneToKnockBackX = false;
+		private int currentHealth;
+		private int maximumHealth;
 
-    private int CurrentHealth
-    {
-        get => currentHealth;
-        set
-        {
-            currentHealth = value;
-            Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
-            if (currentHealth <= 0)
-            {
-                Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
-                gameObject.SetActive(false);
-            }
-        }
-    }
+		private int CurrentHealth
+		{
+			get => currentHealth;
+			set
+			{
+				currentHealth = value;
+				Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
+				if (currentHealth <= 0)
+				{
+					Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
+					gameObject.SetActive(false);
+				}
+			}
+		}
 
-    protected void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
-    {
-        maximumHealth = _health;
-        currentHealth = maximumHealth;
-        BoxCollider = _boxCollider;
-        RigidBody = _rigidBody2D;
-    }
+		protected void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
+		{
+			maximumHealth = _health;
+			currentHealth = maximumHealth;
+			BoxCollider = _boxCollider;
+			RigidBody = _rigidBody2D;
+		}
 
-    public void Immobilize(bool immobilize)
-    {
-        Immobilized = immobilize;
-    }
+		public void Immobilize(bool immobilize)
+		{
+			Immobilized = immobilize;
+		}
 
-    protected bool IsImmobilized()
-    {
-        return Immobilized;
-    }
+		protected bool IsImmobilized()
+		{
+			return Immobilized;
+		}
 
-    public void TakeDamage(int damage)
-    {
-        CurrentHealth -= damage;
-    }
+		public void TakeDamage(int damage)
+		{
+			CurrentHealth -= damage;
+		}
 
-    public int GetCurrentHealth()
-    {
-        return CurrentHealth;
-    }
+		public int GetCurrentHealth()
+		{
+			return CurrentHealth;
+		}
 
-    public void Heal(int heal)
-    {
-        CurrentHealth += heal;
-    }
+		public void Heal(int heal)
+		{
+			CurrentHealth += heal;
+		}
 
-    //TODO:
-    //ten knockback to picuje s tema projektilama, mozna to udelat jako magicPush, ten funguje
-    public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
-    {
-        Immobilize(true);
-        Vector2 direction = ((Vector2)transform.position - perpetratorPosition).normalized;
-        Vector2 force = new Vector2();
+		//TODO:
+		//ten knockback to picuje s tema projektilama, mozna to udelat jako magicPush, ten funguje
+		public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
+		{
+			Immobilize(true);
+			Vector2 direction = ((Vector2)transform.position - perpetratorPosition).normalized;
+			Vector2 force = new Vector2();
 
-        if (!immuneToKnockBackX)
-        {
-            force.x = direction.x * knockbackDistance;
-            Debug.Log(knockbackDistance);
-        }
-        force.y = knockbackDistance * RigidBody.gravityScale;
-        RigidBody.AddForce(force, ForceMode2D.Impulse);
-    }
+			if (!immuneToKnockBackX)
+			{
+				force.x = direction.x * knockbackDistance;
+				Debug.Log(knockbackDistance);
+			}
 
-    public void MagicPushMe(Vector2 perpetratorPosition, float knockbackDistance)
-    {
-        StartCoroutine(MagicPushMeCoroutine(perpetratorPosition, knockbackDistance));
-    }
+			force.y = knockbackDistance * RigidBody.gravityScale;
+			RigidBody.AddForce(force, ForceMode2D.Impulse);
+		}
 
-    private IEnumerator MagicPushMeCoroutine(Vector2 perpetratorPosition, float knockbackDistance)
-    {
-        if (immuneToKnockBackX)
-        {
-            yield break;
-        }
-        float originalY = gameObject.transform.position.y;
-        float timer = 0.3f;
-        immuneToKnockBackX = true;
+		public void MagicPushMe(Vector2 perpetratorPosition, float knockbackDistance)
+		{
+			StartCoroutine(MagicPushMeCoroutine(perpetratorPosition, knockbackDistance));
+		}
 
-        while (timer > 0)
-        {
-            Vector2 objectPosition = transform.position;
-            Vector2 distanceToEnemy = objectPosition - perpetratorPosition;
+		private IEnumerator MagicPushMeCoroutine(Vector2 perpetratorPosition, float knockbackDistance)
+		{
+			if (immuneToKnockBackX)
+			{
+				yield break;
+			}
 
-            if (Mathf.Abs(distanceToEnemy.x - knockbackDistance) < 0.2f)
-            {
-                immuneToKnockBackX = false;
-                yield break;
-            }
-            Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
-            targetPosition.y = originalY;
-            float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
-            transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
-            timer -= Time.deltaTime;
-            yield return null;
-        }
-        immuneToKnockBackX = false;
-    }
+			float originalY = gameObject.transform.position.y;
+			float timer = 0.3f;
+			immuneToKnockBackX = true;
+
+			while (timer > 0)
+			{
+				Vector2 objectPosition = transform.position;
+				Vector2 distanceToEnemy = objectPosition - perpetratorPosition;
+
+				if (Mathf.Abs(distanceToEnemy.x - knockbackDistance) < 0.2f)
+				{
+					immuneToKnockBackX = false;
+					yield break;
+				}
+
+				Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
+				targetPosition.y = originalY;
+				float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
+				transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
+				timer -= Time.deltaTime;
+				yield return null;
+			}
+
+			immuneToKnockBackX = false;
+		}
+	}
 }

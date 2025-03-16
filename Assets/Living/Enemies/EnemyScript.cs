@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
 
@@ -7,9 +8,8 @@ namespace Living.Enemies
 {
 	public class EnemyScript : LivingEntity
 	{
-		public Transform groundCheck;
-		public Transform playerLocation;
-		public LayerMask groundLayers;
+		[SerializeField] protected Transform groundCheck;
+		[SerializeField] protected Transform playerLocation;
 		protected float movementSpeed = 1f;
 		public ParticleSystem explosionParticles;
 		private float lastDirection = 1;
@@ -36,7 +36,6 @@ namespace Living.Enemies
 				transform.Rotate(0f, 180f, 0f);
 			}
 
-			//todo: tady toto nefunguje, protoze kdyz jich je vic, tak se stridaji. Musi to byt locked na jednoho.
 			if (Math.Abs(playerLocation.position.x) - Math.Abs(this.transform.position.x) > 0)
 			{
 				movementDirection = -1;

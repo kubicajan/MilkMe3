@@ -1,4 +1,5 @@
 using System.Collections;
+using Helpers;
 using Living.Enemies;
 using Living.Player;
 using Persona.Blueprints;
@@ -30,7 +31,7 @@ namespace Persona
 		{
 			Transform playerAttackPoint = playerBase.attackPoint;
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
-				RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
 			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
 				playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);

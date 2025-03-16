@@ -1,13 +1,14 @@
+using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Living.Enemies.WarriorBoss
 {
 	public class WarriorBoss : EnemyScript
 	{
 		[SerializeField] private Transform attackPoint;
-		public LayerMask enemyLayers;
-		private const float MEELE_ATTACK_RANGE = 3f;
+		private const float MELEE_ATTACK_RANGE = 3f;
 
 		private void Awake()
 		{
@@ -15,10 +16,10 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
-		public void MeeleAttack()
+		public void MeleeAttack()
 		{
 			const float KNOCKBACK = 2;
-			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
+			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
 		}
 
 		public override void DoDialog()
@@ -30,7 +31,7 @@ namespace Living.Enemies.WarriorBoss
 
 		public string SelectAttack()
 		{
-			if (Vector2.Distance(playerLocation.position, attackPoint.position) <= MEELE_ATTACK_RANGE)
+			if (Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE)
 			{
 				if (GetRandomOneOrTwo() != 1)
 				{
@@ -41,6 +42,7 @@ namespace Living.Enemies.WarriorBoss
 					return WarriorBossTrigger.DoubleAttack;
 				}
 			}
+
 			return null;
 		}
 
@@ -61,9 +63,9 @@ namespace Living.Enemies.WarriorBoss
 			}
 		}
 
-		private Collider2D[] DetectEnemiesInRange(float range)
+		private Collider2D[] DetectHostilesInRange(float range)
 		{
-			return Utility.DetectByLayers(attackPoint.position, range, enemyLayers);
+			return Utility.DetectByLayers(attackPoint.position, range, hostileLayers);
 		}
 	}
 }

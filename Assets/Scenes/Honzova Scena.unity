@@ -1370,12 +1370,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f377e36d4ba9547b4caad6184e5d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
-  groundCheck: {fileID: 203043307}
-  playerLocation: {fileID: 825198581}
+  hostileLayers:
+    serializedVersion: 2
+    m_Bits: 0
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  groundCheck: {fileID: 203043307}
+  playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
 --- !u!61 &463093094
 BoxCollider2D:
@@ -2269,17 +2272,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34eee3ad0c14797a2b591ea7a35d303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
-  groundCheck: {fileID: 733296916}
-  playerLocation: {fileID: 825198581}
+  hostileLayers:
+    serializedVersion: 2
+    m_Bits: 512
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  groundCheck: {fileID: 733296916}
+  playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
   attackPoint: {fileID: 1329765633}
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!1 &621782782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3049,7 +3052,7 @@ GameObject:
   - component: {fileID: 780711605}
   m_Layer: 7
   m_Name: Slime2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3180,7 +3183,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 780711598}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -1.25, y: -1.34, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3188,7 +3191,7 @@ Transform:
   - {fileID: 888158296}
   m_Father: {fileID: 0}
   m_RootOrder: 21
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &780711605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3201,12 +3204,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4289d5fa47494d15991b4ad2609725f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
-  groundCheck: {fileID: 888158296}
-  playerLocation: {fileID: 825198581}
+  hostileLayers:
+    serializedVersion: 2
+    m_Bits: 512
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  groundCheck: {fileID: 888158296}
+  playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
 --- !u!1 &825198577
 GameObject:
@@ -3420,18 +3426,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9021c5dd26e70dc47a50d3169b2d390a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
-  attackPoint: {fileID: 276902811}
-  groundCheck: {fileID: 1403300807}
+  hostileLayers:
+    serializedVersion: 2
+    m_Bits: 128
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  attackPoint: {fileID: 276902811}
+  groundCheck: {fileID: 1403300807}
   buildingLayers:
     serializedVersion: 2
     m_Bits: 256
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 128
   npcLayers:
     serializedVersion: 2
     m_Bits: 1024
@@ -8500,7 +8506,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1352802634}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.94, y: -1.93, z: 0}
+  m_LocalPosition: {x: 0, y: -1.78, z: 0}
   m_LocalScale: {x: 1, y: 0.2727, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

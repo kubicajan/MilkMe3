@@ -12,7 +12,7 @@ namespace Living.Enemies
 		public LayerMask groundLayers;
 		protected float movementSpeed = 1f;
 		public ParticleSystem explosionParticles;
-		protected static float lastDirection = 1;
+		private float lastDirection = 1;
 		private int movementDirection;
 
 		private void Start()
@@ -37,7 +37,7 @@ namespace Living.Enemies
 			}
 
 			//todo: tady toto nefunguje, protoze kdyz jich je vic, tak se stridaji. Musi to byt locked na jednoho.
-			if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
+			if (Math.Abs(playerLocation.position.x) - Math.Abs(this.transform.position.x) > 0)
 			{
 				movementDirection = -1;
 			}

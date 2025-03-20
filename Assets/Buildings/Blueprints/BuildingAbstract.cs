@@ -1,3 +1,4 @@
+using Living.Player;
 using UnityEngine;
 
 public abstract class BuildingAbstract : MonoBehaviour

@@ -1,173 +1,179 @@
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Persona.Blueprints;
 using UnityEngine;
 
-public class Warrior : PersonaAbstract
+namespace Persona
 {
-    private const float MEELE_ATTACK_RANGE = 2f;
-    public ParticleSystem stompParticle;
-    private int attackCounter = 0;
-    private bool canAttack = true;
-    public override int maxNumberOfJumps => 1;
+	public class Warrior : PersonaAbstract
+	{
+		[SerializeField] private ParticleSystem stompParticle;
 
-    public override string PersonaName { get; set; } = "Warrior";
+		private const float MEELE_ATTACK_RANGE = 2f;
+		private int attackCounter = 0;
+		private bool canAttack = true;
+		protected override int maxNumberOfJumps => 1;
 
-    public override void BaseAttack()
-    {
-        MeeleAttack();
-    }
+		public override string PersonaName { get; set; } = "Warrior";
 
-    public override void FirstAbility()
-    {
-        KickAttack();
-    }
+		public override void BaseAttack()
+		{
+			MeeleAttack();
+		}
 
-    public override void SecondAbility()
-    {
-        LiftAttack();
-    }
+		public override void FirstAbility()
+		{
+			KickAttack();
+		}
 
-    public override void SwapToMe()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
+		public override void SecondAbility()
+		{
+			LiftAttack();
+		}
 
-    public override void SwapFromMe()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
+		public override void SwapToMe()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
 
-
-    //todo: jako to funguje, ale ne uplne. musel bych vypnout vsechnu gravitaci pro ty debily a movement
-    //protected override IEnumerator DashCoroutine()
-    //{
-    //    ResetJumps();
-    //    Common.TurnOffGravity(RigidBody, true);
-    //    float distanceToDash = lastDirection * 30;
-    //    RigidBody.velocity = new Vector2(distanceToDash, 0);
-    //    Collider2D[] detectedEnemies = DetectEnemiesInRange(distanceToDash);
-    //    ProcessEnemies(detectedEnemies, enemyScript => enemyScript.Immobilize(true));
-    //    yield return new WaitForSeconds(0.3f);
-    //    RigidBody.velocity = Vector2.zero;
-    //    yield return new WaitForSeconds(0.1f);
-    //    Common.TurnOffGravity(RigidBody, false);
-    //}
+		public override void SwapFromMe()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
 
 
-    private void MeeleAttack()
-    {
-        if (canAttack)
-        {
-            StartCoroutine(MakeAttackGoOnCoodlown());
-            const float KNOCKBACK = 0.2f;
-            const int MOVE_BY = 2;
-            attackCounter++;
+		//todo: jako to funguje, ale ne uplne. musel bych vypnout vsechnu gravitaci pro ty debily a movement
+		//protected override IEnumerator DashCoroutine()
+		//{
+		//    ResetJumps();
+		//    Common.TurnOffGravity(RigidBody, true);
+		//    float distanceToDash = lastDirection * 30;
+		//    RigidBody.velocity = new Vector2(distanceToDash, 0);
+		//    Collider2D[] detectedEnemies = DetectEnemiesInRange(distanceToDash);
+		//    ProcessEnemies(detectedEnemies, enemyScript => enemyScript.Immobilize(true));
+		//    yield return new WaitForSeconds(0.3f);
+		//    RigidBody.velocity = Vector2.zero;
+		//    yield return new WaitForSeconds(0.1f);
+		//    Common.TurnOffGravity(RigidBody, false);
+		//}
 
-            if (attackCounter >= 3)
-            {
-                attackCounter = 0;
-                StompAttack();
-            }
-            else
-            {
-                Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
-                DealDamageTo(detectedEnemies, KNOCKBACK);
-                AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
-                MoveAttackMeBy(MOVE_BY);
-            }
-        }
-    }
 
-    private void KickAttack()
-    {
-        Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
-        DealDamageTo(detectedEnemies, 0);
-        ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, 10));
-    }
+		private void MeeleAttack()
+		{
+			if (canAttack)
+			{
+				StartCoroutine(MakeAttackGoOnCooldown());
+				const float KNOCKBACK = 0.2f;
+				const int MOVE_BY = 2;
+				attackCounter++;
 
-    private IEnumerator MakeAttackGoOnCoodlown()
-    {
-        canAttack = false;
-        yield return new WaitForSeconds(0.25f);
-        canAttack = true;
-    }
+				if (attackCounter >= 3)
+				{
+					attackCounter = 0;
+					StompAttack();
+				}
+				else
+				{
+					Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+					DealDamageTo(detectedEnemies, KNOCKBACK);
+					AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
+					MoveAttackMeBy(MOVE_BY);
+				}
+			}
+		}
 
-    private void MoveAttackMeBy(int moveBy)
-    {
-        RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform, RigidBody, null));
-    }
+		private void KickAttack()
+		{
+			Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+			DealDamageTo(detectedEnemies, 0);
+			ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, 10));
+		}
 
-    private void LiftAttack()
-    {
-        const int LIFT_BY_THIS_MUCH = 5;
-        Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
-        LiftUpAllEnemiesHit(detectedEnemies, LIFT_BY_THIS_MUCH);
-        LiftMeUpBy(LIFT_BY_THIS_MUCH);
-    }
+		private IEnumerator MakeAttackGoOnCooldown()
+		{
+			canAttack = false;
+			yield return new WaitForSeconds(0.25f);
+			canAttack = true;
+		}
 
-    private void LiftMeUpBy(int liftByThisMuch)
-    {
-        RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, null));
-    }
+		private void MoveAttackMeBy(int moveBy)
+		{
+			RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, lastDirection, transform,
+				RigidBody, null));
+		}
 
-    private void StompAttack()
-    {
-        const float AREA_OF_EFFECT = 5f;
-        const float KNOCKBACK = 2;
-        const int STOMP_SPEED = -100;
+		private void LiftAttack()
+		{
+			const int LIFT_BY_THIS_MUCH = 5;
+			Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+			LiftUpAllEnemiesHit(detectedEnemies, LIFT_BY_THIS_MUCH);
+			LiftMeUpBy(LIFT_BY_THIS_MUCH);
+		}
 
-        if (!IsGrounded())
-        {
-            StompDownAllEnemiesHit(DetectEnemiesInRange(MEELE_ATTACK_RANGE), STOMP_SPEED);
-            StartCoroutine(StompDown(AREA_OF_EFFECT, STOMP_SPEED, KNOCKBACK));
-            return;
-        }
-        else
-        {
-            Instantiate(stompParticle, transform.position, Quaternion.identity);
-            DealDamageTo(DetectEnemiesInRange(AREA_OF_EFFECT), KNOCKBACK);
-        }
-    }
+		private void LiftMeUpBy(int liftByThisMuch)
+		{
+			RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, null));
+		}
 
-    private IEnumerator StompDown(float areaOfEffect, int stompSpeed, float landingKnockBack)
-    {
-        Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
+		private void StompAttack()
+		{
+			const float AREA_OF_EFFECT = 5f;
+			const float KNOCKBACK = 2;
+			const int STOMP_SPEED = -100;
 
-        while (!IsGrounded())
-        {
-            RigidBody.velocity = new Vector2(0, stompSpeed);
-            yield return null;
-        }
-        RigidBody.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.05f);
-        Instantiate(stompParticle, transform.position, Quaternion.identity);
-        DealDamageTo(DetectEnemiesInRange(areaOfEffect), landingKnockBack);
-        Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
-    }
+			if (!IsGrounded())
+			{
+				StompDownAllEnemiesHit(DetectEnemiesInRange(MEELE_ATTACK_RANGE), STOMP_SPEED);
+				StartCoroutine(StompDown(AREA_OF_EFFECT, STOMP_SPEED, KNOCKBACK));
+			}
+			else
+			{
+				Instantiate(stompParticle, transform.position, Quaternion.identity);
+				DealDamageTo(DetectEnemiesInRange(AREA_OF_EFFECT), KNOCKBACK);
+			}
+		}
 
-    private void AttackMoveAllEnemiesHit(Collider2D[] detectedEntities, int moveBy)
-    {
-        ProcessEnemies(detectedEntities, enemyScript => enemyScript.AttackMoveMe(moveBy, lastDirection));
-    }
+		private IEnumerator StompDown(float areaOfEffect, int stompSpeed, float landingKnockBack)
+		{
+			Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
 
-    private void LiftUpAllEnemiesHit(Collider2D[] detectedEntities, int liftByThisMuch)
-    {
-        ProcessEnemies(detectedEntities, enemyScript => enemyScript.LiftMeUp(liftByThisMuch));
-    }
+			while (!IsGrounded())
+			{
+				RigidBody.velocity = new Vector2(0, stompSpeed);
+				yield return null;
+			}
 
-    private void StompDownAllEnemiesHit(Collider2D[] detectedEntities, int stompSpeed)
-    {
-        ProcessEnemies(detectedEntities, enemyScript => enemyScript.StompMeDown(stompSpeed));
-    }
+			RigidBody.velocity = Vector2.zero;
+			yield return new WaitForSeconds(0.05f);
+			Instantiate(stompParticle, transform.position, Quaternion.identity);
+			DealDamageTo(DetectEnemiesInRange(areaOfEffect), landingKnockBack);
+			Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
+		}
 
-    void OnDrawGizmosSelected()
-    {
-        if (playerBase.attackPoint.position == null) { return; }
-        Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
-    }
+		private void AttackMoveAllEnemiesHit(Collider2D[] detectedEntities, int moveBy)
+		{
+			ProcessEnemies(detectedEntities, enemyScript => enemyScript.AttackMoveMe(moveBy, lastDirection));
+		}
+
+		private void LiftUpAllEnemiesHit(Collider2D[] detectedEntities, int liftByThisMuch)
+		{
+			ProcessEnemies(detectedEntities, enemyScript => enemyScript.LiftMeUp(liftByThisMuch));
+		}
+
+		private void StompDownAllEnemiesHit(Collider2D[] detectedEntities, int stompSpeed)
+		{
+			ProcessEnemies(detectedEntities, enemyScript => enemyScript.StompMeDown(stompSpeed));
+		}
+
+		void OnDrawGizmosSelected()
+		{
+			if (playerBase.attackPoint.position == null)
+			{
+				return;
+			}
+
+			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+		}
+	}
 }

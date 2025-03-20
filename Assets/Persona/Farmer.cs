@@ -1,74 +1,121 @@
+using System.Collections;
+using Living.Enemies;
+using Persona.Blueprints;
 using UnityEngine;
 
-public class Farmer : PersonaAbstract
+namespace Persona
 {
-    private const float MEELE_ATTACK_RANGE = 2f;
-    private bool isAngry = false;
-    public ParticleSystem angryParticleEffect;
-    public GameObject pitchForkPrefab;
+	public class Farmer : PersonaAbstract
+	{
+		[SerializeField] private ParticleSystem angryParticleEffect;
+		[SerializeField] private LineRenderer laser;
+		[SerializeField] private GameObject pitchForkPrefab;
 
-    public override string PersonaName { get; set; } = "Farmer";
+		private const float MEELE_ATTACK_RANGE = 2f;
+		private bool isAngry = false;
 
-    public override void BaseAttack()
-    {
-        MeeleAttack();
-    }
+		public override string PersonaName { get; set; } = "Farmer";
 
-    public override void FirstAbility()
-    {
-        if (!isAngry)
-        {
-            AngerHim();
-        }
-        else
-        {
-            CalmHim();
-        }
-    }
+		public override void BaseAttack()
+		{
+			MeeleAttack();
+		}
 
-    public override void SecondAbility()
-    {
-        BulletAttack();
-        return;
-    }
+		public override void FirstAbility()
+		{
+			if (!isAngry)
+			{
+				MakeAngry();
+			}
+			else
+			{
+				CalmDown();
+			}
+		}
 
-    private void BulletAttack()
-    {
-        Instantiate(pitchForkPrefab, playerBase.attackPoint.position, playerBase.attackPoint.rotation);
-    }
+		public override void SecondAbility()
+		{
+			StartCoroutine(PitchforkThrow());
+		}
 
-    public override void SwapToMe()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
+		private IEnumerator PitchforkThrow()
+		{
+			//charge it
+			yield return new WaitForSeconds(1f);
+			const float RANGE_ATTACK_DISTANCE = 25f;
+			Transform playerAttackPoint = playerBase.attackPoint;
+			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+				RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
 
-    public override void SwapFromMe()
-    {
-        CalmHim();
-    }
 
-    private void CalmHim()
-    {
-        isAngry = false;
-        angryParticleEffect.Stop();
-    }
+			if (enemyHitInfo)
+			{
+				EnemyScript enemyScript = enemyHitInfo.transform.GetComponent<EnemyScript>();
+				if (enemyScript != null)
+				{
+					Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
+					GameObject projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+					projectile.transform.parent = enemyHitInfo.transform;
+					enemyScript.TakeDamage(10);
+					enemyScript.MagicPushMe(enemyHitInfo.point, 5);
+				}
+			}
+			else if (groundHitInfo)
+			{
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
+				Instantiate(pitchForkPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+			}
+			else
+			{
+				Vector2 secondPosition = new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+					playerAttackPoint.position.y);
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
+			}
 
-    private void AngerHim()
-    {
-        isAngry = true;
-        angryParticleEffect.Play();
-    }
+			laser.enabled = true;
+			yield return new WaitForSeconds(0.05f);
+			laser.enabled = false;
+		}
 
-    private void MeeleAttack()
-    {
-        const float KNOCKBACK = 2;
-        DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
-    }
+		public override void SwapToMe()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
 
-    void OnDrawGizmosSelected()
-    {
-        if (playerBase.attackPoint.position == null) { return; }
-        Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
-    }
+		public override void SwapFromMe()
+		{
+			CalmDown();
+		}
+
+		private void CalmDown()
+		{
+			isAngry = false;
+			angryParticleEffect.Stop();
+		}
+
+		private void MakeAngry()
+		{
+			isAngry = true;
+			angryParticleEffect.Play();
+		}
+
+		private void MeeleAttack()
+		{
+			const float KNOCKBACK = 2;
+			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
+		}
+
+		void OnDrawGizmosSelected()
+		{
+			if (playerBase.attackPoint.position == null)
+			{
+				return;
+			}
+
+			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+		}
+	}
 }

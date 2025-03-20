@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public class PlayerBase : LivingEntity
+namespace Living.Player
 {
-    public Transform attackPoint;
-    public Transform groundCheck;
-    public LayerMask groundLayers;
-    public LayerMask buildingLayers;
-    public LayerMask enemyLayers;
-    public LayerMask npcLayers;
-    public bool canMove = true;
-
-    void Awake()
+    public class PlayerBase : LivingEntity
     {
-        Init(_health: 100,
-            _rigidBody2D: GetComponent<Rigidbody2D>(),
-            _boxCollider: GetComponent<BoxCollider2D>());
-    }
+        public Transform attackPoint;
+        public Transform groundCheck;
+        public LayerMask groundLayers;
+        public LayerMask buildingLayers;
+        public LayerMask enemyLayers;
+        public LayerMask npcLayers;
+        public bool canMove = true;
 
-    public Rigidbody2D GetRigidBody()
-    {
-        return RigidBody;
+        void Awake()
+        {
+            Init(_health: 100,
+                _rigidBody2D: GetComponent<Rigidbody2D>(),
+                _boxCollider: GetComponent<BoxCollider2D>());
+        }
+
+        public Rigidbody2D GetRigidBody()
+        {
+            return RigidBody;
+        }
     }
 }

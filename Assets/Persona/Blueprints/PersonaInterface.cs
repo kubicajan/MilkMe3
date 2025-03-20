@@ -1,8 +1,11 @@
-public interface PersonaInterface
+namespace Persona.Blueprints
 {
-    void BaseAttack();
-    void FirstAbility();
-    void SecondAbility();
-    void SwapToMe();
-    void SwapFromMe();
+    public interface IPersonaInterface
+    {
+        void BaseAttack();
+        void FirstAbility();
+        void SecondAbility();
+        void SwapToMe();
+        void SwapFromMe();
+    }
 }

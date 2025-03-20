@@ -1,89 +1,132 @@
+using System;
 using System.Collections;
+using Helpers.CommonEnums;
 using UnityEngine;
 
-public class EnemyScript : LivingEntity
+namespace Living.Enemies
 {
-    public Transform groundCheck;
-    public Transform playerLocation;
-    public LayerMask groundLayers;
-    private float speed = 1f;
-    public ParticleSystem explosionParticles;
-    
-    private void Start()
-    {
-        Init(_health: 500,
-            _rigidBody2D: GetComponent<Rigidbody2D>(),
-            _boxCollider: GetComponent<BoxCollider2D>());
-    }
+	public class EnemyScript : LivingEntity
+	{
+		public Transform groundCheck;
+		public Transform playerLocation;
+		public LayerMask groundLayers;
+		protected float movementSpeed = 1f;
+		public ParticleSystem explosionParticles;
+		protected static float lastDirection = 1;
+		private int movementDirection;
 
-    public void Update()
-    {
-        if (!IsImmobilized())
-        {
-            Vector3 targetPosition = new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-        }
-        else
-        {
-            if (IsGrounded() && RigidBody.velocity == Vector2.zero)
-            {
-                Immobilize(false);
-            }
-        }
-    }
+		private void Start()
+		{
+			Init(_health: 500,
+				_rigidBody2D: GetComponent<Rigidbody2D>(),
+				_boxCollider: GetComponent<BoxCollider2D>());
+		}
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Instantiate(explosionParticles, transform.position, Quaternion.identity);
-            MagicPushMe(collision.gameObject.transform.position, 5);
-        }
-    }
+		public void Update()
+		{
+			TurnTowardsPlayer();
+		}
 
-    public void LiftMeUp(int liftByThisMuch)
-    {
-        RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
-    }
+		//tu by se mozna mel dat watcher co checkuje jestli se movementDirection zmenil a jestli jo, tak jedu
+		private void TurnTowardsPlayer()
+		{
+			if (!Mathf.Approximately(lastDirection, movementDirection))
+			{
+				lastDirection = movementDirection;
+				transform.Rotate(0f, 180f, 0f);
+			}
 
-    public void AttackMoveMe(float moveBy, float directionToMove)
-    {
-        RunMovementCoroutine(Common.WarriorMoveAttack(this.transform.position.x, moveBy, directionToMove, transform, RigidBody, this));
-    }
+			//todo: tady toto nefunguje, protoze kdyz jich je vic, tak se stridaji. Musi to byt locked na jednoho.
+			if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
+			{
+				movementDirection = -1;
+			}
+			else
+			{
+				movementDirection = 1;
+			}
+		}
 
-    public void StompMeDown(int stompSpeed)
-    {
-        StartCoroutine(StompDown(stompSpeed));
-    }
+		public virtual void DoDialog()
+		{
+			return;
+		}
 
-    private IEnumerator StompDown(int stompSpeed)
-    {
+		public void Move()
+		{
+			if (!IsImmobilized())
+			{
+				Vector3 targetPosition =
+					new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
+				transform.position =
+					Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+			}
+			else
+			{
+				if (IsGrounded() && RigidBody.velocity == Vector2.zero)
+				{
+					Immobilize(false);
+				}
+			}
+		}
 
-        while (!IsGrounded())
-        {
-            RigidBody.velocity = new Vector2(0, stompSpeed);
-            Debug.Log("still stomping");
-            yield return null;
-        }
-        RigidBody.velocity = Vector2.zero;
-    }
+		private void OnCollisionEnter2D(Collision2D collision)
+		{
+			if (CompareTag(GameTag.Enemy) || CompareTag(GameTag.Boss))
+			{
+				if (collision.gameObject.CompareTag(GameTag.Player))
+				{
+					Instantiate(explosionParticles, transform.position, Quaternion.identity);
+					MagicPushMe(collision.gameObject.transform.position, 5);
+				}
+			}
+		}
 
-    protected void RunMovementCoroutine(IEnumerator coroutine)
-    {
-        StopMovementCoroutine();
-        movementCoroutine = StartCoroutine(coroutine);
-    }
+		public void LiftMeUp(int liftByThisMuch)
+		{
+			RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
+		}
 
-    protected void StopMovementCoroutine()
-    {
-        if (movementCoroutine != null)
-        {
-            StopCoroutine(movementCoroutine);
-        }
-    }
+		public void AttackMoveMe(float moveBy, float directionToMove)
+		{
+			RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, directionToMove, transform,
+				RigidBody, this));
+		}
 
-    protected bool IsGrounded()
-    {
-        return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
-    }
+		public void StompMeDown(int stompSpeed)
+		{
+			StartCoroutine(StompDown(stompSpeed));
+		}
+
+		private IEnumerator StompDown(int stompSpeed)
+		{
+			while (!IsGrounded())
+			{
+				RigidBody.velocity = new Vector2(0, stompSpeed);
+				Debug.Log("still stomping");
+				yield return null;
+			}
+
+			RigidBody.velocity = Vector2.zero;
+		}
+
+		protected void RunMovementCoroutine(IEnumerator coroutine)
+		{
+			StopMovementCoroutine();
+			movementCoroutine = StartCoroutine(coroutine);
+		}
+
+		protected void StopMovementCoroutine()
+		{
+			if (movementCoroutine != null)
+			{
+				StopCoroutine(movementCoroutine);
+			}
+		}
+
+		protected bool IsGrounded()
+		{
+			return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
+		}
+	}
 }

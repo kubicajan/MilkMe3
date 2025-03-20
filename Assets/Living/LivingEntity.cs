@@ -18,7 +18,7 @@ public abstract class LivingEntity : MonoBehaviour
 
     private int CurrentHealth
     {
-        get { return currentHealth; }
+        get => currentHealth;
         set
         {
             currentHealth = value;
@@ -31,22 +31,22 @@ public abstract class LivingEntity : MonoBehaviour
         }
     }
 
-    public void Immobilize(bool immobilize)
-    {
-        Immobilized = immobilize;
-    }
-
-    public bool IsImmobilized()
-    {
-        return Immobilized;
-    }
-
-    public void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
+    protected void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
     {
         maximumHealth = _health;
         currentHealth = maximumHealth;
         BoxCollider = _boxCollider;
         RigidBody = _rigidBody2D;
+    }
+
+    public void Immobilize(bool immobilize)
+    {
+        Immobilized = immobilize;
+    }
+
+    protected bool IsImmobilized()
+    {
+        return Immobilized;
     }
 
     public void TakeDamage(int damage)
@@ -59,11 +59,13 @@ public abstract class LivingEntity : MonoBehaviour
         return CurrentHealth;
     }
 
-    private void Heal(int heal)
+    public void Heal(int heal)
     {
         CurrentHealth += heal;
     }
 
+    //TODO:
+    //ten knockback to picuje s tema projektilama, mozna to udelat jako magicPush, ten funguje
     public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
     {
         Immobilize(true);

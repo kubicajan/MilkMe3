@@ -1,64 +1,100 @@
 using System.Collections;
+using Living.Enemies;
+using Living.Player;
+using Persona.Blueprints;
 using UnityEngine;
 
-public class Archer : PersonaAbstract
+namespace Persona
 {
-    private const float RANGE_ATTACK_DISTANCE = 8f;
-    public LineRenderer laser;
+	public class Archer : PersonaAbstract
+	{
+		[SerializeField] private LineRenderer laser;
+		[SerializeField] private GameObject arrowPrefab;
 
-    public override string PersonaName { get; set; } = "Archer";
+		private const float RANGE_ATTACK_DISTANCE = 8f;
 
-    public override void BaseAttack()
-    {
-        StartCoroutine(RangeAttack());
-    }
+		public override string PersonaName { get; set; } = "Archer";
 
-    private IEnumerator RangeAttack()
-    {
-        RaycastHit2D hitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right, RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+		public override void BaseAttack()
+		{
+			StartCoroutine(RangeAttack());
+		}
 
-        if (hitInfo)
-        {
-            EnemyScript enemyScript = hitInfo.transform.GetComponent<EnemyScript>();
-            if (enemyScript != null)
-            {
-                Debug.Log("hit enemy");
-                enemyScript.TakeDamage(10);
-                enemyScript.GetKnockedBack(this.transform.position, 0.5f);
-                laser.SetPosition(0, playerBase.attackPoint.position);
-                laser.SetPosition(1, hitInfo.point);
-            }
-        }
-        else
-        {
-            laser.SetPosition(0, playerBase.attackPoint.position);
-            laser.SetPosition(1, new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerBase.attackPoint.position.x, playerBase.attackPoint.position.y));
-        }
-        laser.enabled = true;
-        yield return new WaitForSeconds(0.1f);
-        laser.enabled = false;
-    }
+		public override void Initialize(PlayerBase _playerBase)
+		{
+			base.Initialize(_playerBase);
+			laser.GetComponent<LineRenderer>().positionCount = 2;
+		}
 
-    public override void FirstAbility()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
+		private IEnumerator RangeAttack()
+		{
+			Transform playerAttackPoint = playerBase.attackPoint;
+			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+				RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
+				playerBase.attackPoint.right,
+				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
+			RaycastHit2D npcHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+				RANGE_ATTACK_DISTANCE, playerBase.npcLayers);
 
-    public override void SecondAbility()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
-    public override void SwapToMe()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
+			if (enemyHitInfo)
+			{
+				EnemyScript enemyScript = enemyHitInfo.transform.GetComponent<EnemyScript>();
+				if (enemyScript != null)
+				{
+					enemyScript.TakeDamage(10);
+					enemyScript.GetKnockedBack(this.transform.position, 0.5f);
+					Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
+					GameObject projectile = Instantiate(arrowPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+					projectile.transform.parent = enemyHitInfo.transform;
+				}
+			}
+			else if (npcHitInfo)
+			{
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, npcHitInfo.point);
+				GameObject projectile = Instantiate(arrowPrefab, npcHitInfo.point, playerAttackPoint.rotation);
+				projectile.transform.parent = npcHitInfo.transform;
+			}
+			else if (groundHitInfo)
+			{
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
+				Instantiate(arrowPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+			}
+			else
+			{
+				Vector2 secondPosition = new Vector2(
+					(lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+					playerAttackPoint.position.y);
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
+			}
 
-    public override void SwapFromMe()
-    {
-        Debug.Log("Unfinished");
-        return;
-    }
+			laser.enabled = true;
+			yield return new WaitForSeconds(0.05f);
+			laser.enabled = false;
+		}
+
+		public override void FirstAbility()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
+
+		public override void SecondAbility()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
+
+		public override void SwapToMe()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
+
+		public override void SwapFromMe()
+		{
+			Debug.Log("Unfinished");
+			return;
+		}
+	}
 }

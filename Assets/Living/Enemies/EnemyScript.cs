@@ -17,7 +17,7 @@ namespace Living.Enemies
 
 		private void Start()
 		{
-			Init(_health: 500,
+			Init(_health: 50,
 				_rigidBody2D: GetComponent<Rigidbody2D>(),
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}

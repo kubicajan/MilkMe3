@@ -17,7 +17,8 @@ namespace Living.Enemies.WarriorBoss
 		public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			warriorBoss.Move();
-			if (!isAttackSelected)
+
+			if (warriorBoss.CanAttack())
 			{
 				selectedAttack = warriorBoss.SelectAttack();
 				Debug.Log(selectedAttack);

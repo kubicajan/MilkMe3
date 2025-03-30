@@ -169,6 +169,7 @@ namespace Persona.Blueprints
 			}
 		}
 
+		//todo: maybe rather by tags, rather than layers?
 		protected Collider2D[] DetectEnemiesInRange(float range)
 		{
 			return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.hostileLayers);

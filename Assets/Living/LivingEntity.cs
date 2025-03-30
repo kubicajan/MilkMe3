@@ -27,10 +27,21 @@ namespace Living
 				Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
 				if (currentHealth <= 0)
 				{
-					Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
-					gameObject.SetActive(false);
+					Die();
 				}
 			}
+		}
+
+		public virtual void Die()
+		{
+			StartCoroutine(DieCoroutine());
+		}
+
+		protected IEnumerator DieCoroutine(float secondsToDeath = 0)
+		{
+			Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
+			yield return new WaitForSeconds(secondsToDeath);
+			gameObject.SetActive(false);
 		}
 
 		protected void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)

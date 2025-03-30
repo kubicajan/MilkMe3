@@ -1,3 +1,4 @@
+using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
@@ -22,6 +23,13 @@ namespace Living.Enemies.WarriorBoss
 			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
 		}
 
+		public override void Die()
+		{
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
+			StartCoroutine(DieCoroutine(5));
+		}
+
+
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
@@ -29,21 +37,21 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Boss;
 		}
 
+		public bool CanAttack()
+		{
+			return Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE;
+		}
+
 		public string SelectAttack()
 		{
-			if (Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE)
+			if (GetRandomOneOrTwo() != 1)
 			{
-				if (GetRandomOneOrTwo() != 1)
-				{
-					return WarriorBossTrigger.HeavyAttack;
-				}
-				else
-				{
-					return WarriorBossTrigger.DoubleAttack;
-				}
+				return WarriorBossTrigger.HeavyAttack;
 			}
-
-			return null;
+			else
+			{
+				return WarriorBossTrigger.DoubleAttack;
+			}
 		}
 
 		private int GetRandomOneOrTwo()

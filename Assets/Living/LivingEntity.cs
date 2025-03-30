@@ -18,6 +18,8 @@ namespace Living
 		private int currentHealth;
 		private int maximumHealth;
 
+		//todo: this should be done universally. A unit should have a list of things that it is immune/damagable by
+		//todo: it should check before triggering any damage
 		private int CurrentHealth
 		{
 			get => currentHealth;

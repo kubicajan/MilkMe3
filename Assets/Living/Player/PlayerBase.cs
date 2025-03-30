@@ -5,6 +5,7 @@ namespace Living.Player
 	public class PlayerBase : LivingEntity
 	{
 		[SerializeField] public Transform attackPoint;
+		[SerializeField] public ParticleSystem jumpParticle;
 		[SerializeField] public Transform groundCheck;
 		[SerializeField] public LayerMask buildingLayers;
 		[SerializeField] public LayerMask npcLayers;

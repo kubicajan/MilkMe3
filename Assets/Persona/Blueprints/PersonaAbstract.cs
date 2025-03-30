@@ -121,7 +121,7 @@ namespace Persona.Blueprints
 				closestNpc.GetComponent<NpcScript>().DoDialog();
 				return;
 			}
-			else if(closestEnemy)
+			else if (closestEnemy)
 			{
 				closestEnemy.GetComponent<EnemyScript>().DoDialog();
 				return;
@@ -145,6 +145,11 @@ namespace Persona.Blueprints
 			else if (!IsGrounded() && MaxNumberOfJumps <= consecutiveJumps)
 			{
 				return;
+			}
+
+			if (consecutiveJumps > 0)
+			{
+				Instantiate(playerBase.jumpParticle, transform.position, Quaternion.identity);
 			}
 
 			consecutiveJumps++;

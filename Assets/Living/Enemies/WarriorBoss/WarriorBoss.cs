@@ -9,6 +9,7 @@ namespace Living.Enemies.WarriorBoss
 	public class WarriorBoss : EnemyScript
 	{
 		[SerializeField] private Transform attackPoint;
+		[SerializeField] public GameObject heavyRangeAttack;
 		private const float MELEE_ATTACK_RANGE = 3f;
 
 		private void Awake()
@@ -17,7 +18,18 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
-		public void MeleeAttack()
+		public void HeavyAttack()
+		{
+			MeleeAttack();
+			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
+		}
+
+		public void DoubleAttack()
+		{
+			MeleeAttack();
+		}
+
+		private void MeleeAttack()
 		{
 			const float KNOCKBACK = 2;
 			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);

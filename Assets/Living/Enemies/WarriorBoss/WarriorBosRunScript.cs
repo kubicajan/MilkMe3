@@ -21,8 +21,6 @@ namespace Living.Enemies.WarriorBoss
 			if (warriorBoss.CanAttack())
 			{
 				selectedAttack = warriorBoss.SelectAttack();
-				Debug.Log(selectedAttack);
-
 				if (selectedAttack != null)
 				{
 					isAttackSelected = true;

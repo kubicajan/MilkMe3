@@ -2283,6 +2283,7 @@ MonoBehaviour:
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
   attackPoint: {fileID: 1329765633}
+  heavyRangeAttack: {fileID: 579203161671551913, guid: a4b93306d92499d4ba35446ed6ae1ca3, type: 3}
 --- !u!1 &621782782
 GameObject:
   m_ObjectHideFlags: 0

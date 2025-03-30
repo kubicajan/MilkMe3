@@ -3434,6 +3434,7 @@ MonoBehaviour:
     m_Bits: 64
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   attackPoint: {fileID: 276902811}
+  jumpParticle: {fileID: 3570820612805916696, guid: b34c617cbc5c91b428c626bf86f4caaf, type: 3}
   groundCheck: {fileID: 1403300807}
   buildingLayers:
     serializedVersion: 2

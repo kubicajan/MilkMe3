@@ -22,9 +22,12 @@ namespace Living.Enemies
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
 
-		public void Update()
+		public virtual void Update()
 		{
-			TurnTowardsPlayer();
+			if (!dead)
+			{
+				TurnTowardsPlayer();
+			}
 		}
 
 		//tu by se mozna mel dat watcher co checkuje jestli se movementDirection zmenil a jestli jo, tak jedu

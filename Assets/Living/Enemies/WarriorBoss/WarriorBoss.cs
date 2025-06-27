@@ -10,12 +10,24 @@ namespace Living.Enemies.WarriorBoss
 	{
 		[SerializeField] private Transform attackPoint;
 		[SerializeField] public GameObject heavyRangeAttack;
+		[SerializeField] private Animator animator;
 		private const float MELEE_ATTACK_RANGE = 3f;
+		public bool isAttacking = true;
 
 		private void Awake()
 		{
 			movementSpeed = 9f;
 			gameObject.tag = GameTag.Npc;
+		}
+
+		public override void Update()
+		{
+			base.Update();
+			if (!isAttacking && CanAttack())
+			{
+				isAttacking = true;
+				animator.SetTrigger(SelectAttack());
+			}
 		}
 
 		public void HeavyAttack()
@@ -38,7 +50,7 @@ namespace Living.Enemies.WarriorBoss
 		public override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
-			StartCoroutine(DieCoroutine(5));
+			// StartCoroutine(DieCoroutine(5));
 		}
 
 
@@ -49,12 +61,15 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Boss;
 		}
 
-		public bool CanAttack()
+		private bool CanAttack()
 		{
-			return Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE;
+			//check if angry & close enough to attack
+			return gameObject.CompareTag(GameTag.Boss)
+				? Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE
+				: false;
 		}
 
-		public string SelectAttack()
+		private string SelectAttack()
 		{
 			if (GetRandomOneOrTwo() != 1)
 			{

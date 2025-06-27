@@ -13,6 +13,7 @@ namespace Living
 
 		public ParticleSystem deathParticleEffect;
 		private bool Immobilized = false;
+		protected bool dead = false;
 
 		private bool immuneToKnockBackX = false;
 		private int currentHealth;
@@ -27,8 +28,9 @@ namespace Living
 			{
 				currentHealth = value;
 				Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
-				if (currentHealth <= 0)
+				if (currentHealth <= 0 && !dead)
 				{
+					dead = true;
 					Die();
 				}
 			}

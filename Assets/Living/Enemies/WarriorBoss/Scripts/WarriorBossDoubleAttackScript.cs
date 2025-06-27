@@ -8,6 +8,7 @@ public class WarriorBossDoubleAttackScript : StateMachineBehaviour
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
 		warriorBoss = animator.GetComponent<WarriorBoss>();
+		warriorBoss.isAttacking = true;
 	}
 
 	public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -16,7 +17,7 @@ public class WarriorBossDoubleAttackScript : StateMachineBehaviour
 
 	public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
-		animator.ResetTrigger(WarriorBossTrigger.DoubleAttack);
 		warriorBoss.isAttacking = false;
+		animator.ResetTrigger(WarriorBossTrigger.DoubleAttack);
 	}
 }

@@ -14,6 +14,7 @@ namespace Living
 		public ParticleSystem deathParticleEffect;
 		private bool Immobilized = false;
 		protected bool dead = false;
+		public bool isAttacking = false;
 
 		private bool immuneToKnockBackX = false;
 		private int currentHealth;

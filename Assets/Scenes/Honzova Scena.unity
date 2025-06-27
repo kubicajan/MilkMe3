@@ -1377,6 +1377,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  isAttacking: 0
   groundCheck: {fileID: 203043307}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -2279,13 +2280,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   deathParticleEffect: {fileID: 3880816499781483569, guid: 145df809b78f93544804c198e32089c0, type: 3}
+  isAttacking: 0
   groundCheck: {fileID: 733296916}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
   attackPoint: {fileID: 1329765633}
   heavyRangeAttack: {fileID: 579203161671551913, guid: a4b93306d92499d4ba35446ed6ae1ca3, type: 3}
   animator: {fileID: 614723970}
-  isAttacking: 1
 --- !u!1 &621782782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3214,6 +3215,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  isAttacking: 0
   groundCheck: {fileID: 888158296}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -3436,6 +3438,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
+  isAttacking: 0
   attackPoint: {fileID: 276902811}
   jumpParticle: {fileID: 3570820612805916696, guid: b34c617cbc5c91b428c626bf86f4caaf, type: 3}
   groundCheck: {fileID: 1403300807}

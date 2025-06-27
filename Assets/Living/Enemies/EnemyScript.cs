@@ -24,7 +24,7 @@ namespace Living.Enemies
 
 		public virtual void Update()
 		{
-			if (!dead)
+			if (!dead && !isAttacking)
 			{
 				TurnTowardsPlayer();
 			}

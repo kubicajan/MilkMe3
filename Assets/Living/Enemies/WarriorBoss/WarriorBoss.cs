@@ -1,8 +1,7 @@
-using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Living.Enemies.WarriorBoss
 {
@@ -12,7 +11,6 @@ namespace Living.Enemies.WarriorBoss
 		[SerializeField] public GameObject heavyRangeAttack;
 		[SerializeField] private Animator animator;
 		private const float MELEE_ATTACK_RANGE = 3f;
-		public bool isAttacking = true;
 
 		private void Awake()
 		{
@@ -25,7 +23,6 @@ namespace Living.Enemies.WarriorBoss
 			base.Update();
 			if (!isAttacking && CanAttack())
 			{
-				isAttacking = true;
 				animator.SetTrigger(SelectAttack());
 			}
 		}

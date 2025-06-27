@@ -4,9 +4,11 @@ namespace Helpers
 {
     public class DestroyObject : MonoBehaviour
     {
+        [SerializeField] private float timeToDestruction;
+
         private void Start()
         {
-            Destroy(gameObject, 3f);
+            Destroy(gameObject, timeToDestruction);
         }
     }
 }

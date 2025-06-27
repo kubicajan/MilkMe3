@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyObject : MonoBehaviour
+namespace Helpers
 {
-    void Start()
+    public class DestroyObject : MonoBehaviour
     {
-        Destroy(gameObject, 3f);
+        [SerializeField] private float timeToDestruction;
+
+        private void Start()
+        {
+            Destroy(gameObject, timeToDestruction);
+        }
     }
 }

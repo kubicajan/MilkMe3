@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
 
@@ -7,17 +8,16 @@ namespace Living.Enemies
 {
 	public class EnemyScript : LivingEntity
 	{
-		public Transform groundCheck;
-		public Transform playerLocation;
-		public LayerMask groundLayers;
+		[SerializeField] protected Transform groundCheck;
+		[SerializeField] protected Transform playerLocation;
 		protected float movementSpeed = 1f;
 		public ParticleSystem explosionParticles;
-		protected static float lastDirection = 1;
+		private float lastDirection = 1;
 		private int movementDirection;
 
 		private void Start()
 		{
-			Init(_health: 500,
+			Init(_health: 50,
 				_rigidBody2D: GetComponent<Rigidbody2D>(),
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
@@ -36,8 +36,7 @@ namespace Living.Enemies
 				transform.Rotate(0f, 180f, 0f);
 			}
 
-			//todo: tady toto nefunguje, protoze kdyz jich je vic, tak se stridaji. Musi to byt locked na jednoho.
-			if (Math.Abs(playerLocation.position.x) - Math.Abs(transform.position.x) > 0)
+			if (Math.Abs(playerLocation.position.x) - Math.Abs(this.transform.position.x) > 0)
 			{
 				movementDirection = -1;
 			}

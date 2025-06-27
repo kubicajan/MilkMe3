@@ -1,4 +1,5 @@
 using System.Collections;
+using Helpers;
 using Living.Enemies;
 using Living.Player;
 using Persona.Blueprints;
@@ -10,6 +11,8 @@ namespace Persona
 	{
 		[SerializeField] private LineRenderer laser;
 		[SerializeField] private GameObject arrowPrefab;
+		[SerializeField] private GameObject bulletPrefab;
+		private bool gunslinger = true;
 
 		private const float RANGE_ATTACK_DISTANCE = 8f;
 
@@ -29,8 +32,13 @@ namespace Persona
 		private IEnumerator RangeAttack()
 		{
 			Transform playerAttackPoint = playerBase.attackPoint;
+			if (gunslinger)
+			{
+				Instantiate(bulletPrefab, transform.position, playerAttackPoint.rotation);
+				yield break;
+			}
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
-				RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
 			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
 				playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);

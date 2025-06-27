@@ -1,4 +1,5 @@
 using System.Collections;
+using Helpers;
 using Living.Enemies;
 using Persona.Blueprints;
 using UnityEngine;
@@ -11,14 +12,14 @@ namespace Persona
 		[SerializeField] private LineRenderer laser;
 		[SerializeField] private GameObject pitchForkPrefab;
 
-		private const float MEELE_ATTACK_RANGE = 2f;
+		private const float MELEE_ATTACK_RANGE = 2f;
 		private bool isAngry = false;
 
 		public override string PersonaName { get; set; } = "Farmer";
 
 		public override void BaseAttack()
 		{
-			MeeleAttack();
+			MeleeAttack();
 		}
 
 		public override void FirstAbility()
@@ -45,7 +46,7 @@ namespace Persona
 			const float RANGE_ATTACK_DISTANCE = 25f;
 			Transform playerAttackPoint = playerBase.attackPoint;
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
-				RANGE_ATTACK_DISTANCE, playerBase.enemyLayers);
+				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
 			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
 
@@ -102,10 +103,10 @@ namespace Persona
 			angryParticleEffect.Play();
 		}
 
-		private void MeeleAttack()
+		private void MeleeAttack()
 		{
 			const float KNOCKBACK = 2;
-			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
+			DealDamageTo(DetectEnemiesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
 		}
 
 		void OnDrawGizmosSelected()
@@ -115,7 +116,7 @@ namespace Persona
 				return;
 			}
 
-			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MELEE_ATTACK_RANGE);
 		}
 	}
 }

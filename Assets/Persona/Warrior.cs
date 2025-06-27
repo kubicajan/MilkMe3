@@ -1,4 +1,5 @@
 using System.Collections;
+using Helpers;
 using Persona.Blueprints;
 using UnityEngine;
 
@@ -8,16 +9,16 @@ namespace Persona
 	{
 		[SerializeField] private ParticleSystem stompParticle;
 
-		private const float MEELE_ATTACK_RANGE = 2f;
+		private const float MELEE_ATTACK_RANGE = 2f;
 		private int attackCounter = 0;
 		private bool canAttack = true;
-		protected override int maxNumberOfJumps => 1;
+		protected override int MaxNumberOfJumps => 1;
 
 		public override string PersonaName { get; set; } = "Warrior";
 
 		public override void BaseAttack()
 		{
-			MeeleAttack();
+			MeleeAttack();
 		}
 
 		public override void FirstAbility()
@@ -59,7 +60,7 @@ namespace Persona
 		//}
 
 
-		private void MeeleAttack()
+		private void MeleeAttack()
 		{
 			if (canAttack)
 			{
@@ -75,7 +76,7 @@ namespace Persona
 				}
 				else
 				{
-					Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+					Collider2D[] detectedEnemies = DetectEnemiesInRange(MELEE_ATTACK_RANGE);
 					DealDamageTo(detectedEnemies, KNOCKBACK);
 					AttackMoveAllEnemiesHit(detectedEnemies, MOVE_BY);
 					MoveAttackMeBy(MOVE_BY);
@@ -85,7 +86,7 @@ namespace Persona
 
 		private void KickAttack()
 		{
-			Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+			Collider2D[] detectedEnemies = DetectEnemiesInRange(MELEE_ATTACK_RANGE);
 			DealDamageTo(detectedEnemies, 0);
 			ProcessEnemies(detectedEnemies, enemyScript => enemyScript.MagicPushMe(transform.position, 10));
 		}
@@ -106,7 +107,7 @@ namespace Persona
 		private void LiftAttack()
 		{
 			const int LIFT_BY_THIS_MUCH = 5;
-			Collider2D[] detectedEnemies = DetectEnemiesInRange(MEELE_ATTACK_RANGE);
+			Collider2D[] detectedEnemies = DetectEnemiesInRange(MELEE_ATTACK_RANGE);
 			LiftUpAllEnemiesHit(detectedEnemies, LIFT_BY_THIS_MUCH);
 			LiftMeUpBy(LIFT_BY_THIS_MUCH);
 		}
@@ -124,7 +125,7 @@ namespace Persona
 
 			if (!IsGrounded())
 			{
-				StompDownAllEnemiesHit(DetectEnemiesInRange(MEELE_ATTACK_RANGE), STOMP_SPEED);
+				StompDownAllEnemiesHit(DetectEnemiesInRange(MELEE_ATTACK_RANGE), STOMP_SPEED);
 				StartCoroutine(StompDown(AREA_OF_EFFECT, STOMP_SPEED, KNOCKBACK));
 			}
 			else
@@ -136,7 +137,7 @@ namespace Persona
 
 		private IEnumerator StompDown(float areaOfEffect, int stompSpeed, float landingKnockBack)
 		{
-			Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
+			Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.hostileLayers);
 
 			while (!IsGrounded())
 			{
@@ -148,7 +149,7 @@ namespace Persona
 			yield return new WaitForSeconds(0.05f);
 			Instantiate(stompParticle, transform.position, Quaternion.identity);
 			DealDamageTo(DetectEnemiesInRange(areaOfEffect), landingKnockBack);
-			Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
+			Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.hostileLayers);
 		}
 
 		private void AttackMoveAllEnemiesHit(Collider2D[] detectedEntities, int moveBy)
@@ -173,7 +174,7 @@ namespace Persona
 				return;
 			}
 
-			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MEELE_ATTACK_RANGE);
+			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MELEE_ATTACK_RANGE);
 		}
 	}
 }

@@ -6,8 +6,8 @@ namespace Living.Enemies.WarriorBoss
 	public class WarriorBosRunScript : StateMachineBehaviour
 	{
 		private WarriorBoss warriorBoss;
-		private bool isAttackSelected = false;
-		private string selectedAttack = null;
+		private bool isAttackSelected;
+		private string selectedAttack;
 
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
@@ -17,11 +17,10 @@ namespace Living.Enemies.WarriorBoss
 		public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			warriorBoss.Move();
-			if (!isAttackSelected)
+
+			if (warriorBoss.CanAttack())
 			{
 				selectedAttack = warriorBoss.SelectAttack();
-				Debug.Log(selectedAttack);
-
 				if (selectedAttack != null)
 				{
 					isAttackSelected = true;

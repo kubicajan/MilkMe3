@@ -1,13 +1,16 @@
+using System.Collections;
+using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Living.Enemies.WarriorBoss
 {
 	public class WarriorBoss : EnemyScript
 	{
 		[SerializeField] private Transform attackPoint;
-		public LayerMask enemyLayers;
-		private const float MEELE_ATTACK_RANGE = 3f;
+		[SerializeField] public GameObject heavyRangeAttack;
+		private const float MELEE_ATTACK_RANGE = 3f;
 
 		private void Awake()
 		{
@@ -15,11 +18,29 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
-		public void MeeleAttack()
+		public void HeavyAttack()
+		{
+			MeleeAttack();
+			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
+		}
+
+		public void DoubleAttack()
+		{
+			MeleeAttack();
+		}
+
+		private void MeleeAttack()
 		{
 			const float KNOCKBACK = 2;
-			DealDamageTo(DetectEnemiesInRange(MEELE_ATTACK_RANGE), KNOCKBACK);
+			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
 		}
+
+		public override void Die()
+		{
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
+			StartCoroutine(DieCoroutine(5));
+		}
+
 
 		public override void DoDialog()
 		{
@@ -28,20 +49,21 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Boss;
 		}
 
+		public bool CanAttack()
+		{
+			return Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE;
+		}
+
 		public string SelectAttack()
 		{
-			if (Vector2.Distance(playerLocation.position, attackPoint.position) <= MEELE_ATTACK_RANGE)
+			if (GetRandomOneOrTwo() != 1)
 			{
-				if (GetRandomOneOrTwo() != 1)
-				{
-					return WarriorBossTrigger.HeavyAttack;
-				}
-				else
-				{
-					return WarriorBossTrigger.DoubleAttack;
-				}
+				return WarriorBossTrigger.HeavyAttack;
 			}
-			return null;
+			else
+			{
+				return WarriorBossTrigger.DoubleAttack;
+			}
 		}
 
 		private int GetRandomOneOrTwo()
@@ -61,9 +83,9 @@ namespace Living.Enemies.WarriorBoss
 			}
 		}
 
-		private Collider2D[] DetectEnemiesInRange(float range)
+		private Collider2D[] DetectHostilesInRange(float range)
 		{
-			return Utility.DetectByLayers(attackPoint.position, range, enemyLayers);
+			return Utility.DetectByLayers(attackPoint.position, range, hostileLayers);
 		}
 	}
 }

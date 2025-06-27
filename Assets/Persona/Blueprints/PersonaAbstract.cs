@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Helpers;
 using Living.Enemies;
 using Living.Player;
 using UnityEngine;
@@ -9,9 +10,9 @@ namespace Persona.Blueprints
 {
 	public abstract class PersonaAbstract : MonoBehaviour, IPersonaInterface
 	{
-		protected PlayerBase playerBase;
 		public abstract string PersonaName { get; set; }
-		protected virtual int maxNumberOfJumps => 5;
+		protected virtual int MaxNumberOfJumps => 5;
+		protected PlayerBase playerBase;
 
 		private float moveSpeed = 10f;
 		private float jumpForce = 20f;
@@ -59,7 +60,7 @@ namespace Persona.Blueprints
 		private IEnumerator DashCoroutine()
 		{
 			ResetJumps();
-			Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.enemyLayers);
+			Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.hostileLayers);
 			Common.TurnOffGravity(RigidBody, true);
 			//dashing = true;
 			RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
@@ -68,7 +69,7 @@ namespace Persona.Blueprints
 			yield return new WaitForSeconds(0.1f);
 			//dashing = false;
 			Common.TurnOffGravity(RigidBody, false);
-			Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.enemyLayers);
+			Utility.IgnoreCollisionsByLayers(false, gameObject.layer, playerBase.hostileLayers);
 		}
 
 		private void ResetJumps()
@@ -113,14 +114,14 @@ namespace Persona.Blueprints
 		public void Interact()
 		{
 			Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
-			Collider2D closestEnemy = DetectClosest(playerBase.enemyLayers);
+			Collider2D closestEnemy = DetectClosest(playerBase.hostileLayers);
 
 			if (closestNpc)
 			{
 				closestNpc.GetComponent<NpcScript>().DoDialog();
 				return;
 			}
-			else if(closestEnemy)
+			else if (closestEnemy)
 			{
 				closestEnemy.GetComponent<EnemyScript>().DoDialog();
 				return;
@@ -141,9 +142,14 @@ namespace Persona.Blueprints
 			{
 				ResetJumps();
 			}
-			else if (!IsGrounded() && maxNumberOfJumps <= consecutiveJumps)
+			else if (!IsGrounded() && MaxNumberOfJumps <= consecutiveJumps)
 			{
 				return;
+			}
+
+			if (consecutiveJumps > 0)
+			{
+				Instantiate(playerBase.jumpParticle, transform.position, Quaternion.identity);
 			}
 
 			consecutiveJumps++;
@@ -170,7 +176,7 @@ namespace Persona.Blueprints
 
 		protected Collider2D[] DetectEnemiesInRange(float range)
 		{
-			return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.enemyLayers);
+			return Utility.DetectByLayers(playerBase.attackPoint.position, range, playerBase.hostileLayers);
 		}
 
 		private Collider2D DetectClosest(LayerMask layers)

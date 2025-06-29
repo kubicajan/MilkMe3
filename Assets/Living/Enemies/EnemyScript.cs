@@ -22,7 +22,7 @@ namespace Living.Enemies
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
 
-		public virtual void Update()
+		public virtual void FixedUpdate()
 		{
 			if (!dead && !isAttacking)
 			{

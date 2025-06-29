@@ -18,9 +18,9 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
-		public override void Update()
+		public override void FixedUpdate()
 		{
-			base.Update();
+			base.FixedUpdate();
 			if (!isAttacking && CanAttack())
 			{
 				animator.SetTrigger(SelectAttack());

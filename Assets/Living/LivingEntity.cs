@@ -13,6 +13,8 @@ namespace Living
 
 		public ParticleSystem deathParticleEffect;
 		private bool Immobilized = false;
+		protected bool dead = false;
+		public bool isAttacking = false;
 
 		private bool immuneToKnockBackX = false;
 		private int currentHealth;
@@ -27,8 +29,9 @@ namespace Living
 			{
 				currentHealth = value;
 				Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
-				if (currentHealth <= 0)
+				if (currentHealth <= 0 && !dead)
 				{
+					dead = true;
 					Die();
 				}
 			}
@@ -79,27 +82,23 @@ namespace Living
 			CurrentHealth += heal;
 		}
 
-		//TODO:
-		//ten knockback to picuje s tema projektilama, mozna to udelat jako magicPush, ten funguje
+		private Coroutine coroutine;
+
+		//todo: tyhle dve metody jsou uplne stejne, klidne by stacilo pouzit jednu
 		public void GetKnockedBack(Vector2 perpetratorPosition, float knockbackDistance)
 		{
-			Immobilize(true);
-			Vector2 direction = ((Vector2)transform.position - perpetratorPosition).normalized;
-			Vector2 force = new Vector2();
-
-			if (!immuneToKnockBackX)
+			if (coroutine == null)
 			{
-				force.x = direction.x * knockbackDistance;
-				Debug.Log(knockbackDistance);
+				coroutine = StartCoroutine(MagicPushMeCoroutine(perpetratorPosition, knockbackDistance));
 			}
-
-			force.y = knockbackDistance * RigidBody.gravityScale;
-			RigidBody.AddForce(force, ForceMode2D.Impulse);
 		}
 
 		public void MagicPushMe(Vector2 perpetratorPosition, float knockbackDistance)
 		{
-			StartCoroutine(MagicPushMeCoroutine(perpetratorPosition, knockbackDistance));
+			if (coroutine == null)
+			{
+				StartCoroutine(MagicPushMeCoroutine(perpetratorPosition, knockbackDistance));
+			}
 		}
 
 		private IEnumerator MagicPushMeCoroutine(Vector2 perpetratorPosition, float knockbackDistance)
@@ -113,26 +112,42 @@ namespace Living
 			float timer = 0.3f;
 			immuneToKnockBackX = true;
 
+			Vector2 direction = (transform.position - (Vector3)perpetratorPosition).normalized;
+			Vector2 targetPosition = (Vector2)transform.position + direction * knockbackDistance;
+			targetPosition.y = originalY;
+
 			while (timer > 0)
 			{
-				Vector2 objectPosition = transform.position;
-				Vector2 distanceToEnemy = objectPosition - perpetratorPosition;
-
-				if (Mathf.Abs(distanceToEnemy.x - knockbackDistance) < 0.2f)
-				{
-					immuneToKnockBackX = false;
-					yield break;
-				}
-
-				Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
-				targetPosition.y = originalY;
-				float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
-				transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, targetPosition, knockbackDistance / 0.3f * Time.deltaTime);
 				timer -= Time.deltaTime;
 				yield return null;
 			}
 
+			//outdated, kept just in case:
+
+			// while (timer > 0)
+			// {
+			// 	Vector2 objectPosition = transform.position;
+			// 	Vector2 distanceToEnemy = objectPosition - perpetratorPosition;
+			//
+			// 	if (Vector2.Distance(transform.position,
+			// 		    perpetratorPosition + distanceToEnemy.normalized * knockbackDistance) < 0.2f)
+			// 	{
+			// 		immuneToKnockBackX = false;
+			// 		yield break;
+			// 	}
+			//
+			// 	Vector2 targetPosition = perpetratorPosition + distanceToEnemy.normalized * knockbackDistance;
+			// 	targetPosition.y = originalY;
+			// 	float speed = (Mathf.Abs(knockbackDistance) - Mathf.Abs(distanceToEnemy.x)) * 10;
+			// 	Debug.Log(targetPosition.x);
+			// 	transform.position = Vector3.MoveTowards(objectPosition, targetPosition, speed * Time.deltaTime);
+			// 	timer -= Time.deltaTime;
+			// 	yield return null;
+			// }
+
 			immuneToKnockBackX = false;
+			coroutine = null;
 		}
 	}
 }

@@ -195,6 +195,13 @@ namespace Persona.Blueprints
 			}
 		}
 
+		protected Quaternion GetRotation()
+		{
+			float angle =  (1 - lastDirection) * 90;
+			return Quaternion.Euler(0, 0, angle);
+		}
+
+
 		public abstract void BaseAttack();
 
 		public abstract void FirstAbility();

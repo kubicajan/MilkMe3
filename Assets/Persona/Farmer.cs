@@ -9,6 +9,7 @@ namespace Persona
 	public class Farmer : PersonaAbstract
 	{
 		[SerializeField] private ParticleSystem angryParticleEffect;
+		[SerializeField] private ParticleSystem chargingParticleEffect;
 		[SerializeField] private LineRenderer laser;
 		[SerializeField] private GameObject pitchForkPrefab;
 
@@ -41,14 +42,20 @@ namespace Persona
 
 		private IEnumerator PitchforkThrow()
 		{
+			chargingParticleEffect.Play();
+
 			//charge it
+			yield return new WaitForSeconds(1.5f);
+			chargingParticleEffect.Stop();
 			yield return new WaitForSeconds(1f);
 			const float RANGE_ATTACK_DISTANCE = 25f;
 			Transform playerAttackPoint = playerBase.attackPoint;
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
-			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
+				playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
+
 
 			if (enemyHitInfo)
 			{
@@ -69,7 +76,8 @@ namespace Persona
 			}
 			else
 			{
-				Vector2 secondPosition = new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+				Vector2 secondPosition = new Vector2(
+					(lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
 					playerAttackPoint.position.y);
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
 			}

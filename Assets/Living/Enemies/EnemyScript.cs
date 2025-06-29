@@ -33,19 +33,19 @@ namespace Living.Enemies
 		//tu by se mozna mel dat watcher co checkuje jestli se movementDirection zmenil a jestli jo, tak jedu
 		private void TurnTowardsPlayer()
 		{
+			if (playerLocation.position.x > this.transform.position.x)
+			{
+				movementDirection = 1;
+			}
+			else
+			{
+				movementDirection = -1;
+			}
+
 			if (!Mathf.Approximately(lastDirection, movementDirection))
 			{
 				lastDirection = movementDirection;
 				transform.Rotate(0f, 180f, 0f);
-			}
-
-			if (Math.Abs(playerLocation.position.x) - Math.Abs(this.transform.position.x) > 0)
-			{
-				movementDirection = -1;
-			}
-			else
-			{
-				movementDirection = 1;
 			}
 		}
 

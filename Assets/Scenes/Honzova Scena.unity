@@ -3464,7 +3464,7 @@ MonoBehaviour:
   skin: {fileID: 21300000, guid: e5600378dd761e64d9423790c482bf36, type: 3}
   laser: {fileID: 1043541796}
   arrowPrefab: {fileID: 264234619582631049, guid: 3e99fd477ca701c428251d39cdbf9af6, type: 3}
-  bulletPrefab: {fileID: 6258024638024291337, guid: 8817d2809e919e14ea63b2bdafdb4c00, type: 3}
+  bulletPrefab: {fileID: 5883039149145406716, guid: 31d664fa42701ad4e9ac8e572b549501, type: 3}
 --- !u!1 &844724640
 GameObject:
   m_ObjectHideFlags: 0

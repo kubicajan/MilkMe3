@@ -78,8 +78,12 @@ namespace Living.Enemies
 			{
 				if (collision.gameObject.CompareTag(GameTag.Player))
 				{
-					Instantiate(explosionParticles, transform.position, Quaternion.identity);
-					MagicPushMe(collision.gameObject.transform.position, 5);
+					if (collision.gameObject.TryGetComponent<LivingEntity>(out var targetScript))
+					{
+						Instantiate(explosionParticles, transform.position, Quaternion.identity);
+						targetScript.TakeDamage(10);
+						targetScript.GetKnockedBack(gameObject.transform.position, 5);
+					}
 				}
 			}
 		}

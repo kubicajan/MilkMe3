@@ -8,6 +8,7 @@ namespace Living.Enemies.WarriorBoss
 	public class WarriorBoss : EnemyScript
 	{
 		[SerializeField] private Transform attackPoint;
+		[SerializeField] private ParticleSystem highlightParticleEffect;
 		[SerializeField] public GameObject heavyRangeAttack;
 		[SerializeField] private Animator animator;
 		private const float MELEE_ATTACK_RANGE = 3f;
@@ -52,9 +53,9 @@ namespace Living.Enemies.WarriorBoss
 		public override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
+			highlightParticleEffect.Play();
 			// StartCoroutine(DieCoroutine(5));
 		}
-
 
 		public override void DoDialog()
 		{

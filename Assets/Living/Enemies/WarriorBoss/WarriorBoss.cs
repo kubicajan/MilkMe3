@@ -1,8 +1,7 @@
-using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Living.Enemies.WarriorBoss
 {
@@ -10,6 +9,7 @@ namespace Living.Enemies.WarriorBoss
 	{
 		[SerializeField] private Transform attackPoint;
 		[SerializeField] public GameObject heavyRangeAttack;
+		[SerializeField] private Animator animator;
 		private const float MELEE_ATTACK_RANGE = 3f;
 
 		private void Awake()
@@ -18,27 +18,41 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			if (!isAttacking && CanAttack())
+			{
+				animator.SetTrigger(SelectAttack());
+			}
+		}
+
 		public void HeavyAttack()
 		{
-			MeleeAttack();
-			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
+			const float KNOCKBACK = 20;
+			MeleeAttack(KNOCKBACK);
+			// Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
 		}
 
-		public void DoubleAttack()
+		public void LightAttack()
 		{
-			MeleeAttack();
+			MeleeAttack(0);
 		}
 
-		private void MeleeAttack()
+		public void MediumAttack()
 		{
-			const float KNOCKBACK = 2;
-			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
+			MeleeAttack(10);
+		}
+
+		private void MeleeAttack(float knockback = 0)
+		{
+			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), knockback);
 		}
 
 		public override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
-			StartCoroutine(DieCoroutine(5));
+			// StartCoroutine(DieCoroutine(5));
 		}
 
 
@@ -49,12 +63,15 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Boss;
 		}
 
-		public bool CanAttack()
+		private bool CanAttack()
 		{
-			return Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE;
+			//check if angry & close enough to attack
+			return gameObject.CompareTag(GameTag.Boss)
+				? Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE
+				: false;
 		}
 
-		public string SelectAttack()
+		private string SelectAttack()
 		{
 			if (GetRandomOneOrTwo() != 1)
 			{
@@ -71,14 +88,14 @@ namespace Living.Enemies.WarriorBoss
 			return Random.Range(1, 3); // Random.Range with (1,3) returns either 1 or 2
 		}
 
-		private void DealDamageTo(Collider2D[] detectedEnemies, float knockBack)
+		private void DealDamageTo(Collider2D[] detectedTargets, float knockBack)
 		{
-			foreach (Collider2D enemy in detectedEnemies)
+			foreach (Collider2D target in detectedTargets)
 			{
-				if (enemy.TryGetComponent<LivingEntity>(out var enemyScript))
+				if (target.TryGetComponent<LivingEntity>(out var targetScript))
 				{
-					enemyScript.TakeDamage(10);
-					enemyScript.GetKnockedBack(this.transform.position, knockBack);
+					targetScript.TakeDamage(10);
+					targetScript.GetKnockedBack(this.transform.position, knockBack);
 				}
 			}
 		}

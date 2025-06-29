@@ -29,19 +29,24 @@ namespace Living.Enemies.WarriorBoss
 
 		public void HeavyAttack()
 		{
-			MeleeAttack();
-			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
+			const float KNOCKBACK = 20;
+			MeleeAttack(KNOCKBACK);
+			// Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
 		}
 
-		public void DoubleAttack()
+		public void LightAttack()
 		{
-			MeleeAttack();
+			MeleeAttack(0);
 		}
 
-		private void MeleeAttack()
+		public void MediumAttack()
 		{
-			const float KNOCKBACK = 2;
-			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
+			MeleeAttack(10);
+		}
+
+		private void MeleeAttack(float knockback = 0)
+		{
+			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), knockback);
 		}
 
 		public override void Die()
@@ -83,14 +88,14 @@ namespace Living.Enemies.WarriorBoss
 			return Random.Range(1, 3); // Random.Range with (1,3) returns either 1 or 2
 		}
 
-		private void DealDamageTo(Collider2D[] detectedEnemies, float knockBack)
+		private void DealDamageTo(Collider2D[] detectedTargets, float knockBack)
 		{
-			foreach (Collider2D enemy in detectedEnemies)
+			foreach (Collider2D target in detectedTargets)
 			{
-				if (enemy.TryGetComponent<LivingEntity>(out var enemyScript))
+				if (target.TryGetComponent<LivingEntity>(out var targetScript))
 				{
-					enemyScript.TakeDamage(10);
-					enemyScript.GetKnockedBack(this.transform.position, knockBack);
+					targetScript.TakeDamage(10);
+					targetScript.GetKnockedBack(this.transform.position, knockBack);
 				}
 			}
 		}

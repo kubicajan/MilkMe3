@@ -7,13 +7,12 @@ namespace Persona
 	{
 		[SerializeField] private ParticleSystem shieldParticleEffect;
 		[SerializeField] private GameObject tornadoPrefab;
-
+		[SerializeField] private GameObject lightningPrefab;
 		public override string PersonaName { get; set; } = "Mage";
 
 		public override void BaseAttack()
 		{
-			Debug.Log("Unfinished");
-			return;
+			LightningAttack();
 		}
 
 		public override void FirstAbility()
@@ -34,6 +33,17 @@ namespace Persona
 		public override void SwapFromMe()
 		{
 			DeactivateShield();
+		}
+
+		private void LightningAttack()
+		{
+			Collider2D[] enemiesInRange = DetectEnemiesInRange(100);
+			DealDamageTo(enemiesInRange, 10);
+
+			foreach (Collider2D enemy in enemiesInRange)
+			{
+				Instantiate(lightningPrefab, enemy.transform.position, gameObject.transform.rotation);
+			}
 		}
 
 		private void ShootTornado()

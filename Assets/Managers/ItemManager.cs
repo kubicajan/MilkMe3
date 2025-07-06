@@ -24,15 +24,32 @@ public class ItemManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public IEnumerator PopUpItem(int numberOfItems, Vector2 parentPosition)
+	public IEnumerator SpawnItems(int numberOfItems, Vector2 parentPosition)
 	{
 		yield return new WaitForSeconds(0.8f);
 		Instantiate(item, parentPosition, Quaternion.identity);
 
-		for (int i = 0; i < numberOfItems - 1; i++)
+		int pairs = (numberOfItems - 1) / 2;
+		float offset = 0;
+
+		for (int i = 0; i < pairs; i++)
 		{
 			yield return new WaitForSeconds(0.5f);
-			Instantiate(item, Utility.RandomizeXPosition(parentPosition), Quaternion.identity);
+			offset = 1.5f * (i + 1);
+			InstantiateItem(parentPosition, -offset);
+			InstantiateItem(parentPosition, offset);
 		}
+
+		if (numberOfItems % 2 == 0)
+		{
+			yield return new WaitForSeconds(0.5f);
+			offset += 1.5f;
+			InstantiateItem(parentPosition, -offset);
+		}
+	}
+
+	private void InstantiateItem(Vector2 position, float offset)
+	{
+		Instantiate(item, new Vector2(position.x + offset, position.y), Quaternion.identity);
 	}
 }

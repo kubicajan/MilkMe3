@@ -32,12 +32,5 @@ namespace Helpers
 				line.SetPosition(i, positions[i]);
 			}
 		}
-
-		public static Vector2 RandomizeXPosition(Vector2 position)
-		{
-			const int MAX_OFFSET = 3;
-			float offset = Random.Range(-MAX_OFFSET, MAX_OFFSET);
-			return new Vector2(position.x + offset, position.y);
-		}
 	}
 }

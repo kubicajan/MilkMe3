@@ -55,7 +55,7 @@ namespace Living.Enemies.WarriorBoss
 		public override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
-			StartCoroutine(ItemManager.Instance.PopUpItem(3, transform.position));
+			StartCoroutine(ItemManager.Instance.SpawnItems(7, transform.position));
 			gameObject.layer = LayerMask.NameToLayer(GameLayer.Prop);
 			gameObject.tag = GameTag.Prop;
 			StartCoroutine(CreateGodBeams());

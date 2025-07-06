@@ -56,6 +56,11 @@ namespace Living.Enemies.WarriorBoss
 			highlightParticleEffect.Play();
 			StartCoroutine(ItemManager.Instance.PopUpItem(3, transform.position));
 			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
+			gameObject.layer = LayerMask.NameToLayer(GameLayer.Prop);
+			gameObject.tag = GameTag.Prop;
+
+			//TODO:THIS WHOLE THING SHOULD BE REPLACED WITH AN IMAGE
+			GetComponent<Rigidbody2D>().simulated = false;
 			// StartCoroutine(DieCoroutine(5));
 		}
 

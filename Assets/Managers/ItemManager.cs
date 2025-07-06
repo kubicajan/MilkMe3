@@ -26,13 +26,13 @@ public class ItemManager : MonoBehaviour
 
 	public IEnumerator PopUpItem(int numberOfItems, Vector2 parentPosition)
 	{
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(0.8f);
+		Instantiate(item, parentPosition, Quaternion.identity);
 
-		for (int i = 0; i < numberOfItems; i++)
+		for (int i = 0; i < numberOfItems - 1; i++)
 		{
 			yield return new WaitForSeconds(0.5f);
-			GameObject duplicatedObject = Instantiate(item);
-			duplicatedObject.transform.position = Utility.RandomizeXPosition(parentPosition);
+			Instantiate(item, Utility.RandomizeXPosition(parentPosition), Quaternion.identity);
 		}
 	}
 }

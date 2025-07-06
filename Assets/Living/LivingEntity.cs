@@ -7,6 +7,7 @@ namespace Living
 	{
 		[SerializeField] public LayerMask hostileLayers;
 		[SerializeField] public LayerMask groundLayers;
+		[SerializeField] public LayerMask itemLayers;
 		protected Rigidbody2D RigidBody { get; private set; }
 		protected BoxCollider2D BoxCollider { get; private set; }
 		public Coroutine movementCoroutine;

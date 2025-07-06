@@ -1,6 +1,9 @@
-using System.Xml;
-using TMPro;
+using System.Collections;
+using Helpers;
+using Living.Enemies;
+using Persona.Blueprints;
 using UnityEngine;
+
 
 public class ItemManager : MonoBehaviour
 {
@@ -21,10 +24,15 @@ public class ItemManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public void PopUpItem(Vector2 parentPosition)
+	public IEnumerator PopUpItem(int numberOfItems, Vector2 parentPosition)
 	{
-		GameObject duplicatedObject = Instantiate(item);
-		//duplicatedObject.transform.SetParent(parent.transform, false);
-		duplicatedObject.transform.position = new Vector2(parentPosition.x, parentPosition.y);
+		yield return new WaitForSeconds(0.5f);
+
+		for (int i = 0; i < numberOfItems; i++)
+		{
+			yield return new WaitForSeconds(0.5f);
+			GameObject duplicatedObject = Instantiate(item);
+			duplicatedObject.transform.position = Utility.RandomizeXPosition(parentPosition);
+		}
 	}
 }

@@ -2,34 +2,42 @@ using UnityEngine;
 
 namespace Helpers
 {
-    public static class Utility
-    {
-        public static Collider2D[] DetectByLayers(Vector2 hitPosition, float areaOfEffect, LayerMask layersToBeDetected)
-        {
-            return Physics2D.OverlapCircleAll(hitPosition, areaOfEffect, layersToBeDetected);
-        }
+	public static class Utility
+	{
+		public static Collider2D[] DetectByLayers(Vector2 hitPosition, float areaOfEffect, LayerMask layersToBeDetected)
+		{
+			return Physics2D.OverlapCircleAll(hitPosition, areaOfEffect, layersToBeDetected);
+		}
 
-        public static void IgnoreCollisionsByLayers(bool disable, int currentLayer, LayerMask maskLayersToIgnore)
-        {
-            Physics2D.IgnoreLayerCollision(currentLayer, Mathf.RoundToInt(Mathf.Log(maskLayersToIgnore.value, 2)), disable);
-        }
+		public static void IgnoreCollisionsByLayers(bool disable, int currentLayer, LayerMask maskLayersToIgnore)
+		{
+			Physics2D.IgnoreLayerCollision(currentLayer, Mathf.RoundToInt(Mathf.Log(maskLayersToIgnore.value, 2)),
+				disable);
+		}
 
-        public static bool IsGroundedOnLayers(Vector2 position, LayerMask groundLayers)
-        {
-            // Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.2f, groundLayers);
-            // return colliders.Length > 0;
+		public static bool IsGroundedOnLayers(Vector2 position, LayerMask groundLayers)
+		{
+			// Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 0.2f, groundLayers);
+			// return colliders.Length > 0;
 
-            Collider2D[] results = new Collider2D[1];
-            int count = Physics2D.OverlapCircleNonAlloc(position, 0.2f, results, groundLayers);
-            return count > 0;
-        }
+			Collider2D[] results = new Collider2D[1];
+			int count = Physics2D.OverlapCircleNonAlloc(position, 0.2f, results, groundLayers);
+			return count > 0;
+		}
 
-        public static void SetLaserPosition(LineRenderer line, params Vector2[] positions)
-        {
-            for (int i = 0; i < line.positionCount; i++)
-            {
-                line.SetPosition(i, positions[i]);
-            }
-        }
-    }
+		public static void SetLaserPosition(LineRenderer line, params Vector2[] positions)
+		{
+			for (int i = 0; i < line.positionCount; i++)
+			{
+				line.SetPosition(i, positions[i]);
+			}
+		}
+
+		public static Vector2 RandomizeXPosition(Vector2 position)
+		{
+			const int MAX_OFFSET = 3;
+			float offset = Random.Range(-MAX_OFFSET, MAX_OFFSET);
+			return new Vector2(position.x + offset, position.y);
+		}
+	}
 }

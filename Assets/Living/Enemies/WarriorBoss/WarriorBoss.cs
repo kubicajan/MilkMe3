@@ -54,7 +54,7 @@ namespace Living.Enemies.WarriorBoss
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
 			highlightParticleEffect.Play();
-			ItemManager.Instance.PopUpItem(transform.position);
+			StartCoroutine(ItemManager.Instance.PopUpItem(3, transform.position));
 			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
 			// StartCoroutine(DieCoroutine(5));
 		}

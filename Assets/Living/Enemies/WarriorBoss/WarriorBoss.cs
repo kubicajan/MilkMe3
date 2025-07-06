@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Linq;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
@@ -8,6 +10,7 @@ namespace Living.Enemies.WarriorBoss
 	public class WarriorBoss : EnemyScript
 	{
 		[SerializeField] private Transform attackPoint;
+		[SerializeField] private ParticleSystem highlightParticleEffect;
 		[SerializeField] public GameObject heavyRangeAttack;
 		[SerializeField] private Animator animator;
 		private const float MELEE_ATTACK_RANGE = 3f;
@@ -52,9 +55,20 @@ namespace Living.Enemies.WarriorBoss
 		public override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
+			StartCoroutine(ItemManager.Instance.SpawnItems(7, transform.position));
+			gameObject.layer = LayerMask.NameToLayer(GameLayer.Prop);
+			gameObject.tag = GameTag.Prop;
+			StartCoroutine(CreateGodBeams());
+			//TODO:THIS WHOLE THING SHOULD BE REPLACED WITH AN IMAGE
+			GetComponent<Rigidbody2D>().simulated = false;
 			// StartCoroutine(DieCoroutine(5));
 		}
 
+		private IEnumerator CreateGodBeams()
+		{
+			yield return new WaitForSeconds(1.5f);
+			highlightParticleEffect.Play();
+		}
 
 		public override void DoDialog()
 		{

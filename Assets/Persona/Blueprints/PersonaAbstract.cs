@@ -115,13 +115,21 @@ namespace Persona.Blueprints
 		{
 			Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
 			Collider2D closestEnemy = DetectClosest(playerBase.hostileLayers);
+			Collider2D closestItem = DetectClosest(playerBase.itemLayers);
+
+			if (closestItem)
+			{
+				closestItem.GetComponent<Item>().Interact();
+				return;
+			}
 
 			if (closestNpc)
 			{
 				closestNpc.GetComponent<NpcScript>().DoDialog();
 				return;
 			}
-			else if (closestEnemy)
+
+			if (closestEnemy)
 			{
 				closestEnemy.GetComponent<EnemyScript>().DoDialog();
 				return;
@@ -197,7 +205,7 @@ namespace Persona.Blueprints
 
 		protected Quaternion GetRotation()
 		{
-			float angle =  (1 - lastDirection) * 90;
+			float angle = (1 - lastDirection) * 90;
 			return Quaternion.Euler(0, 0, angle);
 		}
 

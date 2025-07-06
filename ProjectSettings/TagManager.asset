@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - NPC
   - PlayerProjectile
+  - Prop
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - NPC
   - Shield
   - Camera
-  - 
-  - 
+  - Item
+  - Prop
   - 
   - 
   - 

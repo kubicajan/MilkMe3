@@ -9,6 +9,7 @@ namespace Persona
 	public class Farmer : PersonaAbstract
 	{
 		[SerializeField] private ParticleSystem angryParticleEffect;
+		[SerializeField] private ParticleSystem chargingParticleEffect;
 		[SerializeField] private LineRenderer laser;
 		[SerializeField] private GameObject pitchForkPrefab;
 
@@ -41,13 +42,18 @@ namespace Persona
 
 		private IEnumerator PitchforkThrow()
 		{
+			chargingParticleEffect.Play();
+
 			//charge it
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(1.5f);
+			chargingParticleEffect.Stop();
+			yield return new WaitForSeconds(0.5f);
 			const float RANGE_ATTACK_DISTANCE = 25f;
 			Transform playerAttackPoint = playerBase.attackPoint;
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
-			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
+				playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
 
 
@@ -57,7 +63,7 @@ namespace Persona
 				if (enemyScript != null)
 				{
 					Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
-					GameObject projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+					GameObject projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, GetRotation());
 					projectile.transform.parent = enemyHitInfo.transform;
 					enemyScript.TakeDamage(10);
 					enemyScript.MagicPushMe(enemyHitInfo.point, 5);
@@ -66,11 +72,12 @@ namespace Persona
 			else if (groundHitInfo)
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
-				Instantiate(pitchForkPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+				Instantiate(pitchForkPrefab, groundHitInfo.point, GetRotation());
 			}
 			else
 			{
-				Vector2 secondPosition = new Vector2((lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
+				Vector2 secondPosition = new Vector2(
+					(lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
 					playerAttackPoint.position.y);
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
 			}

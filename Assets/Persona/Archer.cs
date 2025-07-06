@@ -34,9 +34,10 @@ namespace Persona
 			Transform playerAttackPoint = playerBase.attackPoint;
 			if (gunslinger)
 			{
-				Instantiate(bulletPrefab, transform.position, playerAttackPoint.rotation);
+				Instantiate(bulletPrefab, transform.position, GetRotation());
 				yield break;
 			}
+
 			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
 				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
 			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
@@ -53,20 +54,20 @@ namespace Persona
 					enemyScript.TakeDamage(10);
 					enemyScript.GetKnockedBack(this.transform.position, 0.5f);
 					Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
-					GameObject projectile = Instantiate(arrowPrefab, enemyHitInfo.point, playerAttackPoint.rotation);
+					GameObject projectile = Instantiate(arrowPrefab, enemyHitInfo.point,  GetRotation());
 					projectile.transform.parent = enemyHitInfo.transform;
 				}
 			}
 			else if (npcHitInfo)
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, npcHitInfo.point);
-				GameObject projectile = Instantiate(arrowPrefab, npcHitInfo.point, playerAttackPoint.rotation);
+				GameObject projectile = Instantiate(arrowPrefab, npcHitInfo.point,  GetRotation());
 				projectile.transform.parent = npcHitInfo.transform;
 			}
 			else if (groundHitInfo)
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
-				Instantiate(arrowPrefab, groundHitInfo.point, playerAttackPoint.rotation);
+				Instantiate(arrowPrefab, groundHitInfo.point,  GetRotation());
 			}
 			else
 			{

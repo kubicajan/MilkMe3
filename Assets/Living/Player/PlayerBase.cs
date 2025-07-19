@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Living.Player
@@ -10,6 +11,7 @@ namespace Living.Player
 		[SerializeField] public LayerMask buildingLayers;
 		[SerializeField] public LayerMask npcLayers;
 		public bool canMove = true;
+		private ItemData[] inventory = new ItemData[3];
 
 		private void Awake()
 		{
@@ -21,6 +23,19 @@ namespace Living.Player
 		public Rigidbody2D GetRigidBody()
 		{
 			return RigidBody;
+		}
+
+		public bool TryAddToInventory(ItemData item)
+		{
+			for (int i = 0; i < inventory.Length; i++)
+			{
+				if (inventory[i] == null)
+				{
+					inventory[i] = item;
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

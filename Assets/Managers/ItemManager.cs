@@ -27,6 +27,7 @@ public class ItemManager : MonoBehaviour
 	public IEnumerator SpawnItems(int numberOfItems, Vector2 parentPosition)
 	{
 		yield return new WaitForSeconds(0.8f);
+
 		Instantiate(item, parentPosition, Quaternion.identity);
 
 		int pairs = (numberOfItems - 1) / 2;

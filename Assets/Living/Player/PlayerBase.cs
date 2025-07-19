@@ -35,6 +35,7 @@ namespace Living.Player
 					return true;
 				}
 			}
+
 			return false;
 		}
 	}

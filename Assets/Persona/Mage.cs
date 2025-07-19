@@ -8,6 +8,7 @@ namespace Persona
 		[SerializeField] private ParticleSystem shieldParticleEffect;
 		[SerializeField] private GameObject tornadoPrefab;
 		[SerializeField] private GameObject lightningPrefab;
+		private const int SHIELD_HEALTH = 50;
 		public override string PersonaName { get; set; } = "Mage";
 
 		public override void BaseAttack()
@@ -53,8 +54,7 @@ namespace Persona
 
 		private void ActivateShield()
 		{
-			shieldParticleEffect.Play();
-			shieldParticleEffect.GetComponent<CircleCollider2D>().enabled = true;
+			playerBase.ActivateShield(SHIELD_HEALTH, shieldParticleEffect, shieldParticleEffect.GetComponent<CircleCollider2D>());
 		}
 
 		private void DeactivateShield()

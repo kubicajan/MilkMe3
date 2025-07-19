@@ -21,6 +21,10 @@ namespace Living
 		private int currentHealth;
 		private int maximumHealth;
 
+		private int currentShieldHealth = 0;
+		private ParticleSystem currentShieldParticleEffect;
+		private CircleCollider2D currentShieldCollider;
+
 		//todo: this should be done universally. A unit should have a list of things that it is immune/damagable by
 		//todo: it should check before triggering any damage
 		private int CurrentHealth
@@ -36,6 +40,32 @@ namespace Living
 					Die();
 				}
 			}
+		}
+
+		private int CurrentShieldHealth
+		{
+			get => currentShieldHealth;
+			set
+			{
+				currentShieldHealth = value;
+				Debug.Log($"{gameObject.name} has {currentShieldHealth} shield remaining");
+				if (currentShieldHealth <= 0 && !dead)
+				{
+					currentShieldParticleEffect.Stop();
+					currentShieldCollider.enabled = false;
+					Debug.Log($"Shield broke!");
+				}
+			}
+		}
+
+		public void ActivateShield(int shieldHp, ParticleSystem shieldParticleEffect, CircleCollider2D shieldCollider)
+		{
+			currentShieldHealth += shieldHp;
+			currentShieldParticleEffect = shieldParticleEffect;
+			currentShieldCollider = shieldCollider;
+
+			currentShieldParticleEffect.Play();
+			currentShieldCollider.enabled = true;
 		}
 
 		public virtual void Die()
@@ -70,7 +100,14 @@ namespace Living
 
 		public void TakeDamage(int damage)
 		{
-			CurrentHealth -= damage;
+			if (currentShieldHealth > 0)
+			{
+				CurrentShieldHealth -= damage;
+			}
+			else
+			{
+				CurrentHealth -= damage;
+			}
 		}
 
 		public int GetCurrentHealth()
@@ -119,7 +156,8 @@ namespace Living
 
 			while (timer > 0)
 			{
-				transform.position = Vector2.MoveTowards(transform.position, targetPosition, knockbackDistance / 0.3f * Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, targetPosition,
+					knockbackDistance / 0.3f * Time.deltaTime);
 				timer -= Time.deltaTime;
 				yield return null;
 			}

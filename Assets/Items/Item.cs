@@ -22,7 +22,7 @@ public class Item : MonoBehaviour
 	{
 		if (playerBase.TryAddToInventory(data))
 		{
-			Destroy(gameObject);
+			Destroy(transform.parent.gameObject);
 		}
 		//TODO: display message that inventory is full
 	}

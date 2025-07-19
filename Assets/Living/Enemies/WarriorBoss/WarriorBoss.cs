@@ -59,8 +59,7 @@ namespace Living.Enemies.WarriorBoss
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
 			godRays.Play();
-			StartCoroutine(ItemManager.Instance.SpawnItems(7, new List<ItemRarity>() { ItemRarity.STANDARD },
-				transform.position));
+			StartCoroutine(ItemManager.Instance.SpawnItems(7, transform.position));
 			gameObject.layer = LayerMask.NameToLayer(GameLayer.Prop);
 			gameObject.tag = GameTag.Prop;
 			//TODO:THIS WHOLE THING SHOULD BE REPLACED WITH AN IMAGE

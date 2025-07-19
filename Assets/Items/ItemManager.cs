@@ -28,14 +28,10 @@ public class ItemManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public IEnumerator SpawnItems(int numberOfItems, List<ItemRarity> possibleRarities, Vector2 parentPosition)
+	public IEnumerator SpawnItems(int numberOfItems, Vector2 parentPosition)
 	{
 		yield return new WaitForSeconds(0.8f);
-
-		GameObject newItem = Instantiate(itemPrefab, parentPosition, Quaternion.identity);
-		//todo: the data should probably be decided here and just pass it to the item.
-		newItem.GetComponentInChildren<Item>().Initialize(possibleRarities);
-		newItem.SetActive(true);
+		InstantiateItem(parentPosition);
 
 		int pairs = (numberOfItems - 1) / 2;
 		float offset = 0;
@@ -58,6 +54,13 @@ public class ItemManager : MonoBehaviour
 
 	private void InstantiateItemWithOffset(Vector2 position, float offset)
 	{
-		Instantiate(itemPrefab, new Vector2(position.x + offset, position.y), Quaternion.identity);
+		InstantiateItem(new Vector2(position.x + offset, position.y));
+	}
+
+	private void InstantiateItem(Vector2 position)
+	{
+		GameObject newItem = Instantiate(itemPrefab, position, Quaternion.identity);
+		newItem.GetComponentInChildren<Item>().Initialize();
+		newItem.SetActive(true);
 	}
 }

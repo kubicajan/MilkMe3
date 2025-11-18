@@ -85,54 +85,64 @@ namespace Living.Enemies
 						targetScript.GetKnockedBack(gameObject.transform.position, 5);
 					}
 				}
+				else if (collision.gameObject.CompareTag(GameTag.PlayerProjectile))
+				{
+					if (collision.gameObject.TryGetComponent<Tornado>(out var tornadoScript))
+					{
+						this.TakeDamage(10);
+						Instantiate(explosionParticles, transform.position, Quaternion.identity);
+						this.GetKnockedBack(gameObject.transform.position, 5);
+					}
+				}
 			}
 		}
 
-		public void LiftMeUp(int liftByThisMuch)
+	public void LiftMeUp(int liftByThisMuch)
+	{
+		RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
+	}
+
+	public void AttackMoveMe(float moveBy, float directionToMove)
+	{
+		RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, directionToMove, transform,
+			RigidBody, this));
+	}
+
+	public void StompMeDown(int stompSpeed)
+	{
+		StartCoroutine(StompDown(stompSpeed));
+	}
+
+	private IEnumerator StompDown(int stompSpeed)
+	{
+		while (!IsGrounded())
 		{
-			RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
+			RigidBody.velocity = new Vector2(0, stompSpeed);
+			Debug.Log("still stomping");
+			yield return null;
 		}
 
-		public void AttackMoveMe(float moveBy, float directionToMove)
-		{
-			RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, directionToMove, transform,
-				RigidBody, this));
-		}
+		RigidBody.velocity = Vector2.zero;
+	}
 
-		public void StompMeDown(int stompSpeed)
-		{
-			StartCoroutine(StompDown(stompSpeed));
-		}
+	protected void RunMovementCoroutine(IEnumerator coroutine)
+	{
+		StopMovementCoroutine();
+		movementCoroutine = StartCoroutine(coroutine);
+	}
 
-		private IEnumerator StompDown(int stompSpeed)
+	protected void StopMovementCoroutine()
+	{
+		if (movementCoroutine != null)
 		{
-			while (!IsGrounded())
-			{
-				RigidBody.velocity = new Vector2(0, stompSpeed);
-				Debug.Log("still stomping");
-				yield return null;
-			}
-
-			RigidBody.velocity = Vector2.zero;
-		}
-
-		protected void RunMovementCoroutine(IEnumerator coroutine)
-		{
-			StopMovementCoroutine();
-			movementCoroutine = StartCoroutine(coroutine);
-		}
-
-		protected void StopMovementCoroutine()
-		{
-			if (movementCoroutine != null)
-			{
-				StopCoroutine(movementCoroutine);
-			}
-		}
-
-		protected bool IsGrounded()
-		{
-			return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
+			StopCoroutine(movementCoroutine);
 		}
 	}
+
+	protected bool IsGrounded()
+	{
+		return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
+	}
+}
+
 }

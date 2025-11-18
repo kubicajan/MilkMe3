@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tornado : MonoBehaviour
 {
-    private float speed = 2;
+    private float speed = 8;
     private float direction = 1f;
 
     void Update()

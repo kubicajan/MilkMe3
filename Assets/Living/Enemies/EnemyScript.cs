@@ -90,8 +90,9 @@ namespace Living.Enemies
 					if (collision.gameObject.TryGetComponent<Tornado>(out var tornadoScript))
 					{
 						this.TakeDamage(10);
+						LiftMeUp(50);
 						Instantiate(explosionParticles, transform.position, Quaternion.identity);
-						this.GetKnockedBack(gameObject.transform.position, 5);
+						// this.GetKnockedBack(gameObject.transform.position, 15);
 					}
 				}
 			}

@@ -22,7 +22,12 @@ public class Item : MonoBehaviour
 	{
 		if (playerBase.TryAddToInventory(data))
 		{
+			Debug.Log($"item {data.name} picked up");
 			Destroy(transform.parent.gameObject);
+		}
+		else
+		{
+			Debug.Log($"cannot pick up {data.name} ");
 		}
 		//TODO: display message that inventory is full
 	}

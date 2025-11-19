@@ -98,52 +98,51 @@ namespace Living.Enemies
 			}
 		}
 
-	public void LiftMeUp(int liftByThisMuch)
-	{
-		RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
-	}
-
-	public void AttackMoveMe(float moveBy, float directionToMove)
-	{
-		RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, directionToMove, transform,
-			RigidBody, this));
-	}
-
-	public void StompMeDown(int stompSpeed)
-	{
-		StartCoroutine(StompDown(stompSpeed));
-	}
-
-	private IEnumerator StompDown(int stompSpeed)
-	{
-		while (!IsGrounded())
+		public void LiftMeUp(int liftByThisMuch)
 		{
-			RigidBody.velocity = new Vector2(0, stompSpeed);
-			Debug.Log("still stomping");
-			yield return null;
+			RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
 		}
 
-		RigidBody.velocity = Vector2.zero;
-	}
-
-	protected void RunMovementCoroutine(IEnumerator coroutine)
-	{
-		StopMovementCoroutine();
-		movementCoroutine = StartCoroutine(coroutine);
-	}
-
-	protected void StopMovementCoroutine()
-	{
-		if (movementCoroutine != null)
+		public void AttackMoveMe(float moveBy, float directionToMove)
 		{
-			StopCoroutine(movementCoroutine);
+			RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, directionToMove, transform,
+				RigidBody, this));
+		}
+
+		public void StompMeDown(int stompSpeed)
+		{
+			StartCoroutine(StompDown(stompSpeed));
+		}
+
+		private IEnumerator StompDown(int stompSpeed)
+		{
+			while (!IsGrounded())
+			{
+				RigidBody.velocity = new Vector2(0, stompSpeed);
+				Debug.Log("still stomping");
+				yield return null;
+			}
+
+			RigidBody.velocity = Vector2.zero;
+		}
+
+		protected void RunMovementCoroutine(IEnumerator coroutine)
+		{
+			StopMovementCoroutine();
+			movementCoroutine = StartCoroutine(coroutine);
+		}
+
+		protected void StopMovementCoroutine()
+		{
+			if (movementCoroutine != null)
+			{
+				StopCoroutine(movementCoroutine);
+			}
+		}
+
+		protected bool IsGrounded()
+		{
+			return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
 		}
 	}
-
-	protected bool IsGrounded()
-	{
-		return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
-	}
-}
-
 }

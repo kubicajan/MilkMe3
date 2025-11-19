@@ -70,7 +70,9 @@ namespace Living.Enemies.WarriorBoss
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			// GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
+
 			gameObject.tag = GameTag.Boss;
 		}
 
@@ -92,6 +94,19 @@ namespace Living.Enemies.WarriorBoss
 			{
 				return WarriorBossTrigger.DoubleAttack;
 			}
+		}
+
+		public void Teleport(Vector2 position)
+		{
+			transform.position = position;
+		}
+
+		public void Fly(int direction, float speed)
+		{
+			Vector3 targetPosition =
+				new Vector3(transform.position.x, transform.position.y + (10 * direction), transform.position.z);
+			transform.position =
+				Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 		}
 
 		private int GetRandomOneOrTwo()

@@ -1654,6 +1654,7 @@ MonoBehaviour:
     m_Bits: 0
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
+  immuneToKnockBackX: 0
   groundCheck: {fileID: 203043307}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -2505,7 +2506,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 614723964}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -2561,6 +2562,7 @@ MonoBehaviour:
     m_Bits: 0
   deathParticleEffect: {fileID: 3880816499781483569, guid: 145df809b78f93544804c198e32089c0, type: 3}
   isAttacking: 0
+  immuneToKnockBackX: 0
   groundCheck: {fileID: 733296916}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -3514,6 +3516,7 @@ MonoBehaviour:
     m_Bits: 0
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
+  immuneToKnockBackX: 0
   groundCheck: {fileID: 888158296}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -3933,6 +3936,7 @@ MonoBehaviour:
     m_Bits: 8192
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
+  immuneToKnockBackX: 0
   attackPoint: {fileID: 276902811}
   jumpParticle: {fileID: 3570820612805916696, guid: b34c617cbc5c91b428c626bf86f4caaf, type: 3}
   groundCheck: {fileID: 1403300807}

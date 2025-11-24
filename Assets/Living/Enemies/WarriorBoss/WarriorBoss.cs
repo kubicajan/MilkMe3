@@ -58,13 +58,20 @@ namespace Living.Enemies.WarriorBoss
 		public override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
+			gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+			gameObject.GetComponent<Rigidbody2D>().gravityScale = 5;
+			StartCoroutine(DieCoroutine());
+		}
+
+		public IEnumerator DieCoroutine()
+		{
+			yield return new WaitForSeconds(1f);
 			godRays.Play();
-			StartCoroutine(ItemManager.Instance.SpawnItems(7, transform.position));
 			gameObject.layer = LayerMask.NameToLayer(GameLayer.Prop);
 			gameObject.tag = GameTag.Prop;
-			//TODO:THIS WHOLE THING SHOULD BE REPLACED WITH AN IMAGE
+			//TODO:THIS WHOLE THING COULD BE REPLACED WITH AN IMAGE
 			GetComponent<Rigidbody2D>().simulated = false;
-			// StartCoroutine(DieCoroutine(5));
+			StartCoroutine(ItemManager.Instance.SpawnItems(7, transform.position));
 		}
 
 		public override void DoDialog()

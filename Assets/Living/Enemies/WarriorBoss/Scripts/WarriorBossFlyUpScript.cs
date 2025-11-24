@@ -10,6 +10,7 @@ namespace Living.Enemies.WarriorBoss
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			warriorBoss = animator.GetComponent<WarriorBoss>();
+			warriorBoss.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 			warriorBoss.GetComponent<Rigidbody2D>().gravityScale = 0;
 		}
 

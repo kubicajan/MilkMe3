@@ -564,7 +564,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1533770652}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &105635276
 Animator:
@@ -874,7 +874,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1533770652}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 56.929}
 --- !u!212 &198777781
 SpriteRenderer:
@@ -958,7 +958,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1533770652}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &200152827
 SpriteRenderer:
@@ -1000,7 +1000,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: f44ceacb0360fe54d9ea8c4e97ef91d4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1654,7 +1654,6 @@ MonoBehaviour:
     m_Bits: 0
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
-  immuneToKnockBackX: 0
   groundCheck: {fileID: 203043307}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -2562,7 +2561,6 @@ MonoBehaviour:
     m_Bits: 0
   deathParticleEffect: {fileID: 3880816499781483569, guid: 145df809b78f93544804c198e32089c0, type: 3}
   isAttacking: 0
-  immuneToKnockBackX: 0
   groundCheck: {fileID: 733296916}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -3516,7 +3514,6 @@ MonoBehaviour:
     m_Bits: 0
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
-  immuneToKnockBackX: 0
   groundCheck: {fileID: 888158296}
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
@@ -3550,7 +3547,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1533770652}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &791185363
 SpriteRenderer:
@@ -3936,7 +3933,6 @@ MonoBehaviour:
     m_Bits: 8192
   deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
-  immuneToKnockBackX: 0
   attackPoint: {fileID: 276902811}
   jumpParticle: {fileID: 3570820612805916696, guid: b34c617cbc5c91b428c626bf86f4caaf, type: 3}
   groundCheck: {fileID: 1403300807}
@@ -4174,7 +4170,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1533770652}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &946748529
 SpriteRenderer:
@@ -9313,7 +9309,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1533770652}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1402159045
 SpriteRenderer:
@@ -9709,12 +9705,12 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 200152826}
   - {fileID: 198777780}
   - {fileID: 1402159044}
   - {fileID: 791185362}
   - {fileID: 105635275}
   - {fileID: 946748528}
-  - {fileID: 200152826}
   - {fileID: 2090649720}
   m_Father: {fileID: 0}
   m_RootOrder: 22

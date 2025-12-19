@@ -16,12 +16,14 @@ namespace Living.Enemies.FarmerBoss
 	{
 		[SerializeField] private Animator animator;
 		[SerializeField] public GameObject pitchfork;
-		[SerializeField] private Transform attackPoint;
+		[SerializeField] private Transform pitchforkAttackPoint;
+		[SerializeField] private LineRenderer laser;
 
 		private void Awake()
 		{
 			movementSpeed = 5f;
 			gameObject.tag = GameTag.Npc;
+			laser.GetComponent<LineRenderer>().positionCount = 2;
 		}
 
 		float timer = 0f;
@@ -51,11 +53,24 @@ namespace Living.Enemies.FarmerBoss
 
 		private void ThrowPitchfork()
 		{
+			StartCoroutine(PitchforkThrow());
+		}
+
+		private IEnumerator PitchforkThrow()
+		{
 			//TODO: CREATE THROWABLE PITCHFORK THAT HAS EFFECTS AND SHIT
 			// Instantiate(pitchfork, attackPoint.position, Quaternion.identity);
 
 			Transform pitchfork = transform.Find("RightArm/Pitchfork");
-			pitchfork.gameObject.SetActive(false);
+			 pitchfork.gameObject.SetActive(false);
+
+			Vector2 secondPosition = new Vector2(100 + pitchforkAttackPoint.position.x,
+				100 + pitchforkAttackPoint.position.y);
+			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
+
+			laser.enabled = true;
+			yield return new WaitForSeconds(0.05f);
+			// laser.enabled = false;
 		}
 
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Living.Enemies.FarmerBoss;
 using Living.Enemies.WarriorBoss;
 using UnityEngine;
 

@@ -4653,7 +4653,8 @@ Transform:
   m_LocalPosition: {x: 0.35, y: -0.09, z: 0.4}
   m_LocalScale: {x: 3, y: 3, z: 0.91283226}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1337393218}
   m_Father: {fileID: 198777780}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -18, z: 89.799}
@@ -9174,6 +9175,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1337393217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1337393218}
+  m_Layer: 7
+  m_Name: PitchforkAttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1337393218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337393217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.055, y: 0.081, z: -0.03}
+  m_LocalScale: {x: 0, y: 0.30513427, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1056482531}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1352802634
 GameObject:
   m_ObjectHideFlags: 0
@@ -9732,7 +9764,7 @@ GameObject:
   - component: {fileID: 1533770656}
   m_Layer: 7
   m_Name: SomeFarmer
-  m_TagString: Boss
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9853,6 +9885,8 @@ MonoBehaviour:
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
   animator: {fileID: 1533770651}
+  pitchfork: {fileID: 1056482530}
+  attackPoint: {fileID: 1337393218}
 --- !u!1 &1606237304
 GameObject:
   m_ObjectHideFlags: 0

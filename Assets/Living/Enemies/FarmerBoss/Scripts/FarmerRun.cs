@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class FarmerRun : StateMachineBehaviour
 {
-    private FarmerBoss farmerRun;
+    private FarmerBoss farmerBoss;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        farmerRun = animator.GetComponent<FarmerBoss>();
+        farmerBoss = animator.GetComponent<FarmerBoss>();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        farmerRun.Move();
+        farmerBoss.Move();
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

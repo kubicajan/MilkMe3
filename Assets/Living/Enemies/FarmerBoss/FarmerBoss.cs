@@ -19,6 +19,9 @@ namespace Living.Enemies.FarmerBoss
 		[SerializeField] private Transform pitchforkAttackPoint;
 		[SerializeField] private LineRenderer laser;
 
+		private float timer = 0f;
+		const float duration = 4f;
+
 		private void Awake()
 		{
 			movementSpeed = 5f;
@@ -26,13 +29,9 @@ namespace Living.Enemies.FarmerBoss
 			laser.GetComponent<LineRenderer>().positionCount = 2;
 		}
 
-		float timer = 0f;
-		const float duration = 4f;
-
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-
 			timer += Time.fixedDeltaTime;
 
 			if (!isAttacking && CanAttack() && timer >= duration)
@@ -40,8 +39,7 @@ namespace Living.Enemies.FarmerBoss
 				Transform pitchfork = transform.Find("RightArm/Pitchfork");
 
 				pitchfork.gameObject.SetActive(true);
-
-				timer = 0f; // reset if needed
+				timer = 0f;
 				animator.SetTrigger(FarmerBossTrigger.ThrowPitchfork);
 			}
 		}
@@ -58,9 +56,6 @@ namespace Living.Enemies.FarmerBoss
 
 		private IEnumerator PitchforkThrow()
 		{
-			//TODO: CREATE THROWABLE PITCHFORK THAT HAS EFFECTS AND SHIT
-			// Instantiate(pitchfork, attackPoint.position, Quaternion.identity);
-
 			Transform pitchfork = transform.Find("RightArm/Pitchfork");
 			pitchfork.gameObject.SetActive(false);
 
@@ -73,13 +68,10 @@ namespace Living.Enemies.FarmerBoss
 			// laser.enabled = false;
 		}
 
-
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			// GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
 			GetComponent<Animator>().SetTrigger(FarmerBossTrigger.Annoyed);
-
 			gameObject.tag = GameTag.Boss;
 		}
 	}

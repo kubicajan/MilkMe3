@@ -12,7 +12,7 @@ namespace Living.Enemies
 		[SerializeField] protected Transform playerLocation;
 		protected float movementSpeed = 1f;
 		public ParticleSystem explosionParticles;
-		private float lastDirection = 1;
+		protected float lastDirection = 1;
 		private int movementDirection;
 
 		private void Start()

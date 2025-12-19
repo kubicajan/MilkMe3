@@ -62,9 +62,9 @@ namespace Living.Enemies.FarmerBoss
 			// Instantiate(pitchfork, attackPoint.position, Quaternion.identity);
 
 			Transform pitchfork = transform.Find("RightArm/Pitchfork");
-			 pitchfork.gameObject.SetActive(false);
+			pitchfork.gameObject.SetActive(false);
 
-			Vector2 secondPosition = new Vector2(100 + pitchforkAttackPoint.position.x,
+			Vector2 secondPosition = new Vector2(pitchforkAttackPoint.position.x + 100 * lastDirection,
 				100 + pitchforkAttackPoint.position.y);
 			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
 

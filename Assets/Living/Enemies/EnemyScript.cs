@@ -54,12 +54,16 @@ namespace Living.Enemies
 			return;
 		}
 
-		public virtual void Move()
+		public virtual Vector2 GetMoveDestination()
+		{
+			return new Vector2(playerLocation.position.x, transform.position.y);
+		}
+
+		public void Move()
 		{
 			if (!IsImmobilized())
 			{
-				Vector3 targetPosition =
-					new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
+				Vector2 targetPosition = GetMoveDestination();
 				transform.position =
 					Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
 			}

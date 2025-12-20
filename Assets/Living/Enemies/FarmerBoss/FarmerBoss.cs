@@ -1,16 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using DefaultNamespace;
 using Helpers;
 using Helpers.CommonEnums;
-using Living.Enemies.FarmerBoss;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
-using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -85,37 +77,21 @@ namespace Living.Enemies.FarmerBoss
 			StartCoroutine(PitchforkThrow());
 		}
 
-		public override void Move()
+
+		public override Vector2 GetMoveDestination()
 		{
-			if (!IsImmobilized())
+			if (!hasPitchfork && pitchforkLocation != Vector2.negativeInfinity)
 			{
-				if (!hasPitchfork && pitchforkLocation != Vector2.negativeInfinity)
-				{
-					Vector3 targetPosition =
-						new Vector3(pitchforkLocation.x, transform.position.y, transform.position.z);
-					transform.position =
-						Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
-				}
-				else
-				{
-					Vector3 targetPosition =
-						new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
-					transform.position =
-						Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
-				}
+				return new Vector3(pitchforkLocation.x, transform.position.y);
 			}
 			else
 			{
-				if (IsGrounded() && RigidBody.velocity == Vector2.zero)
-				{
-					Immobilize(false);
-				}
+				return new Vector3(playerLocation.position.x, transform.position.y);
 			}
 		}
 
 		private IEnumerator PitchforkThrow()
 		{
-			Transform pitchfork = transform.Find("RightArm/Pitchfork");
 			pitchfork.gameObject.SetActive(false);
 
 			Vector2 secondPosition = new Vector2(pitchforkAttackPoint.position.x + 100 * lastDirection,

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using DefaultNamespace;
 using Helpers;
 using Helpers.CommonEnums;
@@ -8,7 +9,10 @@ using Living.Enemies.FarmerBoss;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Living.Enemies.FarmerBoss
 {
@@ -16,8 +20,11 @@ namespace Living.Enemies.FarmerBoss
 	{
 		[SerializeField] private Animator animator;
 		[SerializeField] public GameObject pitchfork;
+		[SerializeField] public GameObject pitchforkFall;
 		[SerializeField] private Transform pitchforkAttackPoint;
 		[SerializeField] private LineRenderer laser;
+		private bool hasPitchfork = true;
+		private Vector2 pitchforkLocation;
 
 		private float timer = 0f;
 		const float duration = 4f;
@@ -34,24 +41,65 @@ namespace Living.Enemies.FarmerBoss
 			base.FixedUpdate();
 			timer += Time.fixedDeltaTime;
 
-			if (!isAttacking && CanAttack() && timer >= duration)
+			if (!hasPitchfork && IsNear(pitchforkLocation))
+			{
+				animator.SetTrigger(FarmerBossTrigger.PickUpPitchfork);
+				Debug.Log("hello");
+			}
+			else if (!isAttacking && CanAttack() && timer >= duration)
 			{
 				Transform pitchfork = transform.Find("RightArm/Pitchfork");
-
 				pitchfork.gameObject.SetActive(true);
 				timer = 0f;
 				animator.SetTrigger(FarmerBossTrigger.ThrowPitchfork);
+				hasPitchfork = false;
 			}
+		}
+
+		private bool IsNear(Vector2 targetPosition)
+		{
+			double tolerance = 2;
+			double toleranceSqr = tolerance * tolerance;
+
+			return ((Vector2)transform.position - targetPosition).sqrMagnitude <= toleranceSqr;
 		}
 
 		private bool CanAttack()
 		{
-			return gameObject.CompareTag(GameTag.Boss);
+			return gameObject.CompareTag(GameTag.Boss) && hasPitchfork;
 		}
 
 		private void ThrowPitchfork()
 		{
 			StartCoroutine(PitchforkThrow());
+		}
+
+		public override void Move()
+		{
+			if (!IsImmobilized())
+			{
+				if (hasPitchfork)
+				{
+					Vector3 targetPosition =
+						new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
+					transform.position =
+						Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+				}
+				else
+				{
+					Vector3 targetPosition =
+						new Vector3(pitchforkLocation.x, transform.position.y, transform.position.z);
+					transform.position =
+						Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+				}
+			}
+			else
+			{
+				if (IsGrounded() && RigidBody.velocity == Vector2.zero)
+				{
+					Immobilize(false);
+				}
+			}
 		}
 
 		private IEnumerator PitchforkThrow()
@@ -64,8 +112,11 @@ namespace Living.Enemies.FarmerBoss
 			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
 
 			laser.enabled = true;
-			yield return new WaitForSeconds(0.05f);
-			// laser.enabled = false;
+			yield return new WaitForSeconds(0.5f);
+			laser.enabled = false;
+
+			pitchforkLocation = playerLocation.position;
+			Instantiate(pitchforkFall, pitchforkLocation, Quaternion.identity);
 		}
 
 		public override void DoDialog()

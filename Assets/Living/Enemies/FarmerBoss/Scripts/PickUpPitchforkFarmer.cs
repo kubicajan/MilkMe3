@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Living.Enemies.FarmerBoss.Scripts
 {
-	public class FarmerThrowPitchfork : StateMachineBehaviour
+	public class PickUpPitchforkFarmer : StateMachineBehaviour
 	{
 		private FarmerBoss farmerBoss;
 
@@ -19,7 +19,7 @@ namespace Living.Enemies.FarmerBoss.Scripts
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			farmerBoss.isAttacking = false;
-			animator.ResetTrigger(FarmerBossTrigger.ThrowPitchfork);
+			animator.ResetTrigger(FarmerBossTrigger.PickUpPitchfork);
 		}
 	}
 }

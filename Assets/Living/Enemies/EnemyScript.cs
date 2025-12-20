@@ -54,7 +54,7 @@ namespace Living.Enemies
 			return;
 		}
 
-		public void Move()
+		public virtual void Move()
 		{
 			if (!IsImmobilized())
 			{

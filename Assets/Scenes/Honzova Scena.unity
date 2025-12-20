@@ -10015,11 +10015,10 @@ MonoBehaviour:
   playerLocation: {fileID: 825198581}
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
   animator: {fileID: 1533770651}
-  pitchfork: {fileID: 1056482530}
-  pitchforkFall: {fileID: 4812248277714658683, guid: 6b177e7c1a45a9240950f2ce8883cd68, type: 3}
+  pitchforkInHand: {fileID: 1056482530}
+  pitchforkFallPrefab: {fileID: 4812248277714658683, guid: 6b177e7c1a45a9240950f2ce8883cd68, type: 3}
   pitchforkAttackPoint: {fileID: 1337393218}
   laser: {fileID: 944135510}
-  pitchforkFallCopy: {fileID: 0}
 --- !u!1 &1606237304
 GameObject:
   m_ObjectHideFlags: 0

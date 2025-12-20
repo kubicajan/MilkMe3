@@ -11,14 +11,14 @@ namespace Living.Enemies.FarmerBoss
 	public class FarmerBoss : EnemyScript
 	{
 		[SerializeField] private Animator animator;
-		[SerializeField] public GameObject pitchfork;
-		[SerializeField] public GameObject pitchforkFall;
+		[SerializeField] private GameObject pitchforkInHand;
+		[SerializeField] private GameObject pitchforkFallPrefab;
 		[SerializeField] private Transform pitchforkAttackPoint;
 		[SerializeField] private LineRenderer laser;
+		private GameObject pitchforkFallCopy;
+
 		private bool hasPitchfork = true;
 		private Vector2 pitchforkLocation;
-
-		public GameObject pitchforkFallCopy;
 
 		private void Awake()
 		{
@@ -41,30 +41,12 @@ namespace Living.Enemies.FarmerBoss
 			}
 		}
 
-		public void MakePitchforkVisible()
-		{
-			pitchfork.gameObject.SetActive(true);
-		}
-
-		public void MakePitchforkInvisible()
-		{
-			pitchfork.gameObject.SetActive(false);
-		}
-
 		public void PickupPitchfork()
 		{
-			hasPitchfork = true;
+			SetHasPitchfork(true);
 			pitchforkLocation = Vector2.negativeInfinity;
 			MakePitchforkVisible();
 			Destroy(pitchforkFallCopy);
-		}
-
-		private bool IsNear(Vector2 targetPosition)
-		{
-			double tolerance = 2.5;
-			double toleranceSqr = tolerance * tolerance;
-
-			return ((Vector2)transform.position - targetPosition).sqrMagnitude <= toleranceSqr;
 		}
 
 		private bool CanAttack()
@@ -77,6 +59,45 @@ namespace Living.Enemies.FarmerBoss
 			StartCoroutine(PitchforkThrow());
 		}
 
+		private IEnumerator PitchforkThrow()
+		{
+			pitchforkInHand.gameObject.SetActive(false);
+
+			Vector2 secondPosition = new Vector2(pitchforkAttackPoint.position.x + 100 * lastDirection,
+				100 + pitchforkAttackPoint.position.y);
+			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
+
+			laser.enabled = true;
+
+			pitchforkLocation = playerLocation.position;
+			pitchforkFallCopy = Instantiate(pitchforkFallPrefab, pitchforkLocation, Quaternion.identity);
+			pitchforkFallCopy.gameObject.SetActive(true);
+			yield return new WaitForSeconds(0.5f);
+			laser.enabled = false;
+		}
+
+		public void SetHasPitchfork(bool hasIt)
+		{
+			hasPitchfork = hasIt;
+		}
+
+		public void MakePitchforkVisible()
+		{
+			pitchforkInHand.gameObject.SetActive(true);
+		}
+
+		public void MakePitchforkInvisible()
+		{
+			pitchforkInHand.gameObject.SetActive(false);
+		}
+
+		private bool IsNear(Vector2 targetPosition)
+		{
+			double tolerance = 2.5;
+			double toleranceSqr = tolerance * tolerance;
+
+			return ((Vector2)transform.position - targetPosition).sqrMagnitude <= toleranceSqr;
+		}
 
 		public override Vector2 GetMoveDestination()
 		{
@@ -88,28 +109,6 @@ namespace Living.Enemies.FarmerBoss
 			{
 				return new Vector3(playerLocation.position.x, transform.position.y);
 			}
-		}
-
-		private IEnumerator PitchforkThrow()
-		{
-			pitchfork.gameObject.SetActive(false);
-
-			Vector2 secondPosition = new Vector2(pitchforkAttackPoint.position.x + 100 * lastDirection,
-				100 + pitchforkAttackPoint.position.y);
-			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
-
-			laser.enabled = true;
-
-			pitchforkLocation = playerLocation.position;
-			pitchforkFallCopy = Instantiate(pitchforkFall, pitchforkLocation, Quaternion.identity);
-			pitchforkFallCopy.gameObject.SetActive(true);
-			yield return new WaitForSeconds(0.5f);
-			laser.enabled = false;
-		}
-
-		public void SetHasPitchfork(bool hasIt)
-		{
-			this.hasPitchfork = hasIt;
 		}
 
 		public override void DoDialog()

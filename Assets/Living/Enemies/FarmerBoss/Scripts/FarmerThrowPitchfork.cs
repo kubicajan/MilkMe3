@@ -18,6 +18,7 @@ namespace Living.Enemies.FarmerBoss.Scripts
 
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
+			farmerBoss.SetHasPitchfork(false);
 			farmerBoss.isAttacking = false;
 			animator.ResetTrigger(FarmerBossTrigger.ThrowPitchfork);
 		}

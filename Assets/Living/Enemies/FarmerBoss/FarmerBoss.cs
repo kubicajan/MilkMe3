@@ -26,8 +26,7 @@ namespace Living.Enemies.FarmerBoss
 		private bool hasPitchfork = true;
 		private Vector2 pitchforkLocation;
 
-		private float timer = 0f;
-		const float duration = 4f;
+		public GameObject pitchforkFallCopy;
 
 		private void Awake()
 		{
@@ -39,26 +38,38 @@ namespace Living.Enemies.FarmerBoss
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			timer += Time.fixedDeltaTime;
 
 			if (!hasPitchfork && IsNear(pitchforkLocation))
 			{
 				animator.SetTrigger(FarmerBossTrigger.PickUpPitchfork);
-				Debug.Log("hello");
 			}
-			else if (!isAttacking && CanAttack() && timer >= duration)
+			else if (!isAttacking && CanAttack())
 			{
-				Transform pitchfork = transform.Find("RightArm/Pitchfork");
-				pitchfork.gameObject.SetActive(true);
-				timer = 0f;
 				animator.SetTrigger(FarmerBossTrigger.ThrowPitchfork);
-				hasPitchfork = false;
 			}
+		}
+
+		public void MakePitchforkVisible()
+		{
+			pitchfork.gameObject.SetActive(true);
+		}
+
+		public void MakePitchforkInvisible()
+		{
+			pitchfork.gameObject.SetActive(false);
+		}
+
+		public void PickupPitchfork()
+		{
+			hasPitchfork = true;
+			pitchforkLocation = Vector2.negativeInfinity;
+			MakePitchforkVisible();
+			Destroy(pitchforkFallCopy);
 		}
 
 		private bool IsNear(Vector2 targetPosition)
 		{
-			double tolerance = 2;
+			double tolerance = 2.5;
 			double toleranceSqr = tolerance * tolerance;
 
 			return ((Vector2)transform.position - targetPosition).sqrMagnitude <= toleranceSqr;
@@ -78,17 +89,17 @@ namespace Living.Enemies.FarmerBoss
 		{
 			if (!IsImmobilized())
 			{
-				if (hasPitchfork)
+				if (!hasPitchfork && pitchforkLocation != Vector2.negativeInfinity)
 				{
 					Vector3 targetPosition =
-						new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
+						new Vector3(pitchforkLocation.x, transform.position.y, transform.position.z);
 					transform.position =
 						Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
 				}
 				else
 				{
 					Vector3 targetPosition =
-						new Vector3(pitchforkLocation.x, transform.position.y, transform.position.z);
+						new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
 					transform.position =
 						Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
 				}
@@ -112,11 +123,17 @@ namespace Living.Enemies.FarmerBoss
 			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
 
 			laser.enabled = true;
-			yield return new WaitForSeconds(0.5f);
-			laser.enabled = false;
 
 			pitchforkLocation = playerLocation.position;
-			Instantiate(pitchforkFall, pitchforkLocation, Quaternion.identity);
+			pitchforkFallCopy = Instantiate(pitchforkFall, pitchforkLocation, Quaternion.identity);
+			pitchforkFallCopy.gameObject.SetActive(true);
+			yield return new WaitForSeconds(0.5f);
+			laser.enabled = false;
+		}
+
+		public void SetHasPitchfork(bool hasIt)
+		{
+			this.hasPitchfork = hasIt;
 		}
 
 		public override void DoDialog()

@@ -9,6 +9,7 @@ namespace Living.Enemies.FarmerBoss.Scripts
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			farmerBoss = animator.GetComponent<FarmerBoss>();
+			farmerBoss.MakePitchforkVisible();
 			farmerBoss.isAttacking = true;
 		}
 

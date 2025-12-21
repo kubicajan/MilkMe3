@@ -13,9 +13,9 @@ namespace Helpers
 		{
 			LayerMask groundMask = LayerMask.GetMask("Ground");
 
-			Vector3 rayStart = suggestedPosition + Vector2.up * 10f;
-
-			if (Physics.Raycast(rayStart, Vector2.down, out RaycastHit hit, 5000f, groundMask))
+			Vector2 rayStart = suggestedPosition + Vector2.up * 10f;
+			RaycastHit2D hit = Physics2D.Raycast(rayStart, Vector2.down, 5000f, groundMask);
+			if (hit.collider != null)
 			{
 				return hit.point;
 			}

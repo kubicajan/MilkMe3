@@ -68,7 +68,7 @@ namespace Living.Enemies.FarmerBoss
 				100 + pitchforkAttackPoint.position.y);
 			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
 
-			pitchforkLocation = playerLocation.position;
+			pitchforkLocation = Utility.GetGroundBelowLocation(playerLocation.position);
 			pitchforkFallCopy = Instantiate(pitchforkFallPrefab, pitchforkLocation, Quaternion.identity);
 			pitchforkFallCopy.gameObject.SetActive(true);
 			laser.enabled = true;

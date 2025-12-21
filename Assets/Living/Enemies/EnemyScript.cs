@@ -3,6 +3,7 @@ using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
+using UnityEngine.LowLevel;
 
 namespace Living.Enemies
 {
@@ -14,9 +15,12 @@ namespace Living.Enemies
 		public ParticleSystem explosionParticles;
 		protected float lastDirection = 1;
 		private int movementDirection;
+		protected Vector2 targetPosition;
 
 		private void Start()
 		{
+			targetPosition = playerLocation.position;
+
 			Init(_health: 50,
 				_rigidBody2D: GetComponent<Rigidbody2D>(),
 				_boxCollider: GetComponent<BoxCollider2D>());
@@ -26,14 +30,14 @@ namespace Living.Enemies
 		{
 			if (!dead && !isAttacking)
 			{
-				TurnTowardsPlayer();
+				TurnTowardsTarget(targetPosition);
 			}
 		}
 
 		//tu by se mozna mel dat watcher co checkuje jestli se movementDirection zmenil a jestli jo, tak jedu
-		private void TurnTowardsPlayer()
+		private void TurnTowardsTarget(Vector2 target)
 		{
-			if (playerLocation.position.x > this.transform.position.x)
+			if (target.x > transform.position.x)
 			{
 				movementDirection = 1;
 			}

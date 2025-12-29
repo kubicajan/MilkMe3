@@ -4628,8 +4628,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.33333334
-    functionName: PickupPitchfork
+  - time: 1.1666666
+    functionName: DestroyGroundPitchfork
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

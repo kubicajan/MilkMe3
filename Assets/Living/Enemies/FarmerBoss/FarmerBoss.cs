@@ -39,7 +39,7 @@ namespace Living.Enemies.FarmerBoss
 			}
 		}
 
-		public void PickupPitchfork()
+		public void DestroyGroundPitchfork()
 		{
 			SetHasPitchfork(true);
 			Destroy(pitchforkFallCopy);

@@ -77,6 +77,34 @@ namespace Living.Enemies.FarmerBoss
 			targetPosition = pitchforkLocation;
 		}
 
+		public void DoJumpAttack()
+		{
+			Vector3 startPos = transform.position;
+			Vector3 targetPos = playerLocation.position;
+
+			StartCoroutine(JumpRoutine(startPos, targetPos));
+		}
+
+		IEnumerator JumpRoutine(Vector3 startPos, Vector3 targetPos)
+		{
+			float elapsed = 0f;
+			float jumpDuration = 1.2f;
+			float jumpHeight = 5f;
+
+			while (elapsed < jumpDuration)
+			{
+				elapsed += Time.deltaTime;
+				float t = elapsed / jumpDuration;
+				Vector3 currentPos = Vector3.Lerp(startPos, targetPos, t);
+				float height = 4f * jumpHeight * t * (1 - t);
+				currentPos.y += height;
+				transform.position = currentPos;
+				yield return null;
+			}
+
+			transform.position = targetPos;
+		}
+
 		public void SetHasPitchfork(bool hasIt)
 		{
 			hasPitchfork = hasIt;

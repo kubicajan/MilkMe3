@@ -15,29 +15,27 @@ namespace Living.Enemies
 		public ParticleSystem explosionParticles;
 		protected float lastDirection = 1;
 		private int movementDirection;
-		protected Vector2 targetPosition;
+		protected Transform targetLocation;
 
 		private void Start()
 		{
-			targetPosition = playerLocation.position;
+			SetPlayerAsTarget();
 
 			Init(_health: 50,
 				_rigidBody2D: GetComponent<Rigidbody2D>(),
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
 
-		public virtual void FixedUpdate()
+		public void SetPlayerAsTarget()
 		{
-			if (!dead && !isAttacking)
-			{
-				TurnTowardsTarget(targetPosition);
-			}
+			targetLocation = playerLocation;
+			TurnTowardsTarget();
 		}
 
 		//tu by se mozna mel dat watcher co checkuje jestli se movementDirection zmenil a jestli jo, tak jedu
-		private void TurnTowardsTarget(Vector2 target)
+		protected void TurnTowardsTarget()
 		{
-			if (target.x > transform.position.x)
+			if (targetLocation.position.x > transform.position.x)
 			{
 				movementDirection = 1;
 			}
@@ -58,18 +56,18 @@ namespace Living.Enemies
 			return;
 		}
 
-		public virtual Vector2 GetMoveDestination()
+		private Vector2 GetMoveDestination()
 		{
-			return new Vector2(playerLocation.position.x, transform.position.y);
+			return new Vector2(targetLocation.position.x, transform.position.y);
 		}
 
 		public void Move()
 		{
 			if (!IsImmobilized())
 			{
-				Vector2 targetPosition = GetMoveDestination();
+				TurnTowardsTarget();
 				transform.position =
-					Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+					Vector3.MoveTowards(transform.position, GetMoveDestination(), movementSpeed * Time.deltaTime);
 			}
 			else
 			{

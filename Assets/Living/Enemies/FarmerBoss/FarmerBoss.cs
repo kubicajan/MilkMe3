@@ -4,7 +4,6 @@ using Helpers.CommonEnums;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Living.Enemies.FarmerBoss
 {
@@ -18,20 +17,19 @@ namespace Living.Enemies.FarmerBoss
 		private GameObject pitchforkFallCopy;
 
 		private bool hasPitchfork = true;
-		private Vector2 pitchforkLocation;
+		private Transform pitchforkLocation;
 
 		private void Awake()
 		{
+			pitchforkLocation = new GameObject("PitchforkLocation").transform;
 			movementSpeed = 5f;
 			gameObject.tag = GameTag.Npc;
 			laser.GetComponent<LineRenderer>().positionCount = 2;
 		}
 
-		public override void FixedUpdate()
+		public void FixedUpdate()
 		{
-			base.FixedUpdate();
-
-			if (!hasPitchfork && IsNear(pitchforkLocation))
+			if (!hasPitchfork && IsNear(pitchforkLocation.position))
 			{
 				animator.SetTrigger(FarmerBossTrigger.PickUpPitchfork);
 			}
@@ -44,10 +42,7 @@ namespace Living.Enemies.FarmerBoss
 		public void PickupPitchfork()
 		{
 			SetHasPitchfork(true);
-			pitchforkLocation = Vector2.negativeInfinity;
-			MakePitchforkVisible();
 			Destroy(pitchforkFallCopy);
-			targetPosition = playerLocation.position;
 		}
 
 		private bool CanAttack()
@@ -68,41 +63,42 @@ namespace Living.Enemies.FarmerBoss
 				100 + pitchforkAttackPoint.position.y);
 			Utility.SetLaserPosition(laser, pitchforkAttackPoint.position, secondPosition);
 
-			pitchforkLocation = Utility.GetGroundBelowLocation(playerLocation.position);
-			pitchforkFallCopy = Instantiate(pitchforkFallPrefab, pitchforkLocation, Quaternion.identity);
+			pitchforkLocation.position = Utility.GetGroundBelowLocation(playerLocation.position);
+			pitchforkFallCopy = Instantiate(pitchforkFallPrefab, pitchforkLocation.position, Quaternion.identity);
 			pitchforkFallCopy.gameObject.SetActive(true);
 			laser.enabled = true;
 			yield return new WaitForSeconds(0.5f);
 			laser.enabled = false;
-			targetPosition = pitchforkLocation;
 		}
 
 		public void DoJumpAttack()
 		{
-			Vector3 startPos = transform.position;
-			Vector3 targetPos = Utility.GetGroundBelowLocation(playerLocation.position);
+			SetPlayerAsTarget();
+			Vector2 startPos = transform.position;
+			Vector2 targetPos = Utility.GetGroundBelowLocation(targetLocation.position);
 
 			StartCoroutine(JumpRoutine(startPos, targetPos));
 		}
 
-		IEnumerator JumpRoutine(Vector3 startPos, Vector3 targetPos)
+		private IEnumerator JumpRoutine(Vector2 startPos, Vector2 targetPos)
 		{
 			float elapsed = 0f;
-			float jumpDuration = 1.2f;
-			float jumpHeight = 5f;
+			const float JUMP_DURATION = 1.2f;
+			const float JUMP_HEIGHT = 5f;
 
-			while (elapsed < jumpDuration)
+			while (elapsed < JUMP_DURATION)
 			{
 				elapsed += Time.deltaTime;
-				float t = elapsed / jumpDuration;
-				Vector3 currentPos = Vector3.Lerp(startPos, targetPos, t);
-				float height = 4f * jumpHeight * t * (1 - t);
+				float t = elapsed / JUMP_DURATION;
+				Vector2 currentPos = Vector2.Lerp(startPos, targetPos, t);
+				float height = 4f * JUMP_HEIGHT * t * (1 - t);
 				currentPos.y += height;
 				transform.position = currentPos;
 				yield return null;
 			}
 
 			transform.position = targetPos;
+			targetLocation = pitchforkLocation;
 		}
 
 		public void SetHasPitchfork(bool hasIt)
@@ -122,22 +118,10 @@ namespace Living.Enemies.FarmerBoss
 
 		private bool IsNear(Vector2 position)
 		{
-			double tolerance = 2.5;
-			double toleranceSqr = tolerance * tolerance;
+			const double TOLERANCE = 2.5;
+			double toleranceSqr = TOLERANCE * TOLERANCE;
 
 			return ((Vector2)transform.position - position).sqrMagnitude <= toleranceSqr;
-		}
-
-		public override Vector2 GetMoveDestination()
-		{
-			if (!hasPitchfork && pitchforkLocation != Vector2.negativeInfinity)
-			{
-				return new Vector3(pitchforkLocation.x, transform.position.y);
-			}
-			else
-			{
-				return new Vector3(playerLocation.position.x, transform.position.y);
-			}
 		}
 
 		public override void DoDialog()

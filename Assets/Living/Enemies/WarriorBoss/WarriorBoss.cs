@@ -24,9 +24,8 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
-		public override void FixedUpdate()
+		public void FixedUpdate()
 		{
-			base.FixedUpdate();
 			if (!isAttacking && CanAttack())
 			{
 				animator.SetTrigger(SelectAttack());
@@ -77,7 +76,7 @@ namespace Living.Enemies.WarriorBoss
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			 GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
 			// GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
 
 			gameObject.tag = GameTag.Boss;

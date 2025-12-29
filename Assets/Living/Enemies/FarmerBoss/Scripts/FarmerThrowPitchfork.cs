@@ -9,11 +9,8 @@ namespace Living.Enemies.FarmerBoss.Scripts
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			farmerBoss = animator.GetComponent<FarmerBoss>();
+			farmerBoss.SetPlayerAsTarget();
 			farmerBoss.isAttacking = true;
-		}
-
-		public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-		{
 		}
 
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

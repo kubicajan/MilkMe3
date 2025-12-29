@@ -125,20 +125,19 @@ namespace Living.Enemies
 			while (!IsGrounded())
 			{
 				RigidBody.velocity = new Vector2(0, stompSpeed);
-				Debug.Log("still stomping");
 				yield return null;
 			}
 
 			RigidBody.velocity = Vector2.zero;
 		}
 
-		protected void RunMovementCoroutine(IEnumerator coroutine)
+		private void RunMovementCoroutine(IEnumerator coroutine)
 		{
 			StopMovementCoroutine();
 			movementCoroutine = StartCoroutine(coroutine);
 		}
 
-		protected void StopMovementCoroutine()
+		private void StopMovementCoroutine()
 		{
 			if (movementCoroutine != null)
 			{
@@ -146,7 +145,7 @@ namespace Living.Enemies
 			}
 		}
 
-		protected bool IsGrounded()
+		private bool IsGrounded()
 		{
 			return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
 		}

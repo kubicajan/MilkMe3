@@ -1,11 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using DefaultNamespace;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Living.Enemies.WarriorBoss
@@ -54,7 +50,7 @@ namespace Living.Enemies.WarriorBoss
 			DealDamageTo(DetectHostilesInRange(MELEE_ATTACK_RANGE), knockback);
 		}
 
-		public override void Die()
+		protected override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
 			gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
@@ -62,7 +58,7 @@ namespace Living.Enemies.WarriorBoss
 			StartCoroutine(DieCoroutine());
 		}
 
-		public IEnumerator DieCoroutine()
+		private IEnumerator DieCoroutine()
 		{
 			yield return new WaitForSeconds(1f);
 			godRays.Play();
@@ -86,8 +82,7 @@ namespace Living.Enemies.WarriorBoss
 		{
 			//check if angry & close enough to attack
 			return gameObject.CompareTag(GameTag.Boss)
-				? Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE
-				: false;
+			       && Vector2.Distance(playerLocation.position, attackPoint.position) <= MELEE_ATTACK_RANGE;
 		}
 
 		private string SelectAttack()

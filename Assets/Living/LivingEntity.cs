@@ -13,8 +13,8 @@ namespace Living
 		public Coroutine movementCoroutine;
 
 		public ParticleSystem deathParticleEffect;
-		private bool Immobilized = false;
-		protected bool dead = false;
+		private bool isImmobilized = false;
+		private bool isDead = false;
 		public bool isAttacking = false;
 
 		private bool immuneToKnockBackX = false;
@@ -34,9 +34,9 @@ namespace Living
 			{
 				currentHealth = value;
 				Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
-				if (currentHealth <= 0 && !dead)
+				if (currentHealth <= 0 && !isDead)
 				{
-					dead = true;
+					isDead = true;
 					Die();
 				}
 			}
@@ -49,7 +49,7 @@ namespace Living
 			{
 				currentShieldHealth = value;
 				Debug.Log($"{gameObject.name} has {currentShieldHealth} shield remaining");
-				if (currentShieldHealth <= 0 && !dead)
+				if (currentShieldHealth <= 0 && !isDead)
 				{
 					currentShieldParticleEffect.Stop();
 					currentShieldCollider.enabled = false;
@@ -68,12 +68,12 @@ namespace Living
 			currentShieldCollider.enabled = true;
 		}
 
-		public virtual void Die()
+		protected virtual void Die()
 		{
 			StartCoroutine(DieCoroutine());
 		}
 
-		protected IEnumerator DieCoroutine(float secondsToDeath = 0)
+		private IEnumerator DieCoroutine(float secondsToDeath = 0)
 		{
 			Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
 			yield return new WaitForSeconds(secondsToDeath);
@@ -90,12 +90,12 @@ namespace Living
 
 		public void Immobilize(bool immobilize)
 		{
-			Immobilized = immobilize;
+			isImmobilized = immobilize;
 		}
 
 		protected bool IsImmobilized()
 		{
-			return Immobilized;
+			return isImmobilized;
 		}
 
 		public void TakeDamage(int damage)

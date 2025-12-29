@@ -1,24 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using Living.Enemies.FarmerBoss;
-using Living.Enemies.WarriorBoss;
 using UnityEngine;
 
-public class FarmerRun : StateMachineBehaviour
+namespace Living.Enemies.FarmerBoss.Scripts
 {
-    private FarmerBoss farmerBoss;
-
-    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public class FarmerRun : StateMachineBehaviour
     {
-        farmerBoss = animator.GetComponent<FarmerBoss>();
-    }
+        private FarmerBoss farmerBoss;
 
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        farmerBoss.Move();
-    }
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            farmerBoss = animator.GetComponent<FarmerBoss>();
+        }
 
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
+        public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            farmerBoss.Move();
+        }
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+        }
     }
 }

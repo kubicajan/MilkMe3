@@ -80,7 +80,7 @@ namespace Living.Enemies.FarmerBoss
 		public void DoJumpAttack()
 		{
 			Vector3 startPos = transform.position;
-			Vector3 targetPos = playerLocation.position;
+			Vector3 targetPos = Utility.GetGroundBelowLocation(playerLocation.position);
 
 			StartCoroutine(JumpRoutine(startPos, targetPos));
 		}

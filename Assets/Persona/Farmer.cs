@@ -116,15 +116,5 @@ namespace Persona
 			const float KNOCKBACK = 2;
 			DealDamageTo(DetectEnemiesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
 		}
-
-		void OnDrawGizmosSelected()
-		{
-			if (playerBase.attackPoint.position == null)
-			{
-				return;
-			}
-
-			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MELEE_ATTACK_RANGE);
-		}
 	}
 }

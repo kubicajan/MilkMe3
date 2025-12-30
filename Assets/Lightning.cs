@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Lightning : MonoBehaviour
 {
-	[SerializeField] private Transform endPoint;
 	[SerializeField] private ParticleSystem fire;
 
 	private LineRenderer line;
@@ -12,10 +11,9 @@ public class Lightning : MonoBehaviour
 	private void Awake()
 	{
 		line = GetComponent<LineRenderer>();
-		CreateLightning();
 	}
 
-	private void CreateLightning()
+	public void CreateLightning(Transform endPoint)
 	{
 		const int SEGMENTS = 12;
 		const float JAGGEDNESS = 0.5f;
@@ -38,7 +36,8 @@ public class Lightning : MonoBehaviour
 		}
 
 		StartCoroutine(FadeLightning());
-		Instantiate(fire, end, Quaternion.identity);
+		fire.transform.position = end;
+		fire.Play();
 	}
 
 	private IEnumerator FadeLightning()
@@ -60,5 +59,6 @@ public class Lightning : MonoBehaviour
 
 		line.startColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
 		line.endColor = new Color(endColor.r, endColor.g, endColor.b, 0f);
+		fire.Stop();
 	}
 }

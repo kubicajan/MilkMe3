@@ -5,16 +5,17 @@ using UnityEngine;
 public class Lightning : MonoBehaviour
 {
 	[SerializeField] private Transform endPoint;
-	LineRenderer line;
+	[SerializeField] private ParticleSystem fire;
 
-	void Awake()
+	private LineRenderer line;
+
+	private void Awake()
 	{
-		const float REFRESH_RATE = 2f;
 		line = GetComponent<LineRenderer>();
-		InvokeRepeating(nameof(UpdateLightning), 2f, REFRESH_RATE);
+		CreateLightning();
 	}
 
-	void UpdateLightning()
+	private void CreateLightning()
 	{
 		const int SEGMENTS = 12;
 		const float JAGGEDNESS = 0.5f;
@@ -37,6 +38,7 @@ public class Lightning : MonoBehaviour
 		}
 
 		StartCoroutine(FadeLightning());
+		Instantiate(fire, end, Quaternion.identity);
 	}
 
 	private IEnumerator FadeLightning()

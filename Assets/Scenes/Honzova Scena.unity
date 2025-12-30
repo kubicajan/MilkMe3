@@ -10003,6 +10003,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1391472155 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5208547518630417267, guid: ba9b6f97019f75549a7c9233104bb9ca, type: 3}
+  m_PrefabInstance: {fileID: 1670700882}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1391472157 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5208547518630417269, guid: ba9b6f97019f75549a7c9233104bb9ca, type: 3}
+  m_PrefabInstance: {fileID: 1670700882}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1391472158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391472155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75cfd890b38469844b5780edb1a72d1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToDestruction: 5
 --- !u!1 &1402159043
 GameObject:
   m_ObjectHideFlags: 0
@@ -12439,6 +12462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endPoint: {fileID: 825198581}
+  fire: {fileID: 1391472157}
 --- !u!120 &2095465068
 LineRenderer:
   m_ObjectHideFlags: 0

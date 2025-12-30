@@ -10,6 +10,7 @@ TagManager:
   - NPC
   - PlayerProjectile
   - Prop
+  - Ground
   layers:
   - Default
   - TransparentFX

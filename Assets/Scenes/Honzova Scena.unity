@@ -3151,7 +3151,7 @@ GameObject:
   - component: {fileID: 696152709}
   m_Layer: 6
   m_Name: Surface (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4932,7 +4932,7 @@ GameObject:
   - component: {fileID: 979388095}
   m_Layer: 6
   m_Name: Surface (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5448,7 +5448,7 @@ GameObject:
   - component: {fileID: 1128690930}
   m_Layer: 6
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10307,7 +10307,7 @@ GameObject:
   - component: {fileID: 1533770656}
   m_Layer: 7
   m_Name: SomeFarmer
-  m_TagString: NPC
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -113,21 +113,23 @@ namespace Persona.Blueprints
 
 		public void Interact()
 		{
-			Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
-			Collider2D closestEnemy = DetectClosest(playerBase.hostileLayers);
 			Collider2D closestItem = DetectClosest(playerBase.itemLayers);
 
 			if (closestItem)
 			{
-				closestItem.GetComponent<Item>().Interact();
+				closestItem.GetComponent<Item>().Interact(playerBase);
 				return;
 			}
+
+			Collider2D closestNpc = DetectClosest(playerBase.npcLayers);
 
 			if (closestNpc)
 			{
 				closestNpc.GetComponent<NpcScript>().DoDialog();
 				return;
 			}
+
+			Collider2D closestEnemy = DetectClosest(playerBase.hostileLayers);
 
 			if (closestEnemy)
 			{

@@ -13,13 +13,17 @@ namespace Living
 		public Coroutine movementCoroutine;
 
 		public ParticleSystem deathParticleEffect;
-		private bool Immobilized = false;
-		protected bool dead = false;
+		private bool isImmobilized = false;
+		private bool isDead = false;
 		public bool isAttacking = false;
 
 		private bool immuneToKnockBackX = false;
 		private int currentHealth;
 		private int maximumHealth;
+
+		private int currentShieldHealth = 0;
+		private ParticleSystem currentShieldParticleEffect;
+		private CircleCollider2D currentShieldCollider;
 
 		//todo: this should be done universally. A unit should have a list of things that it is immune/damagable by
 		//todo: it should check before triggering any damage
@@ -30,20 +34,46 @@ namespace Living
 			{
 				currentHealth = value;
 				Debug.Log($"{gameObject.name} has {currentHealth} health remaining");
-				if (currentHealth <= 0 && !dead)
+				if (currentHealth <= 0 && !isDead)
 				{
-					dead = true;
+					isDead = true;
 					Die();
 				}
 			}
 		}
 
-		public virtual void Die()
+		private int CurrentShieldHealth
+		{
+			get => currentShieldHealth;
+			set
+			{
+				currentShieldHealth = value;
+				Debug.Log($"{gameObject.name} has {currentShieldHealth} shield remaining");
+				if (currentShieldHealth <= 0 && !isDead)
+				{
+					currentShieldParticleEffect.Stop();
+					currentShieldCollider.enabled = false;
+					Debug.Log($"Shield broke!");
+				}
+			}
+		}
+
+		public void ActivateShield(int shieldHp, ParticleSystem shieldParticleEffect, CircleCollider2D shieldCollider)
+		{
+			currentShieldHealth += shieldHp;
+			currentShieldParticleEffect = shieldParticleEffect;
+			currentShieldCollider = shieldCollider;
+
+			currentShieldParticleEffect.Play();
+			currentShieldCollider.enabled = true;
+		}
+
+		protected virtual void Die()
 		{
 			StartCoroutine(DieCoroutine());
 		}
 
-		protected IEnumerator DieCoroutine(float secondsToDeath = 0)
+		private IEnumerator DieCoroutine(float secondsToDeath = 0)
 		{
 			Instantiate(deathParticleEffect, transform.position, Quaternion.identity);
 			yield return new WaitForSeconds(secondsToDeath);
@@ -60,17 +90,24 @@ namespace Living
 
 		public void Immobilize(bool immobilize)
 		{
-			Immobilized = immobilize;
+			isImmobilized = immobilize;
 		}
 
 		protected bool IsImmobilized()
 		{
-			return Immobilized;
+			return isImmobilized;
 		}
 
 		public void TakeDamage(int damage)
 		{
-			CurrentHealth -= damage;
+			if (currentShieldHealth > 0)
+			{
+				CurrentShieldHealth -= damage;
+			}
+			else
+			{
+				CurrentHealth -= damage;
+			}
 		}
 
 		public int GetCurrentHealth()
@@ -119,7 +156,8 @@ namespace Living
 
 			while (timer > 0)
 			{
-				transform.position = Vector2.MoveTowards(transform.position, targetPosition, knockbackDistance / 0.3f * Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, targetPosition,
+					knockbackDistance / 0.3f * Time.deltaTime);
 				timer -= Time.deltaTime;
 				yield return null;
 			}

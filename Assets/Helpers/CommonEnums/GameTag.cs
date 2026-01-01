@@ -8,5 +8,6 @@ namespace Helpers.CommonEnums
 		public static string Enemy => "Enemy";
 		public static string PlayerProjectile => "PlayerProjectile";
 		public static string Prop => "Prop";
+		public static string Ground => "Ground";
 	}
 }

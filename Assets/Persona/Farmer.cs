@@ -1,5 +1,6 @@
 using System.Collections;
 using Helpers;
+using Helpers.CommonEnums;
 using Living.Enemies;
 using Persona.Blueprints;
 using UnityEngine;
@@ -42,44 +43,44 @@ namespace Persona
 
 		private IEnumerator PitchforkThrow()
 		{
-			chargingParticleEffect.Play();
+			const float RANGE_ATTACK_DISTANCE = 25f;
 
-			//charge it
+			chargingParticleEffect.Play();
 			yield return new WaitForSeconds(1.5f);
 			chargingParticleEffect.Stop();
+
 			yield return new WaitForSeconds(0.5f);
-			const float RANGE_ATTACK_DISTANCE = 25f;
 			Transform playerAttackPoint = playerBase.attackPoint;
-			RaycastHit2D enemyHitInfo = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
-				RANGE_ATTACK_DISTANCE, playerBase.hostileLayers);
-			RaycastHit2D groundHitInfo = Physics2D.Raycast(playerBase.attackPoint.position,
-				playerBase.attackPoint.right,
-				RANGE_ATTACK_DISTANCE, playerBase.groundLayers);
+
+			LayerMask hitLayers = playerBase.hostileLayers | playerBase.groundLayers;
+			RaycastHit2D hit = Physics2D.Raycast(playerBase.attackPoint.position, playerBase.attackPoint.right,
+				RANGE_ATTACK_DISTANCE, hitLayers);
 
 
-			if (enemyHitInfo)
-			{
-				EnemyScript enemyScript = enemyHitInfo.transform.GetComponent<EnemyScript>();
-				if (enemyScript != null)
-				{
-					Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
-					GameObject projectile = Instantiate(pitchForkPrefab, enemyHitInfo.point, GetRotation());
-					projectile.transform.parent = enemyHitInfo.transform;
-					enemyScript.TakeDamage(10);
-					enemyScript.MagicPushMe(enemyHitInfo.point, 5);
-				}
-			}
-			else if (groundHitInfo)
-			{
-				Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
-				Instantiate(pitchForkPrefab, groundHitInfo.point, GetRotation());
-			}
-			else
+			if (hit.collider == null)
 			{
 				Vector2 secondPosition = new Vector2(
 					(lastDirection * RANGE_ATTACK_DISTANCE) + playerAttackPoint.position.x,
 					playerAttackPoint.position.y);
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, secondPosition);
+			}
+			else if (hit.collider.CompareTag(GameTag.Boss) || hit.collider.CompareTag(GameTag.Enemy))
+			{
+				EnemyScript enemy = hit.collider.GetComponent<EnemyScript>();
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, hit.point);
+				GameObject projectile = Instantiate(pitchForkPrefab, hit.point, GetRotation());
+				projectile.transform.parent = hit.transform;
+
+				if (enemy != null)
+				{
+					enemy.TakeDamage(10);
+					enemy.MagicPushMe(hit.point, 5);
+				}
+			}
+			else if (hit.collider.CompareTag(GameTag.Ground))
+			{
+				Utility.SetLaserPosition(laser, playerAttackPoint.position, hit.point);
+				Instantiate(pitchForkPrefab, hit.point, GetRotation());
 			}
 
 			laser.enabled = true;
@@ -114,16 +115,6 @@ namespace Persona
 		{
 			const float KNOCKBACK = 2;
 			DealDamageTo(DetectEnemiesInRange(MELEE_ATTACK_RANGE), KNOCKBACK);
-		}
-
-		void OnDrawGizmosSelected()
-		{
-			if (playerBase.attackPoint.position == null)
-			{
-				return;
-			}
-
-			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MELEE_ATTACK_RANGE);
 		}
 	}
 }

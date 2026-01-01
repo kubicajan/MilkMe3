@@ -12,6 +12,7 @@ namespace Living.Enemies.WarriorBoss
 		[SerializeField] private ParticleSystem godRays;
 		[SerializeField] public GameObject heavyRangeAttack;
 		[SerializeField] private Animator animator;
+		[SerializeField] private Lightning lightningPrefab;
 		private const float MELEE_ATTACK_RANGE = 3f;
 
 		private void Awake()
@@ -20,9 +21,23 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.tag = GameTag.Npc;
 		}
 
+		private float hoverStateTimer = 0f;
+
 		public void FixedUpdate()
 		{
-			if (!isAttacking && CanAttack())
+			AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+
+			if (state.IsName("Boss_hover"))
+			{
+				hoverStateTimer += Time.deltaTime;
+
+				if (hoverStateTimer >= 0.5f)
+				{
+					LightningAttack();
+					hoverStateTimer = 0f;
+				}
+			}
+			else if (!isAttacking && CanAttack())
 			{
 				animator.SetTrigger(SelectAttack());
 			}
@@ -33,6 +48,13 @@ namespace Living.Enemies.WarriorBoss
 			const float KNOCKBACK = 20;
 			MeleeAttack(KNOCKBACK);
 			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
+		}
+
+		private void LightningAttack()
+		{
+			//todo: deal damage to player
+			Lightning lightning = Instantiate(lightningPrefab, new Vector2(), Quaternion.identity);
+			lightning.CreateLightning(playerLocation.transform);
 		}
 
 		public void LightAttack()
@@ -72,8 +94,8 @@ namespace Living.Enemies.WarriorBoss
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
-			// GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
+			//GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
 
 			gameObject.tag = GameTag.Boss;
 		}

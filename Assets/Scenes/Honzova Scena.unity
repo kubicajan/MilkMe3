@@ -2877,6 +2877,7 @@ MonoBehaviour:
   godRays: {fileID: 1016115034}
   heavyRangeAttack: {fileID: 579203161671551913, guid: a4b93306d92499d4ba35446ed6ae1ca3, type: 3}
   animator: {fileID: 614723970}
+  lightningPrefab: {fileID: 4844154102057220738, guid: 4ce6e3eb3444fea4399492097fd5b13d, type: 3}
 --- !u!1 &621782782
 GameObject:
   m_ObjectHideFlags: 0

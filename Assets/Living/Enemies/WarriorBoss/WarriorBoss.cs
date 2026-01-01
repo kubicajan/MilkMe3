@@ -13,6 +13,7 @@ namespace Living.Enemies.WarriorBoss
 		[SerializeField] public GameObject heavyRangeAttack;
 		[SerializeField] private Animator animator;
 		[SerializeField] private Lightning lightningPrefab;
+		[SerializeField] private GameObject meteorPrefab;
 		private const float MELEE_ATTACK_RANGE = 3f;
 
 		private void Awake()
@@ -33,7 +34,15 @@ namespace Living.Enemies.WarriorBoss
 
 				if (hoverStateTimer >= 0.5f)
 				{
-					LightningAttack();
+					if (GetRandomOneOrTwo() != 1)
+					{
+						// LightningAttack();
+					}
+					else
+					{
+						MeteorAttack();
+					}
+
 					hoverStateTimer = 0f;
 				}
 			}
@@ -55,6 +64,13 @@ namespace Living.Enemies.WarriorBoss
 			//todo: deal damage to player
 			Lightning lightning = Instantiate(lightningPrefab, new Vector2(), Quaternion.identity);
 			lightning.CreateLightning(playerLocation.transform);
+		}
+
+		private void MeteorAttack()
+		{
+			//todo: deal damage to player
+			Instantiate(meteorPrefab,
+				new Vector2(playerLocation.position.x, playerLocation.position.y + 10), Quaternion.identity);
 		}
 
 		public void LightAttack()

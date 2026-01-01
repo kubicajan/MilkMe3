@@ -3,6 +3,7 @@ using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
+using UnityEngine.LowLevel;
 
 namespace Living.Enemies
 {
@@ -12,28 +13,29 @@ namespace Living.Enemies
 		[SerializeField] protected Transform playerLocation;
 		protected float movementSpeed = 1f;
 		public ParticleSystem explosionParticles;
-		private float lastDirection = 1;
+		protected float lastDirection = 1;
 		private int movementDirection;
+		protected Transform targetLocation;
 
 		private void Start()
 		{
+			SetPlayerAsTarget();
+
 			Init(_health: 50,
 				_rigidBody2D: GetComponent<Rigidbody2D>(),
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
 
-		public virtual void FixedUpdate()
+		public void SetPlayerAsTarget()
 		{
-			if (!dead && !isAttacking)
-			{
-				TurnTowardsPlayer();
-			}
+			targetLocation = playerLocation;
+			TurnTowardsTarget();
 		}
 
 		//tu by se mozna mel dat watcher co checkuje jestli se movementDirection zmenil a jestli jo, tak jedu
-		private void TurnTowardsPlayer()
+		protected void TurnTowardsTarget()
 		{
-			if (playerLocation.position.x > this.transform.position.x)
+			if (targetLocation.position.x > transform.position.x)
 			{
 				movementDirection = 1;
 			}
@@ -54,14 +56,18 @@ namespace Living.Enemies
 			return;
 		}
 
+		private Vector2 GetMoveDestination()
+		{
+			return new Vector2(targetLocation.position.x, transform.position.y);
+		}
+
 		public void Move()
 		{
 			if (!IsImmobilized())
 			{
-				Vector3 targetPosition =
-					new Vector3(playerLocation.position.x, transform.position.y, transform.position.z);
+				TurnTowardsTarget();
 				transform.position =
-					Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+					Vector3.MoveTowards(transform.position, GetMoveDestination(), movementSpeed * Time.deltaTime);
 			}
 			else
 			{
@@ -83,6 +89,16 @@ namespace Living.Enemies
 						Instantiate(explosionParticles, transform.position, Quaternion.identity);
 						targetScript.TakeDamage(10);
 						targetScript.GetKnockedBack(gameObject.transform.position, 5);
+					}
+				}
+				else if (collision.gameObject.CompareTag(GameTag.PlayerProjectile))
+				{
+					if (collision.gameObject.TryGetComponent<Tornado>(out var tornadoScript))
+					{
+						this.TakeDamage(10);
+						LiftMeUp(50);
+						Instantiate(explosionParticles, transform.position, Quaternion.identity);
+						// this.GetKnockedBack(gameObject.transform.position, 15);
 					}
 				}
 			}
@@ -109,20 +125,19 @@ namespace Living.Enemies
 			while (!IsGrounded())
 			{
 				RigidBody.velocity = new Vector2(0, stompSpeed);
-				Debug.Log("still stomping");
 				yield return null;
 			}
 
 			RigidBody.velocity = Vector2.zero;
 		}
 
-		protected void RunMovementCoroutine(IEnumerator coroutine)
+		private void RunMovementCoroutine(IEnumerator coroutine)
 		{
 			StopMovementCoroutine();
 			movementCoroutine = StartCoroutine(coroutine);
 		}
 
-		protected void StopMovementCoroutine()
+		private void StopMovementCoroutine()
 		{
 			if (movementCoroutine != null)
 			{
@@ -130,7 +145,7 @@ namespace Living.Enemies
 			}
 		}
 
-		protected bool IsGrounded()
+		private bool IsGrounded()
 		{
 			return Utility.IsGroundedOnLayers(groundCheck.position, groundLayers);
 		}

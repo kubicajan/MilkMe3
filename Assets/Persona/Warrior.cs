@@ -166,15 +166,5 @@ namespace Persona
 		{
 			ProcessEnemies(detectedEntities, enemyScript => enemyScript.StompMeDown(stompSpeed));
 		}
-
-		void OnDrawGizmosSelected()
-		{
-			if (playerBase.attackPoint.position == null)
-			{
-				return;
-			}
-
-			Gizmos.DrawWireSphere(playerBase.attackPoint.position, MELEE_ATTACK_RANGE);
-		}
 	}
 }

@@ -9,6 +9,20 @@ namespace Helpers
 			return Physics2D.OverlapCircleAll(hitPosition, areaOfEffect, layersToBeDetected);
 		}
 
+		public static Vector2 GetGroundBelowLocation(Vector2 suggestedPosition)
+		{
+			LayerMask groundMask = LayerMask.GetMask("Ground");
+
+			Vector2 rayStart = suggestedPosition + Vector2.up * 10f;
+			RaycastHit2D hit = Physics2D.Raycast(rayStart, Vector2.down, 5000f, groundMask);
+			if (hit.collider != null)
+			{
+				return hit.point;
+			}
+
+			return Vector2.negativeInfinity;
+		}
+
 		public static void IgnoreCollisionsByLayers(bool disable, int currentLayer, LayerMask maskLayersToIgnore)
 		{
 			Physics2D.IgnoreLayerCollision(currentLayer, Mathf.RoundToInt(Mathf.Log(maskLayersToIgnore.value, 2)),

@@ -1,8 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
+using DefaultNamespace;
 using Helpers;
 using Living.Enemies;
 using Persona.Blueprints;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public class ItemManager : MonoBehaviour
@@ -10,10 +13,11 @@ public class ItemManager : MonoBehaviour
 	public static ItemManager Instance { get; private set; }
 	public static bool IsInitialized => Instance != null;
 
-	[SerializeField] private GameObject item;
+	[SerializeField] private GameObject itemPrefab;
 
 	private void Awake()
 	{
+		itemPrefab.SetActive(false);
 		if (Instance != null && Instance != this)
 		{
 			Destroy(gameObject);
@@ -27,7 +31,7 @@ public class ItemManager : MonoBehaviour
 	public IEnumerator SpawnItems(int numberOfItems, Vector2 parentPosition)
 	{
 		yield return new WaitForSeconds(0.8f);
-		Instantiate(item, parentPosition, Quaternion.identity);
+		InstantiateItem(parentPosition);
 
 		int pairs = (numberOfItems - 1) / 2;
 		float offset = 0;
@@ -36,20 +40,27 @@ public class ItemManager : MonoBehaviour
 		{
 			yield return new WaitForSeconds(0.5f);
 			offset = 1.5f * (i + 1);
-			InstantiateItem(parentPosition, -offset);
-			InstantiateItem(parentPosition, offset);
+			InstantiateItemWithOffset(parentPosition, -offset);
+			InstantiateItemWithOffset(parentPosition, offset);
 		}
 
 		if (numberOfItems % 2 == 0)
 		{
 			yield return new WaitForSeconds(0.5f);
 			offset += 1.5f;
-			InstantiateItem(parentPosition, -offset);
+			InstantiateItemWithOffset(parentPosition, -offset);
 		}
 	}
 
-	private void InstantiateItem(Vector2 position, float offset)
+	private void InstantiateItemWithOffset(Vector2 position, float offset)
 	{
-		Instantiate(item, new Vector2(position.x + offset, position.y), Quaternion.identity);
+		InstantiateItem(new Vector2(position.x + offset, position.y));
+	}
+
+	private void InstantiateItem(Vector2 position)
+	{
+		GameObject newItem = Instantiate(itemPrefab, position, Quaternion.identity);
+		newItem.GetComponentInChildren<Item>().Initialize();
+		newItem.SetActive(true);
 	}
 }

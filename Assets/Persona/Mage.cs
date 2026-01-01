@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Linq;
 using Persona.Blueprints;
 using UnityEngine;
 
@@ -7,12 +9,13 @@ namespace Persona
 	{
 		[SerializeField] private ParticleSystem shieldParticleEffect;
 		[SerializeField] private GameObject tornadoPrefab;
-		[SerializeField] private GameObject lightningPrefab;
+		[SerializeField] private Lightning lightningPrefab;
+		private const int SHIELD_HEALTH = 50;
 		public override string PersonaName { get; set; } = "Mage";
 
 		public override void BaseAttack()
 		{
-			LightningAttack();
+			StartCoroutine(LightningAttack());
 		}
 
 		public override void FirstAbility()
@@ -35,14 +38,17 @@ namespace Persona
 			DeactivateShield();
 		}
 
-		private void LightningAttack()
+		private IEnumerator LightningAttack()
 		{
-			Collider2D[] enemiesInRange = DetectEnemiesInRange(100);
-			DealDamageTo(enemiesInRange, 10);
+			Collider2D[] enemiesInRange = DetectEnemiesInRange(10);
+			DealDamageTo(enemiesInRange, 0);
+			var shuffledEnemies = enemiesInRange.OrderBy(_ => new System.Random().Next()).ToArray();
 
-			foreach (Collider2D enemy in enemiesInRange)
+			foreach (Collider2D enemy in shuffledEnemies)
 			{
-				Instantiate(lightningPrefab, enemy.transform.position, gameObject.transform.rotation);
+				Lightning lightning = Instantiate(lightningPrefab, new Vector2(), Quaternion.identity);
+				lightning.CreateLightning(enemy.transform);
+				yield return new WaitForSeconds(0.05f);
 			}
 		}
 
@@ -53,8 +59,8 @@ namespace Persona
 
 		private void ActivateShield()
 		{
-			shieldParticleEffect.Play();
-			shieldParticleEffect.GetComponent<CircleCollider2D>().enabled = true;
+			playerBase.ActivateShield(SHIELD_HEALTH, shieldParticleEffect,
+				shieldParticleEffect.GetComponent<CircleCollider2D>());
 		}
 
 		private void DeactivateShield()

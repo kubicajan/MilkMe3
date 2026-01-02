@@ -140,6 +140,31 @@ namespace Living.Enemies.WarriorBoss
 			transform.position = position;
 		}
 
+		public void StartFly()
+		{
+			float flySpeed = 25f;
+			StartCoroutine(FlyForSeconds(1, flySpeed, 0.4f));
+		}
+
+		private IEnumerator FlyForSeconds(int direction, float maxSpeed, float duration)
+		{
+			float elapsed = 0f;
+
+			while (elapsed < duration)
+			{
+				float t = elapsed / duration;
+				t = Mathf.Pow(t, 0.8f);
+
+				float easedT = Mathf.SmoothStep(1f, 0f, t);
+				float currentSpeed = maxSpeed * easedT;
+
+				Fly(direction, currentSpeed);
+
+				elapsed += Time.deltaTime;
+				yield return null;
+			}
+		}
+
 		public void Fly(int direction, float speed)
 		{
 			Vector3 targetPosition =

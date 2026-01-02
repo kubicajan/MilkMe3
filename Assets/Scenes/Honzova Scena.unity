@@ -10659,7 +10659,7 @@ MonoBehaviour:
   itemLayers:
     serializedVersion: 2
     m_Bits: 0
-  deathParticleEffect: {fileID: 0}
+  deathParticleEffect: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   isAttacking: 0
   groundCheck: {fileID: 0}
   playerLocation: {fileID: 825198581}
@@ -10668,6 +10668,7 @@ MonoBehaviour:
   pitchforkInHand: {fileID: 1056482530}
   pitchforkFallPrefab: {fileID: 4812248277714658683, guid: 6b177e7c1a45a9240950f2ce8883cd68, type: 3}
   pitchforkAttackPoint: {fileID: 1337393218}
+  groundSlamParticles: {fileID: 3570820612805916696, guid: de9441f632e5ed54fb7e2e80181dceb7, type: 3}
   laser: {fileID: 944135510}
 --- !u!1 &1606237304
 GameObject:

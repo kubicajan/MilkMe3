@@ -2,6 +2,7 @@ using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 
@@ -13,6 +14,8 @@ namespace Living.Enemies.FarmerBoss
 		[SerializeField] private GameObject pitchforkInHand;
 		[SerializeField] private GameObject pitchforkFallPrefab;
 		[SerializeField] private Transform pitchforkAttackPoint;
+		[FormerlySerializedAs("groundSlamParticle")] [SerializeField] private ParticleSystem groundSlamParticles;
+
 		[SerializeField] private LineRenderer laser;
 		private GameObject pitchforkFallCopy;
 
@@ -99,6 +102,11 @@ namespace Living.Enemies.FarmerBoss
 
 			transform.position = targetPos;
 			targetLocation = pitchforkLocation;
+		}
+
+		public void PlayGroundSlamParticles()
+		{
+			Instantiate(groundSlamParticles, transform.position, Quaternion.identity);
 		}
 
 		public void SetHasPitchfork(bool hasIt)

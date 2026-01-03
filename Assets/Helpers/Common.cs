@@ -15,10 +15,10 @@ namespace Helpers
             while (positionBeforeLiftUpY + liftByThisMuch > transform.position.y && elapsedTime <= 0.25f)
             {
                 elapsedTime += Time.deltaTime;
-                rigidBody.velocity = new Vector2(0, 30);
+                rigidBody.linearVelocity = new Vector2(0, 30);
                 yield return null;
             }
-            rigidBody.velocity = Vector2.zero;
+            rigidBody.linearVelocity = Vector2.zero;
             yield return new WaitForSeconds(0.2f);
             TurnOffGravity(rigidBody, false);
         }
@@ -34,7 +34,7 @@ namespace Helpers
                 while (positionBeforeMoveX + moveBy > transform.position.x && elapsedTime < 0.3f)
                 {
                     elapsedTime += Time.deltaTime;
-                    rigidBody.velocity = new Vector2(15, 0);
+                    rigidBody.linearVelocity = new Vector2(15, 0);
                     yield return null;
                 }
             }
@@ -43,11 +43,11 @@ namespace Helpers
                 while (positionBeforeMoveX - moveBy < transform.position.x && elapsedTime < 0.3f)
                 {
                     elapsedTime += Time.deltaTime;
-                    rigidBody.velocity = new Vector2(-15, 0);
+                    rigidBody.linearVelocity = new Vector2(-15, 0);
                     yield return null;
                 }
             }
-            rigidBody.velocity = Vector2.zero;
+            rigidBody.linearVelocity = Vector2.zero;
             yield return new WaitForSeconds(0.35f);
             TurnOffGravity(rigidBody, false);
         }

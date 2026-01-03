@@ -71,7 +71,7 @@ namespace Living.Enemies
 			}
 			else
 			{
-				if (IsGrounded() && RigidBody.velocity == Vector2.zero)
+				if (IsGrounded() && RigidBody.linearVelocity == Vector2.zero)
 				{
 					Immobilize(false);
 				}
@@ -124,11 +124,11 @@ namespace Living.Enemies
 		{
 			while (!IsGrounded())
 			{
-				RigidBody.velocity = new Vector2(0, stompSpeed);
+				RigidBody.linearVelocity = new Vector2(0, stompSpeed);
 				yield return null;
 			}
 
-			RigidBody.velocity = Vector2.zero;
+			RigidBody.linearVelocity = Vector2.zero;
 		}
 
 		private void RunMovementCoroutine(IEnumerator coroutine)

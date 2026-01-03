@@ -1,127 +1,115 @@
 using Persona;
 using Persona.Blueprints;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Living.Player
 {
-	public class PlayerController : MonoBehaviour
-	{
-		private PlayerBase playerBase;
-		private Farmer farmer;
-		private Mage mage;
-		private Warrior warrior;
-		private Archer archer;
-		private PersonaAbstract currentPersona;
-		private int currentPersonaNumber = 1;
+    public class PlayerController : MonoBehaviour
+    {
+        private PlayerBase playerBase;
+        private Farmer farmer;
+        private Mage mage;
+        private Warrior warrior;
+        private Archer archer;
 
-		const int NUMBER_OF_PERSONAS = 4;
+        private PersonaAbstract currentPersona;
+        private int currentPersonaNumber = 1;
 
-		private void Start()
-		{
-			farmer = GetComponent<Farmer>();
-			mage = GetComponent<Mage>();
-			warrior = GetComponent<Warrior>();
-			archer = GetComponent<Archer>();
-			playerBase = GetComponent<PlayerBase>();
-			SwapToPersona(farmer);
-			farmer.Initialize(playerBase);
-			archer.Initialize(playerBase);
-			mage.Initialize(playerBase);
-			warrior.Initialize(playerBase);
-		}
+        private const int NUMBER_OF_PERSONAS = 4;
 
-		private void Update()
-		{
-			if (playerBase.canMove)
-			{
-				if (Input.GetKeyDown("o"))
-				{
-					switch (currentPersonaNumber % NUMBER_OF_PERSONAS)
-					{
-						case 1:
-							SwapToPersona(warrior);
-							break;
-						case 2:
-							SwapToPersona(mage);
-							break;
-						case 3:
-							SwapToPersona(archer);
-							break;
-						case 0:
-							SwapToPersona(farmer);
-							break;
-					}
+        private Keyboard keyboard;
 
-					currentPersonaNumber++;
-					Debug.Log("switched to" + currentPersona.PersonaName);
-				}
+        private void Awake()
+        {
+            keyboard = Keyboard.current;
+        }
 
-				currentPersona.MovePotentially();
+        private void Start()
+        {
+            farmer = GetComponent<Farmer>();
+            mage = GetComponent<Mage>();
+            warrior = GetComponent<Warrior>();
+            archer = GetComponent<Archer>();
+            playerBase = GetComponent<PlayerBase>();
 
-				if (Input.GetKeyDown("f"))
-				{
-					currentPersona.Interact();
-				}
+            farmer.Initialize(playerBase);
+            archer.Initialize(playerBase);
+            mage.Initialize(playerBase);
+            warrior.Initialize(playerBase);
 
-				if (Input.GetKeyDown("x"))
-				{
-					currentPersona.Heal();
-				}
+            SwapToPersona(farmer);
+        }
 
-				if (Input.GetKeyDown("c"))
-				{
-					currentPersona.BaseAttack();
-				}
+        private void Update()
+        {
+            if (!playerBase.canMove || keyboard == null)
+                return;
 
-				if (Input.GetKeyDown("e"))
-				{
-					currentPersona.SecondAbility();
-				}
+            // Swap persona (O)
+            if (keyboard.oKey.wasPressedThisFrame)
+            {
+                switch (currentPersonaNumber % NUMBER_OF_PERSONAS)
+                {
+                    case 1: SwapToPersona(warrior); break;
+                    case 2: SwapToPersona(mage); break;
+                    case 3: SwapToPersona(archer); break;
+                    case 0: SwapToPersona(farmer); break;
+                }
 
-				if (Input.GetKeyDown("q"))
-				{
-					currentPersona.FirstAbility();
-				}
+                currentPersonaNumber++;
+                Debug.Log("Switched to " + currentPersona.PersonaName);
+            }
 
-				if (Input.GetKeyDown("b"))
-				{
-					currentPersona.Build();
-				}
+            currentPersona.MovePotentially();
 
-				if (Input.GetKeyDown("r"))
-				{
-					currentPersona.CommitSuicide();
-				}
+            if (keyboard.fKey.wasPressedThisFrame)
+                currentPersona.Interact();
 
-				if (Input.GetButtonDown("Jump"))
-				{
-					currentPersona.Jump();
-				}
+            if (keyboard.xKey.wasPressedThisFrame)
+                currentPersona.Heal();
 
-				if (Input.GetKeyDown(KeyCode.LeftShift))
-				{
-					currentPersona.Dash();
-				}
-			}
-		}
+            if (keyboard.cKey.wasPressedThisFrame)
+                currentPersona.BaseAttack();
 
-		private void SwapToPersona(PersonaAbstract persona)
-		{
-			if (currentPersona != null)
-			{
-				currentPersona.SwapFromMe();
-			}
-			currentPersona = persona;
-			currentPersona.SwapToMe();
-			gameObject.GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
-		}
+            if (keyboard.eKey.wasPressedThisFrame)
+                currentPersona.SecondAbility();
 
-		private void FixedUpdate()
-		{
-			if (currentPersona.GetMovement().x != 0)
-			{
-				currentPersona.Move();
-			}
-		}
-	}
+            if (keyboard.qKey.wasPressedThisFrame)
+                currentPersona.FirstAbility();
+
+            if (keyboard.bKey.wasPressedThisFrame)
+                currentPersona.Build();
+
+            if (keyboard.rKey.wasPressedThisFrame)
+                currentPersona.CommitSuicide();
+
+            if (keyboard.spaceKey.wasPressedThisFrame)
+                currentPersona.Jump();
+
+            if (keyboard.leftShiftKey.wasPressedThisFrame)
+                currentPersona.Dash();
+        }
+
+        private void FixedUpdate()
+        {
+            if (currentPersona.GetMovement().x != 0)
+            {
+                currentPersona.Move();
+            }
+        }
+
+        private void SwapToPersona(PersonaAbstract persona)
+        {
+            if (currentPersona != null)
+            {
+                currentPersona.SwapFromMe();
+            }
+
+            currentPersona = persona;
+            currentPersona.SwapToMe();
+
+            GetComponent<SpriteRenderer>().sprite = currentPersona.GetSkin();
+        }
+    }
 }

@@ -141,11 +141,11 @@ namespace Persona
 
 			while (!IsGrounded())
 			{
-				RigidBody.velocity = new Vector2(0, stompSpeed);
+				RigidBody.linearVelocity = new Vector2(0, stompSpeed);
 				yield return null;
 			}
 
-			RigidBody.velocity = Vector2.zero;
+			RigidBody.linearVelocity = Vector2.zero;
 			yield return new WaitForSeconds(0.05f);
 			Instantiate(stompParticle, transform.position, Quaternion.identity);
 			DealDamageTo(DetectEnemiesInRange(areaOfEffect), landingKnockBack);

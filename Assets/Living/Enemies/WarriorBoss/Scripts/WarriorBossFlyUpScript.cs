@@ -16,8 +16,6 @@ namespace Living.Enemies.WarriorBoss
 
 		public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
-			float flySpeed = 15f;
-			warriorBoss.Fly(1, flySpeed);
 		}
 
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -5,6 +5,7 @@ using Helpers;
 using Living.Enemies;
 using Living.Player;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Persona.Blueprints
 {
@@ -63,9 +64,9 @@ namespace Persona.Blueprints
 			Utility.IgnoreCollisionsByLayers(true, gameObject.layer, playerBase.hostileLayers);
 			Common.TurnOffGravity(RigidBody, true);
 			//dashing = true;
-			RigidBody.velocity = new Vector2(lastDirection * dashForce, 0);
+			RigidBody.linearVelocity = new Vector2(lastDirection * dashForce, 0);
 			yield return new WaitForSeconds(0.1f);
-			RigidBody.velocity = Vector2.zero;
+			RigidBody.linearVelocity = Vector2.zero;
 			yield return new WaitForSeconds(0.1f);
 			//dashing = false;
 			Common.TurnOffGravity(RigidBody, false);
@@ -91,13 +92,21 @@ namespace Persona.Blueprints
 			}
 
 			Vector3 m_Velocity = Vector3.zero;
-			Vector3 targetVelocity = new Vector2(movement.x * moveSpeed, RigidBody.velocity.y);
-			RigidBody.velocity = Vector3.SmoothDamp(RigidBody.velocity, targetVelocity, ref m_Velocity, .05f);
+			Vector3 targetVelocity = new Vector2(movement.x * moveSpeed, RigidBody.linearVelocity.y);
+			RigidBody.linearVelocity =
+				Vector3.SmoothDamp(RigidBody.linearVelocity, targetVelocity, ref m_Velocity, .05f);
 		}
 
 		public void MovePotentially()
 		{
-			movement.x = Input.GetAxisRaw("Horizontal"); // A (-1) and D (+1)
+			float horizontal = 0f;
+
+			if (Keyboard.current.aKey.isPressed)
+				horizontal -= 1f;  // A = left
+			if (Keyboard.current.dKey.isPressed)
+				horizontal += 1f;  // D = right
+
+			movement.x = horizontal;
 		}
 
 		public void Heal()
@@ -163,7 +172,7 @@ namespace Persona.Blueprints
 			}
 
 			consecutiveJumps++;
-			RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
+			RigidBody.linearVelocity = new Vector2(RigidBody.linearVelocity.x, jumpForce);
 		}
 
 		public Sprite GetSkin()

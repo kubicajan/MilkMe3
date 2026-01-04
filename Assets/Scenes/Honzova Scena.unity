@@ -3107,7 +3107,7 @@ MonoBehaviour:
   explosionParticles: {fileID: 8515007259630702627, guid: fee53a1376779ae469039b5f51309138, type: 3}
   attackPoint: {fileID: 1329765633}
   godRays: {fileID: 1016115034}
-  heavyRangeAttack: {fileID: 579203161671551913, guid: a4b93306d92499d4ba35446ed6ae1ca3, type: 3}
+  heavyRangeAttack: {fileID: 831815559165165119, guid: 8856e6f618f8787428908459b620f57c, type: 3}
   animator: {fileID: 614723970}
   lightningPrefab: {fileID: 4844154102057220738, guid: 4ce6e3eb3444fea4399492097fd5b13d, type: 3}
   meteorPrefab: {fileID: 2897470942931031063, guid: 043600bef69edb443afabac246e29725, type: 3}

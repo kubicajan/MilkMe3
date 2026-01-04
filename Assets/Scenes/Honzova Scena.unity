@@ -3703,7 +3703,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 9072883328055295224, guid: e5cd68e406f6fa846b9299e53bf87337, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4278190080
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072883328055295224, guid: e5cd68e406f6fa846b9299e53bf87337, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 9072883329144416948, guid: e5cd68e406f6fa846b9299e53bf87337, type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -10516,6 +10520,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 4852001416975082049, guid: 6a8c3da4f9bfa094581dbe4db2650626, type: 3}
+  itemRarityEffects:
+  - rarity: 0
+    particleEffect: {fileID: 2192111172225502365, guid: 8ace3ad0b944a564d868c9667b739c33, type: 3}
+  - rarity: 1
+    particleEffect: {fileID: 2354060532115845869, guid: 44e860e4fd9f89e478ee2c6a147867c7, type: 3}
+  - rarity: 2
+    particleEffect: {fileID: 8238464644361916965, guid: 6ee04439c4ba47f4eaad5fed9390cdb6, type: 3}
+  - rarity: 3
+    particleEffect: {fileID: 327669853532810175, guid: f26965a700c27524bb3200d8c0a9d085, type: 3}
+  - rarity: 4
+    particleEffect: {fileID: 712522591398069545, guid: 7efeb09604d5c4c419c6b074dfe1c662, type: 3}
 --- !u!1 &1329765632
 GameObject:
   m_ObjectHideFlags: 0
@@ -12707,7 +12722,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.0625, y: 2.8125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -12779,7 +12794,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 4.0625, y: 2.8125}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 4.0625, y: 2.8125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

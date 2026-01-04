@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a538f0dc8e9ac1b4bba5c65450d25d53
+guid: a8c3ab1f22422b040a3531238ab6050e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7762526562980988420
-    second: twinkle_0
+      213: 8054402122962066328
+    second: "\u2014Pngtree\u2014lens flare white sparkling light_8415861_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: twinkle_0
+      name: "\u2014Pngtree\u2014lens flare white sparkling light_8415861_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 7
-        width: 512
-        height: 498
+        x: 174
+        y: 173
+        width: 1653
+        height: 1653
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 406040a08c80abb60800000000000000
-      internalID: 7762526562980988420
+      spriteID: 89b5e498e0cf6cf60800000000000000
+      internalID: 8054402122962066328
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      twinkle_0: 7762526562980988420
+      "\u2014Pngtree\u2014lens flare white sparkling light_8415861_0": 8054402122962066328
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -15,7 +15,7 @@ namespace Buildings.Church
 
 		private void Awake()
 		{
-			string json = File.ReadAllText("Assets/Buildings/Church/ChurchGodsProperties.json");
+			string json = File.ReadAllText("Assets/Code/Buildings/Church/ChurchGodsProperties.json");
 			churchGods = JsonConvert.DeserializeObject<List<ChurchGod>>(json).ToArray();
 		}
 

@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Code.Living.NPCs
 {
-	public class RabbitNpcScript : NpcScript
+	public class CowNpcScript : NpcScript
 	{
 		[SerializeField] private Rigidbody2D rb;
 		private float moveSpeed = 2f;

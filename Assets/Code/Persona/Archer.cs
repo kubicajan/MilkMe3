@@ -5,14 +5,14 @@ using Living.Enemies;
 using Persona.Blueprints;
 using UnityEngine;
 
-namespace Persona
+namespace Code.Persona
 {
 	public class Archer : PersonaAbstract
 	{
 		[SerializeField] private LineRenderer laser;
 		[SerializeField] private GameObject arrowPrefab;
 		[SerializeField] private GameObject bulletPrefab;
-		private bool gunslinger = true;
+		private bool gunslinger = false;
 
 		private const float RANGE_ATTACK_DISTANCE = 8f;
 

@@ -11140,11 +11140,11 @@ MonoBehaviour:
   itemPrefab: {fileID: 4852001416975082049, guid: 6a8c3da4f9bfa094581dbe4db2650626, type: 3}
   itemRarityEffects:
   - rarity: 0
-    particleEffect: {fileID: 2192111172225502365, guid: 8ace3ad0b944a564d868c9667b739c33, type: 3}
+    particleEffect: {fileID: 8498937465674666278, guid: 8ace3ad0b944a564d868c9667b739c33, type: 3}
   - rarity: 1
     particleEffect: {fileID: 2354060532115845869, guid: 44e860e4fd9f89e478ee2c6a147867c7, type: 3}
   - rarity: 2
-    particleEffect: {fileID: 8238464644361916965, guid: 6ee04439c4ba47f4eaad5fed9390cdb6, type: 3}
+    particleEffect: {fileID: 8238464644361916965, guid: 7c241c6e19fc58f4e95e5c1fed0d811f, type: 3}
   - rarity: 3
     particleEffect: {fileID: 327669853532810175, guid: f26965a700c27524bb3200d8c0a9d085, type: 3}
   - rarity: 4

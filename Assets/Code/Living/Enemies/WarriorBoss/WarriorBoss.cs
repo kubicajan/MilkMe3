@@ -56,7 +56,8 @@ namespace Living.Enemies.WarriorBoss
 		public void HeavyAttack()
 		{
 			const float KNOCKBACK = 20;
-			MeleeAttack(KNOCKBACK);
+			//TODO:
+			// MeleeAttack(KNOCKBACK);
 			Instantiate(heavyRangeAttack, transform.position, Quaternion.identity);
 		}
 

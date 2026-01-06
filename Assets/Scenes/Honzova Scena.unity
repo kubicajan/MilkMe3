@@ -485,8 +485,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bc920368bb4179887b97b28239ac87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.Living.NPCs.CowNpcScript
-  kam: {fileID: 3570820612805916696, guid: b34c617cbc5c91b428c626bf86f4caaf, type: 3}
   rb: {fileID: 33141474}
+  kam: {fileID: 3570820612805916696, guid: b34c617cbc5c91b428c626bf86f4caaf, type: 3}
 --- !u!95 &33141472
 Animator:
   serializedVersion: 7
@@ -1174,8 +1174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727b0a1a70ce46d8a3f12b605cf3b561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.Living.NPCs.ChickenNpcScript
-  kam: {fileID: 8551154271092885276, guid: 7aa487bd632300448a3bbc2da583ea16, type: 3}
   rb: {fileID: 174126911}
+  kam: {fileID: 8551154271092885276, guid: 7aa487bd632300448a3bbc2da583ea16, type: 3}
 --- !u!95 &174126909
 Animator:
   serializedVersion: 7
@@ -1719,8 +1719,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8a74b5cefab411abbc3583b486817c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.Living.NPCs.RabbitNpcScript
-  kam: {fileID: 8248165159871286221, guid: 1af7782f268cc8d4e94cf4eda35582e5, type: 3}
   rb: {fileID: 262280009}
+  kam: {fileID: 8248165159871286221, guid: 1af7782f268cc8d4e94cf4eda35582e5, type: 3}
 --- !u!95 &262280007
 Animator:
   serializedVersion: 7
@@ -2371,8 +2371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c64fd961ef142329acef9b9c91572df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kam: {fileID: 0}
   rb: {fileID: 443860790}
+  kam: {fileID: 0}
 --- !u!1 &456137682
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,41 +2,44 @@ using Helpers.CommonEnums;
 using Living;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+namespace Code
 {
-	public ParticleSystem explosionParticles;
-	private float speed = 30;
-	private float direction = 1f;
-
-	private void OnCollisionEnter2D(Collision2D collision)
+	public class Bullet : MonoBehaviour
 	{
-		GameObject other = collision.gameObject;
+		public ParticleSystem explosionParticles;
+		private float speed = 30;
+		private float direction = 1f;
 
-		if (CompareTag(GameTag.Enemy) || CompareTag(GameTag.Boss))
+		private void OnCollisionEnter2D(Collision2D collision)
 		{
-			if (other.CompareTag(GameTag.Player))
+			GameObject other = collision.gameObject;
+
+			if (CompareTag(GameTag.Enemy) || CompareTag(GameTag.Boss))
 			{
-				LivingEntity entity = other.GetComponent<LivingEntity>();
-				Instantiate(explosionParticles, transform.position, Quaternion.identity);
-				Destroy(gameObject);
-				entity.TakeDamage(10);
+				if (other.CompareTag(GameTag.Player))
+				{
+					LivingEntity entity = other.GetComponent<LivingEntity>();
+					Instantiate(explosionParticles, transform.position, Quaternion.identity);
+					Destroy(gameObject);
+					entity.TakeDamage(10);
+				}
+			}
+			else if (CompareTag(GameTag.PlayerProjectile))
+			{
+				if (other.CompareTag(GameTag.Boss) || other.CompareTag(GameTag.Enemy))
+				{
+					LivingEntity entity = other.GetComponent<LivingEntity>();
+					Instantiate(explosionParticles, transform.position, Quaternion.identity);
+					Destroy(gameObject);
+					entity.TakeDamage(10);
+				}
 			}
 		}
-		else if (CompareTag(GameTag.PlayerProjectile))
-		{
-			if (other.CompareTag(GameTag.Boss) || other.CompareTag(GameTag.Enemy))
-			{
-				LivingEntity entity = other.GetComponent<LivingEntity>();
-				Instantiate(explosionParticles, transform.position, Quaternion.identity);
-				Destroy(gameObject);
-				entity.TakeDamage(10);
-			}
-		}
-	}
 
-	void Update()
-	{
-		Vector3 move = new Vector3(direction, 0, 0f);
-		transform.Translate(move * speed * Time.deltaTime);
+		void Update()
+		{
+			Vector3 move = new Vector3(direction, 0, 0f);
+			transform.Translate(move * speed * Time.deltaTime);
+		}
 	}
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using Code.Living.Player;
+using Code.Persona.Blueprints;
 using Helpers;
 using Living.Enemies;
 using Persona.Blueprints;
@@ -54,20 +55,20 @@ namespace Code.Persona
 					enemyScript.TakeDamage(10);
 					enemyScript.GetKnockedBack(this.transform.position, 0.5f);
 					Utility.SetLaserPosition(laser, playerAttackPoint.position, enemyHitInfo.point);
-					GameObject projectile = Instantiate(arrowPrefab, enemyHitInfo.point,  GetRotation());
+					GameObject projectile = Instantiate(arrowPrefab, enemyHitInfo.point, GetRotation());
 					projectile.transform.parent = enemyHitInfo.transform;
 				}
 			}
 			else if (npcHitInfo)
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, npcHitInfo.point);
-				GameObject projectile = Instantiate(arrowPrefab, npcHitInfo.point,  GetRotation());
+				GameObject projectile = Instantiate(arrowPrefab, npcHitInfo.point, GetRotation());
 				projectile.transform.parent = npcHitInfo.transform;
 			}
 			else if (groundHitInfo)
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, groundHitInfo.point);
-				Instantiate(arrowPrefab, groundHitInfo.point,  GetRotation());
+				Instantiate(arrowPrefab, groundHitInfo.point, GetRotation());
 			}
 			else
 			{
@@ -84,8 +85,43 @@ namespace Code.Persona
 
 		public override void FirstAbility()
 		{
-			Debug.Log("Unfinished");
-			return;
+			StartCoroutine(SpawnTopHalfCircle());
+		}
+
+		IEnumerator SpawnTopHalfCircle()
+		{
+			int spawnCount = 20;
+			float radius = 3f;
+			float minDistance = 0.7f; // Minimum distance between consecutive spawns
+
+			Vector2 lastSpawnPos = Vector2.zero;
+
+			for (int i = 0; i < spawnCount; i++)
+			{
+				Vector2 spawnPos;
+				int attempts = 0;
+				// Keep generating a position until it's far enough from the last one
+				do
+				{
+					float minAngle = 20f * Mathf.Deg2Rad; // Convert 20 degrees to radians
+					float maxAngle = 160f * Mathf.Deg2Rad; // Convert 160 degrees to radians
+
+					float angle = Random.Range(minAngle, maxAngle);
+					Vector2 offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+					spawnPos = (Vector2)transform.position + offset;
+					attempts++; // Safety check to avoid infinite loop
+					if (attempts > 20) break;
+				} while (i > 0 && Vector2.Distance(spawnPos, lastSpawnPos) < minDistance);
+
+				// Direction toward the center
+				Vector2 direction = (Vector2)transform.position - spawnPos;
+				float angleDeg = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+				Quaternion rotation = Quaternion.Euler(0f, 0f, angleDeg);
+				GameObject newArrow = Instantiate(arrowPrefab, spawnPos, rotation);
+				newArrow.transform.parent = gameObject.transform;
+				lastSpawnPos = spawnPos;
+				yield return new WaitForSeconds(0.15f);
+			}
 		}
 
 		public override void SecondAbility()

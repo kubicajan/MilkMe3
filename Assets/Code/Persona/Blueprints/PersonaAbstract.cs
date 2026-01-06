@@ -5,10 +5,11 @@ using Code.Living.NPCs;
 using Code.Living.Player;
 using Helpers;
 using Living.Enemies;
+using Persona.Blueprints;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Persona.Blueprints
+namespace Code.Persona.Blueprints
 {
 	public abstract class PersonaAbstract : MonoBehaviour, IPersonaInterface
 	{
@@ -89,7 +90,10 @@ namespace Persona.Blueprints
 			if (!Mathf.Approximately(lastDirection, movement.x))
 			{
 				lastDirection = movement.x;
-				transform.Rotate(0f, 180f, 0f);
+
+				Vector3 scale = transform.localScale;
+				scale.x = Mathf.Sign(movement.x) * Mathf.Abs(scale.x); // flip based on movement direction
+				transform.localScale = scale;
 			}
 
 			Vector3 m_Velocity = Vector3.zero;

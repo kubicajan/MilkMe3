@@ -1,5 +1,5 @@
+using Code.Living.Player;
 using DefaultNamespace;
-using Living.Player;
 using UnityEngine;
 using Random = System.Random;
 

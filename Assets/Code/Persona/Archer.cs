@@ -1,7 +1,7 @@
 using System.Collections;
+using Code.Living.Player;
 using Helpers;
 using Living.Enemies;
-using Living.Player;
 using Persona.Blueprints;
 using UnityEngine;
 

@@ -3,7 +3,7 @@ using Persona.Blueprints;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Living.Player
+namespace Code.Living.Player
 {
     public class PlayerController : MonoBehaviour
     {

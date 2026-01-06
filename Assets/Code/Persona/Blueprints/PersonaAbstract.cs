@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Linq;
 using Code.Living.NPCs;
+using Code.Living.Player;
 using Helpers;
 using Living.Enemies;
-using Living.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -103,9 +103,9 @@ namespace Persona.Blueprints
 			float horizontal = 0f;
 
 			if (Keyboard.current.aKey.isPressed)
-				horizontal -= 1f;  // A = left
+				horizontal -= 1f; // A = left
 			if (Keyboard.current.dKey.isPressed)
-				horizontal += 1f;  // D = right
+				horizontal += 1f; // D = right
 
 			movement.x = horizontal;
 		}
@@ -113,6 +113,8 @@ namespace Persona.Blueprints
 		public void Heal()
 		{
 			playerBase.Heal(10);
+			Instantiate(playerBase.healParticlePrefab,
+				playerBase.groundCheck.transform.position, Quaternion.identity);
 		}
 
 		public void Build()

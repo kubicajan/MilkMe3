@@ -1,12 +1,15 @@
 using DefaultNamespace;
+using Living;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Living.Player
+namespace Code.Living.Player
 {
 	public class PlayerBase : LivingEntity
 	{
 		[SerializeField] public Transform attackPoint;
 		[SerializeField] public ParticleSystem jumpParticle;
+		[SerializeField] public GameObject healParticlePrefab;
 		[SerializeField] public Transform groundCheck;
 		[SerializeField] public LayerMask buildingLayers;
 		[SerializeField] public LayerMask npcLayers;

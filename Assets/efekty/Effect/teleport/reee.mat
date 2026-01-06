@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: magic_line_ADD
+  m_Name: reee
   m_Shader: {fileID: 211, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3d1053400c9b39143b1ca3213d0c58f2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5f7486bc134a2b6409fb5324c2db6e35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -47,7 +47,7 @@ Material:
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
     - _ColorMode: 0
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DistortionBlend: 0.5
     - _DistortionEnabled: 0
@@ -56,7 +56,7 @@ Material:
     - _DstBlend: 1
     - _EmissionEnabled: 0
     - _FlipbookMode: 0
-    - _InvFade: 3
+    - _InvFade: 1.5
     - _LightingEnabled: 0
     - _Mode: 4
     - _SoftParticlesEnabled: 1

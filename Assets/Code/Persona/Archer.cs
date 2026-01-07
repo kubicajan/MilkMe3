@@ -1,11 +1,7 @@
 using System.Collections;
 using Code.Living.Player;
 using Code.Persona.Blueprints;
-using Helpers;
-using Living.Enemies;
-using Persona.Blueprints;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Code.Persona
 {
@@ -16,7 +12,6 @@ namespace Code.Persona
 		[SerializeField] private ArrowScript arrowPrefab;
 		[SerializeField] private GameObject bulletPrefab;
 		private bool gunslinger = false;
-		private const float RANGE_ATTACK_DISTANCE = 8f;
 
 		public override string PersonaName { get; set; } = "Archer";
 
@@ -24,7 +19,6 @@ namespace Code.Persona
 		{
 			// StartCoroutine(RangeAttack());
 			var newArrow = Instantiate(arrowPrefab, playerBase.attackPoint.position, Quaternion.identity);
-			// SetFacingDirection(newArrow.transform);
 			newArrow.Instantiate(lastDirection);
 		}
 
@@ -89,6 +83,8 @@ namespace Code.Persona
 
 		public override void FirstAbility()
 		{
+
+
 			StartCoroutine(SpawnTopHalfCircle());
 		}
 

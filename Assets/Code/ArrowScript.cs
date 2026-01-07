@@ -51,10 +51,5 @@ namespace Code
 
 			Destroy(gameObject);
 		}
-		// void OnBecameInvisible()
-		// {
-		//     enabled = false;
-		//     Destroy(gameObject);
-		// }
 	}
 }

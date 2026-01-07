@@ -86,7 +86,8 @@ namespace Code.Persona
 
 		public override void FirstAbility()
 		{
-			StartCoroutine(SpawnTopHalfCircle());
+			//StartCoroutine(ArrowRain());
+			 StartCoroutine(SpawnTopHalfCircle());
 		}
 
 		private IEnumerator SpawnTopHalfCircle()
@@ -126,8 +127,44 @@ namespace Code.Persona
 
 		public override void SecondAbility()
 		{
-			// StartCoroutine(ArrowStorm());
-			StartCoroutine(ArrowRain());
+			 StartCoroutine(ArrowStorm());
+			// StartCoroutine(ArrowRain());
+			//StartCoroutine(HelpFromOutside());
+		}
+
+		//todo: mohla by tady jako legiona na horn zahrat
+		private IEnumerator HelpFromOutside()
+		{
+			float direction = lastDirection;
+			Camera cam = Camera.main;
+
+			for (int i = 0; i < 20; i++)
+			{
+				float screenEdgeX;
+
+				if (direction > 0)
+				{
+					screenEdgeX =
+						cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane)).x - 1f;
+				}
+				else
+				{
+					screenEdgeX =
+						cam.ViewportToWorldPoint(new Vector3(1, 0, cam.nearClipPlane)).x + 1f;
+				}
+
+				float spawnY = 5f + Random.Range(-3f, 3f);
+				Vector3 spawnPosition = new Vector3(screenEdgeX, spawnY, 0f);
+
+				ArrowScript.InitializeAutoAttack(
+					arrowPrefab,
+					spawnPosition,
+					Quaternion.identity,
+					direction
+				);
+
+				yield return new WaitForSeconds(0.05f);
+			}
 		}
 
 		private IEnumerator ArrowRain()
@@ -136,8 +173,8 @@ namespace Code.Persona
 			{
 				Vector3 spawnPosition = new Vector3(
 					transform.position.x + Random.Range(-10f, 10f),
-					10f, // fixed Y
-					0f   // Z is ignored in 2D
+					10f,
+					0f
 				);
 
 				ArrowScript.InitializeDrop(
@@ -156,7 +193,7 @@ namespace Code.Persona
 			for (int i = 0; i < 5; i++)
 			{
 				var shuffledEnemies = enemiesInRange
-					.OrderBy(_ => UnityEngine.Random.value) // better than new System.Random() each time
+					.OrderBy(_ => UnityEngine.Random.value)
 					.ToArray();
 
 				foreach (Collider2D enemy in shuffledEnemies)

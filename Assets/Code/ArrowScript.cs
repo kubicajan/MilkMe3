@@ -1,3 +1,4 @@
+using Helpers.CommonEnums;
 using UnityEngine;
 
 namespace Code
@@ -10,7 +11,7 @@ namespace Code
 		public static void InitializeAutoAttack(ArrowScript prefab, Vector3 position, Quaternion rotation,
 			float direction)
 		{
-			float speed = 12f;
+			float speed = 15f;
 			float speedVariance = 1.5f;
 			float upwardForce = 5f;
 			float upwardVariance = 1f;
@@ -26,10 +27,6 @@ namespace Code
 		{
 			ArrowScript arrow = Instantiate(prefab, position, rotation);
 			arrow.rigidBody.gravityScale = 5f;
-		}
-
-		public void DropDownFlight()
-		{
 		}
 
 		private void FixedUpdate()
@@ -51,8 +48,12 @@ namespace Code
 			// 	enemyScript.TakeDamage(10);
 			// 	Destroy(gameObject);
 			// }
-			Instantiate(hitParticle, transform.position, Quaternion.identity);
 
+			if (collision.gameObject.CompareTag(GameTag.PlayerProjectile))
+			{
+				return;
+			}
+			Instantiate(hitParticle, transform.position, Quaternion.identity);
 			Destroy(gameObject);
 		}
 	}

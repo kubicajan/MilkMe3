@@ -8,6 +8,7 @@ namespace Code.Living.Player
 	public class PlayerBase : LivingEntity
 	{
 		[SerializeField] public Transform attackPoint;
+		[SerializeField] private Rigidbody2D rigidBody;
 		[SerializeField] public ParticleSystem jumpParticle;
 		[SerializeField] public GameObject healParticlePrefab;
 		[SerializeField] public Transform groundCheck;
@@ -19,7 +20,7 @@ namespace Code.Living.Player
 		private void Awake()
 		{
 			Init(_health: 100,
-				_rigidBody2D: GetComponent<Rigidbody2D>(),
+				_rigidBody2D: rigidBody,
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
 

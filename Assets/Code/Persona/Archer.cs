@@ -83,8 +83,6 @@ namespace Code.Persona
 
 		public override void FirstAbility()
 		{
-
-
 			StartCoroutine(SpawnTopHalfCircle());
 		}
 
@@ -117,7 +115,7 @@ namespace Code.Persona
 				float angleDeg = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 				Quaternion rotation = Quaternion.Euler(0f, 0f, angleDeg);
 				GameObject newArrow = Instantiate(arrowStrikePrefab, spawnPos, rotation);
-				newArrow.transform.parent = gameObject.transform;
+				newArrow.transform.parent = gameObject.transform.parent;
 				lastSpawnPos = spawnPos;
 				yield return new WaitForSeconds(0.15f);
 			}

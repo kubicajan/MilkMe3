@@ -12,8 +12,7 @@ namespace Code
 
 		private float direction = 1f;
 		[SerializeField] private ParticleSystem hitParticle;
-
-		public Rigidbody2D rigidBody;
+		[SerializeField] private Rigidbody2D rigidBody;
 
 		private void Start()
 		{
@@ -23,9 +22,10 @@ namespace Code
 			rigidBody.linearVelocity = (transform.right * finalSpeed * direction) + (transform.up * finalUpward);
 		}
 
-		public void Instantiate(float _direction)
+		public static void Initialize(ArrowScript prefab, Vector3 position, Quaternion rotation, float direction)
 		{
-			direction = _direction;
+			ArrowScript arrow = Instantiate(prefab, position, rotation);
+			arrow.direction = direction;
 		}
 
 		private void FixedUpdate()

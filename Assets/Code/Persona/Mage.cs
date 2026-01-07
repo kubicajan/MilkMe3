@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Linq;
 using Code.Persona.Blueprints;
-using Persona.Blueprints;
 using UnityEngine;
 
-namespace Persona
+namespace Code.Persona
 {
 	public class Mage : PersonaAbstract
 	{
 		[SerializeField] private ParticleSystem shieldParticleEffect;
-		[SerializeField] private GameObject tornadoPrefab;
+		[SerializeField] private TornadoScript tornadoPrefab;
 		[SerializeField] private Lightning lightningPrefab;
 		private const int SHIELD_HEALTH = 50;
 		public override string PersonaName { get; set; } = "Mage";
@@ -55,7 +54,7 @@ namespace Persona
 
 		private void ShootTornado()
 		{
-			Instantiate(tornadoPrefab, transform.position, gameObject.transform.rotation);
+			TornadoScript.Initialize(tornadoPrefab, transform.position, Quaternion.identity, lastDirection);
 		}
 
 		private void ActivateShield()

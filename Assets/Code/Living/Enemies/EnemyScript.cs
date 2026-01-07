@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Code;
 using Helpers;
 using Helpers.CommonEnums;
 using UnityEngine;
@@ -93,7 +94,7 @@ namespace Living.Enemies
 				}
 				else if (collision.gameObject.CompareTag(GameTag.PlayerProjectile))
 				{
-					if (collision.gameObject.TryGetComponent<Tornado>(out var tornadoScript))
+					if (collision.gameObject.TryGetComponent<TornadoScript>(out var tornadoScript))
 					{
 						this.TakeDamage(10);
 						LiftMeUp(50);

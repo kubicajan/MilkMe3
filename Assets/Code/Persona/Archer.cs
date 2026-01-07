@@ -18,8 +18,7 @@ namespace Code.Persona
 		public override void BaseAttack()
 		{
 			// StartCoroutine(RangeAttack());
-			var newArrow = Instantiate(arrowPrefab, playerBase.attackPoint.position, Quaternion.identity);
-			newArrow.Instantiate(lastDirection);
+			ArrowScript.Initialize(arrowPrefab, playerBase.attackPoint.position, Quaternion.identity, lastDirection);
 		}
 
 		public override void Initialize(PlayerBase _playerBase)

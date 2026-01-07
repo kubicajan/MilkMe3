@@ -3,10 +3,9 @@ using Code.Persona.Blueprints;
 using Helpers;
 using Helpers.CommonEnums;
 using Living.Enemies;
-using Persona.Blueprints;
 using UnityEngine;
 
-namespace Persona
+namespace Code.Persona
 {
 	public class Farmer : PersonaAbstract
 	{
@@ -69,7 +68,8 @@ namespace Persona
 			{
 				EnemyScript enemy = hit.collider.GetComponent<EnemyScript>();
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, hit.point);
-				GameObject projectile = Instantiate(pitchForkPrefab, hit.point, GetRotation());
+				GameObject projectile = Instantiate(pitchForkPrefab, hit.point, Quaternion.identity);
+				SetFacingDirection(projectile.transform);
 				projectile.transform.parent = hit.transform;
 
 				if (enemy != null)
@@ -81,7 +81,8 @@ namespace Persona
 			else if (hit.collider.CompareTag(GameTag.Ground))
 			{
 				Utility.SetLaserPosition(laser, playerAttackPoint.position, hit.point);
-				Instantiate(pitchForkPrefab, hit.point, GetRotation());
+				GameObject projectile = Instantiate(pitchForkPrefab, hit.point, Quaternion.identity);
+				SetFacingDirection(projectile.transform);
 			}
 
 			laser.enabled = true;

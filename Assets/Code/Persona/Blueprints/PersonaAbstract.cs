@@ -220,13 +220,20 @@ namespace Code.Persona.Blueprints
 				}
 			}
 		}
+		//
+		// //WARNING: OBSOLETE
+		// protected Quaternion GetRotation()
+		// {
+		// 	float angle = (1 - lastDirection) * 90;
+		// 	return Quaternion.Euler(0, 0, angle);
+		// }
 
-		protected Quaternion GetRotation()
+		protected void SetFacingDirection(Transform objToFlip)
 		{
-			float angle = (1 - lastDirection) * 90;
-			return Quaternion.Euler(0, 0, angle);
+			Vector3 localScale = transform.localScale;
+			localScale.x = Mathf.Abs(localScale.x) * (Mathf.Approximately(lastDirection, 1) ? 1 : -1);
+			objToFlip.localScale = localScale;
 		}
-
 
 		public abstract void BaseAttack();
 

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75cfd890b38469844b5780edb1a72d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Helpers.DestroyObject
-  timeToDestruction: 0.8
+  timeToDestruction: 1
 --- !u!1 &3935467940291979569
 GameObject:
   m_ObjectHideFlags: 0

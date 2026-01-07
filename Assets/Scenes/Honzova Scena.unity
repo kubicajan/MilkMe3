@@ -5520,7 +5520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e533d434bbf64846977c0f442d7bab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skin: {fileID: 21300000, guid: a82dac155aa8dc74ca8e6232eb4d9cac, type: 3}
+  skin: {fileID: 4151046763693669347, guid: 3accdbde4e56f5c4e9cfa311b8cef55f, type: 3}
   laser: {fileID: 1043541796}
   arrowStrikePrefab: {fileID: 3853414655933793190, guid: e6b6a1fbbfdefa2489bd9ea241b1b62c, type: 3}
   arrowPrefab: {fileID: -5925267212065460121, guid: 78f914ddd3ff0704aa8176d5662c2c84, type: 3}

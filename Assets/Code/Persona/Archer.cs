@@ -87,7 +87,7 @@ namespace Code.Persona
 		public override void FirstAbility()
 		{
 			//StartCoroutine(ArrowRain());
-			 StartCoroutine(SpawnTopHalfCircle());
+			StartCoroutine(SpawnTopHalfCircle());
 		}
 
 		private IEnumerator SpawnTopHalfCircle()
@@ -127,9 +127,9 @@ namespace Code.Persona
 
 		public override void SecondAbility()
 		{
-			 StartCoroutine(ArrowStorm());
+			// StartCoroutine(ArrowStorm());
 			// StartCoroutine(ArrowRain());
-			//StartCoroutine(HelpFromOutside());
+			StartCoroutine(HelpFromOutside());
 		}
 
 		//todo: mohla by tady jako legiona na horn zahrat

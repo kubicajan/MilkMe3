@@ -11,12 +11,12 @@ namespace Code
 		public static void InitializeAutoAttack(ArrowScript prefab, Vector3 position, Quaternion rotation,
 			float direction)
 		{
-			float speed = 15f;
-			float speedVariance = 1.5f;
-			float upwardForce = 5f;
-			float upwardVariance = 1f;
-			float finalSpeed = speed + Random.Range(-speedVariance, speedVariance);
-			float finalUpward = upwardForce + Random.Range(-upwardVariance, upwardVariance);
+			const float SPEED = 15f;
+			const float SPEED_VARIANCE = 1.5f;
+			const float UPWARD_FORCE = 5f;
+			const float UPWARD_VARIANCE = 1f;
+			float finalSpeed = SPEED + Random.Range(-SPEED_VARIANCE, SPEED_VARIANCE);
+			float finalUpward = UPWARD_FORCE + Random.Range(-UPWARD_VARIANCE, UPWARD_VARIANCE);
 
 			ArrowScript arrow = Instantiate(prefab, position, rotation);
 			arrow.rigidBody.linearVelocity = (arrow.transform.right * (finalSpeed * direction)) +
@@ -48,11 +48,6 @@ namespace Code
 			// 	enemyScript.TakeDamage(10);
 			// 	Destroy(gameObject);
 			// }
-
-			if (collision.gameObject.CompareTag(GameTag.PlayerProjectile))
-			{
-				return;
-			}
 			Instantiate(hitParticle, transform.position, Quaternion.identity);
 			Destroy(gameObject);
 		}

@@ -2,63 +2,65 @@ using System.Collections;
 using Helpers;
 using UnityEngine;
 
-public class Lightning : MonoBehaviour
+namespace Code
 {
-	[SerializeField] private ParticleSystem fire;
-
-	private LineRenderer line;
-
-	private void Awake()
+	public class Lightning : MonoBehaviour
 	{
-		line = GetComponent<LineRenderer>();
-	}
+		[SerializeField] private ParticleSystem fire;
+		private LineRenderer line;
 
-	public void CreateLightning(Transform endPoint)
-	{
-		const int SEGMENTS = 12;
-		const float JAGGEDNESS = 0.5f;
-		line.positionCount = SEGMENTS;
-
-		Vector2 start = new Vector2(endPoint.position.x, endPoint.position.y + 10);
-		Vector2 end = Utility.GetGroundBelowLocation(endPoint.position);
-		Vector2 direction = (end - start);
-		Vector2 normal = new Vector2(-direction.y, direction.x).normalized;
-
-		for (int i = 0; i < SEGMENTS; i++)
+		private void Awake()
 		{
-			float t = i / (float)(SEGMENTS - 1);
-			Vector2 pos = Vector2.Lerp(start, end, t);
-
-			float offset = Random.Range(-JAGGEDNESS, JAGGEDNESS);
-			pos += normal * offset;
-
-			line.SetPosition(i, pos);
+			line = GetComponent<LineRenderer>();
 		}
 
-		StartCoroutine(FadeLightning());
-		fire.transform.position = end;
-		fire.Play();
-	}
-
-	private IEnumerator FadeLightning()
-	{
-		yield return new WaitForSeconds(0.3f);
-		float fadeDuration = 1f;
-		float elapsed = 0f;
-		Color startColor = line.startColor;
-		Color endColor = line.endColor;
-
-		while (elapsed < fadeDuration)
+		public void CreateLightning(Transform endPoint)
 		{
-			elapsed += Time.deltaTime;
-			float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
-			line.startColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
-			line.endColor = new Color(endColor.r, endColor.g, endColor.b, alpha);
-			yield return null;
+			const int SEGMENTS = 12;
+			const float JAGGEDNESS = 0.5f;
+			line.positionCount = SEGMENTS;
+
+			Vector2 start = new Vector2(endPoint.position.x, endPoint.position.y + 10);
+			Vector2 end = Utility.GetGroundBelowLocation(endPoint.position);
+			Vector2 direction = (end - start);
+			Vector2 normal = new Vector2(-direction.y, direction.x).normalized;
+
+			for (int i = 0; i < SEGMENTS; i++)
+			{
+				float t = i / (float)(SEGMENTS - 1);
+				Vector2 pos = Vector2.Lerp(start, end, t);
+
+				float offset = Random.Range(-JAGGEDNESS, JAGGEDNESS);
+				pos += normal * offset;
+
+				line.SetPosition(i, pos);
+			}
+
+			StartCoroutine(FadeLightning());
+			fire.transform.position = end;
+			fire.Play();
 		}
 
-		line.startColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
-		line.endColor = new Color(endColor.r, endColor.g, endColor.b, 0f);
-		fire.Stop();
+		private IEnumerator FadeLightning()
+		{
+			yield return new WaitForSeconds(0.3f);
+			float fadeDuration = 1f;
+			float elapsed = 0f;
+			Color startColor = line.startColor;
+			Color endColor = line.endColor;
+
+			while (elapsed < fadeDuration)
+			{
+				elapsed += Time.deltaTime;
+				float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+				line.startColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
+				line.endColor = new Color(endColor.r, endColor.g, endColor.b, alpha);
+				yield return null;
+			}
+
+			line.startColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+			line.endColor = new Color(endColor.r, endColor.g, endColor.b, 0f);
+			fire.Stop();
+		}
 	}
 }

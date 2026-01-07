@@ -1,6 +1,9 @@
 using System.Collections;
+using System.Linq;
 using Code.Living.Player;
 using Code.Persona.Blueprints;
+using Living.Enemies;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Code.Persona
@@ -18,7 +21,8 @@ namespace Code.Persona
 		public override void BaseAttack()
 		{
 			// StartCoroutine(RangeAttack());
-			ArrowScript.Initialize(arrowPrefab, playerBase.attackPoint.position, Quaternion.identity, lastDirection);
+			ArrowScript.InitializeAutoAttack(arrowPrefab, playerBase.attackPoint.position, Quaternion.identity,
+				lastDirection);
 		}
 
 		public override void Initialize(PlayerBase _playerBase)
@@ -85,7 +89,7 @@ namespace Code.Persona
 			StartCoroutine(SpawnTopHalfCircle());
 		}
 
-		IEnumerator SpawnTopHalfCircle()
+		private IEnumerator SpawnTopHalfCircle()
 		{
 			int spawnCount = 20;
 			float radius = 3f;
@@ -122,8 +126,52 @@ namespace Code.Persona
 
 		public override void SecondAbility()
 		{
-			Debug.Log("Unfinished");
-			return;
+			// StartCoroutine(ArrowStorm());
+			StartCoroutine(ArrowRain());
+		}
+
+		private IEnumerator ArrowRain()
+		{
+			for (int i = 0; i < 15; i++)
+			{
+				Vector3 spawnPosition = new Vector3(
+					transform.position.x + Random.Range(-10f, 10f),
+					10f, // fixed Y
+					0f   // Z is ignored in 2D
+				);
+
+				ArrowScript.InitializeDrop(
+					arrowPrefab,
+					spawnPosition,
+					Quaternion.identity
+				);
+
+				yield return new WaitForSeconds(0.1f);
+			}
+		}
+
+		private IEnumerator ArrowStorm()
+		{
+			Collider2D[] enemiesInRange = DetectEnemiesInRange(10);
+			for (int i = 0; i < 5; i++)
+			{
+				var shuffledEnemies = enemiesInRange
+					.OrderBy(_ => UnityEngine.Random.value) // better than new System.Random() each time
+					.ToArray();
+
+				foreach (Collider2D enemy in shuffledEnemies)
+				{
+					ArrowScript.InitializeDrop(
+						arrowPrefab,
+						new Vector2(enemy.transform.position.x, enemy.transform.position.y + 8),
+						Quaternion.identity
+					);
+
+					yield return new WaitForSeconds(0.1f);
+				}
+
+				yield return new WaitForSeconds(0.5f);
+			}
 		}
 
 		public override void SwapToMe()

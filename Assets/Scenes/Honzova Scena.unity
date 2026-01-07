@@ -650,7 +650,7 @@ Transform:
   m_GameObject: {fileID: 33141470}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -57.37, y: -0.7, z: 0}
+  m_LocalPosition: {x: -95.96, y: 2.96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1339,7 +1339,7 @@ Transform:
   m_GameObject: {fileID: 174126907}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -68.84, y: -1.08, z: 0}
+  m_LocalPosition: {x: -98.2, y: 0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1884,7 +1884,7 @@ Transform:
   m_GameObject: {fileID: 262280005}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -65.65, y: -1.28, z: 0}
+  m_LocalPosition: {x: -97.53, y: 1.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2392,7 +2392,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &456137683
 Rigidbody2D:
   serializedVersion: 5
@@ -2586,7 +2586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &463093092
 Rigidbody2D:
   serializedVersion: 5
@@ -4663,7 +4663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &761435429
 Rigidbody2D:
   serializedVersion: 5
@@ -5426,7 +5426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skin: {fileID: 21300000, guid: 748ae8b33df036b46a86e0387f1602cf, type: 3}
   shieldParticleEffect: {fileID: 1914821725}
-  tornadoPrefab: {fileID: 1029487389270759409, guid: e42437e19369ed548a387bd3e19bb718, type: 3}
+  tornadoPrefab: {fileID: 1029487389270759408, guid: e42437e19369ed548a387bd3e19bb718, type: 3}
   lightningPrefab: {fileID: 4844154102057220738, guid: 4ce6e3eb3444fea4399492097fd5b13d, type: 3}
 --- !u!114 &825198587
 MonoBehaviour:

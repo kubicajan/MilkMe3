@@ -4,28 +4,32 @@ namespace Code
 {
 	public class ArrowScript : MonoBehaviour
 	{
-		private float speed = 12f;
-		private float speedVariance = 1.5f;
-
-		private float upwardForce = 5f;
-		private float upwardVariance = 1f;
-
-		private float direction = 1f;
 		[SerializeField] private ParticleSystem hitParticle;
 		[SerializeField] private Rigidbody2D rigidBody;
 
-		private void Start()
+		public static void InitializeAutoAttack(ArrowScript prefab, Vector3 position, Quaternion rotation,
+			float direction)
 		{
+			float speed = 12f;
+			float speedVariance = 1.5f;
+			float upwardForce = 5f;
+			float upwardVariance = 1f;
 			float finalSpeed = speed + Random.Range(-speedVariance, speedVariance);
 			float finalUpward = upwardForce + Random.Range(-upwardVariance, upwardVariance);
 
-			rigidBody.linearVelocity = (transform.right * finalSpeed * direction) + (transform.up * finalUpward);
+			ArrowScript arrow = Instantiate(prefab, position, rotation);
+			arrow.rigidBody.linearVelocity = (arrow.transform.right * (finalSpeed * direction)) +
+			                                 (arrow.transform.up * finalUpward);
 		}
 
-		public static void Initialize(ArrowScript prefab, Vector3 position, Quaternion rotation, float direction)
+		public static void InitializeDrop(ArrowScript prefab, Vector3 position, Quaternion rotation)
 		{
 			ArrowScript arrow = Instantiate(prefab, position, rotation);
-			arrow.direction = direction;
+			arrow.rigidBody.gravityScale = 5f;
+		}
+
+		public void DropDownFlight()
+		{
 		}
 
 		private void FixedUpdate()

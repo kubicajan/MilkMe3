@@ -1,4 +1,5 @@
 using System.Collections;
+using Code.Living.Enemies;
 using Code.Persona.Blueprints;
 using Helpers;
 using Helpers.CommonEnums;

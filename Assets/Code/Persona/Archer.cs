@@ -88,7 +88,7 @@ namespace Code.Persona
 		{
 			//StartCoroutine(ArrowRain());
 			SpawnTopHalfCircleOnEnemies();
-			// SpawnTopHalfCircleOnSelf();
+			SpawnTopHalfCircleOnSelf();
 		}
 
 		private void SpawnTopHalfCircleOnEnemies()

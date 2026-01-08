@@ -4,11 +4,11 @@ namespace Living.Enemies.FarmerBoss.Scripts
 {
 	public class FarmerThrowPitchfork : StateMachineBehaviour
 	{
-		private FarmerBoss farmerBoss;
+		private Code.Living.Enemies.FarmerBoss.FarmerBoss farmerBoss;
 
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
-			farmerBoss = animator.GetComponent<FarmerBoss>();
+			farmerBoss = animator.GetComponent<Code.Living.Enemies.FarmerBoss.FarmerBoss>();
 			farmerBoss.SetPlayerAsTarget();
 			farmerBoss.isAttacking = true;
 		}

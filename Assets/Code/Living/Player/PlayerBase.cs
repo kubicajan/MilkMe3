@@ -8,7 +8,6 @@ namespace Code.Living.Player
 	public class PlayerBase : LivingEntity
 	{
 		[SerializeField] public Transform attackPoint;
-		[SerializeField] private Rigidbody2D rigidBody;
 		[SerializeField] public ParticleSystem jumpParticle;
 		[SerializeField] public GameObject healParticlePrefab;
 		[SerializeField] public Transform groundCheck;
@@ -17,16 +16,11 @@ namespace Code.Living.Player
 		public bool canMove = true;
 		private ItemData[] inventory = new ItemData[3];
 
-		private void Awake()
+		protected override void Awake()
 		{
+			base.Awake();
 			Init(_health: 100,
-				_rigidBody2D: rigidBody,
 				_boxCollider: GetComponent<BoxCollider2D>());
-		}
-
-		public Rigidbody2D GetRigidBody()
-		{
-			return RigidBody;
 		}
 
 		public bool TryAddToInventory(ItemData item)

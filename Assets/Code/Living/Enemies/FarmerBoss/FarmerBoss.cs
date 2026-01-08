@@ -1,12 +1,13 @@
 using System.Collections;
 using Helpers;
 using Helpers.CommonEnums;
+using Living.Enemies.FarmerBoss;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 
-namespace Living.Enemies.FarmerBoss
+namespace Code.Living.Enemies.FarmerBoss
 {
 	public class FarmerBoss : EnemyScript
 	{
@@ -14,7 +15,9 @@ namespace Living.Enemies.FarmerBoss
 		[SerializeField] private GameObject pitchforkInHand;
 		[SerializeField] private GameObject pitchforkFallPrefab;
 		[SerializeField] private Transform pitchforkAttackPoint;
-		[FormerlySerializedAs("groundSlamParticle")] [SerializeField] private ParticleSystem groundSlamParticles;
+
+		[FormerlySerializedAs("groundSlamParticle")] [SerializeField]
+		private ParticleSystem groundSlamParticles;
 
 		[SerializeField] private LineRenderer laser;
 		private GameObject pitchforkFallCopy;
@@ -22,8 +25,9 @@ namespace Living.Enemies.FarmerBoss
 		private bool hasPitchfork = true;
 		private Transform pitchforkLocation;
 
-		private void Awake()
+		protected override void Awake()
 		{
+			base.Awake();
 			pitchforkLocation = new GameObject("PitchforkLocation").transform;
 			movementSpeed = 5f;
 			gameObject.tag = GameTag.Npc;

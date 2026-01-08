@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Code.Living.Enemies;
 using Code.Living.NPCs;
 using Code.Living.Player;
 using Helpers;

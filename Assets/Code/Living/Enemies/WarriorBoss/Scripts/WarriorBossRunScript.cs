@@ -5,11 +5,11 @@ namespace Living.Enemies.WarriorBoss
 {
 	public class WarriorBossRunScript : StateMachineBehaviour
 	{
-		private WarriorBoss warriorBoss;
+		private Code.Living.Enemies.WarriorBoss.WarriorBoss warriorBoss;
 
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
-			warriorBoss = animator.GetComponent<WarriorBoss>();
+			warriorBoss = animator.GetComponent<Code.Living.Enemies.WarriorBoss.WarriorBoss>();
 		}
 
 		public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

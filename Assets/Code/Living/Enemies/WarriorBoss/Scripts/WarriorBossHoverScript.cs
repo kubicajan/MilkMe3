@@ -1,7 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Living.Enemies.WarriorBoss
+namespace Code.Living.Enemies.WarriorBoss.Scripts
 {
 	public class WarriorBossHoverScript : StateMachineBehaviour
 	{
@@ -25,7 +24,7 @@ namespace Living.Enemies.WarriorBoss
 			}
 
 			float flySpeed = 0.5f;
-			warriorBoss.Fly(direction, flySpeed);
+			warriorBoss.StartFly(direction, flySpeed);
 		}
 
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

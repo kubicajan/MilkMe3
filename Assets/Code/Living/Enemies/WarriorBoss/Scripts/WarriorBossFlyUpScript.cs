@@ -1,7 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Living.Enemies.WarriorBoss
+namespace Code.Living.Enemies.WarriorBoss.Scripts
 {
 	public class WarriorBossFlyUpScript : StateMachineBehaviour
 	{
@@ -10,8 +9,8 @@ namespace Living.Enemies.WarriorBoss
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			warriorBoss = animator.GetComponent<WarriorBoss>();
-			warriorBoss.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-			warriorBoss.GetComponent<Rigidbody2D>().gravityScale = 0;
+			warriorBoss.GetRigidBody().bodyType = RigidbodyType2D.Kinematic;
+			warriorBoss.GetRigidBody().gravityScale = 0;
 		}
 
 		public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

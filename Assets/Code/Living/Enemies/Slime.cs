@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Living.Enemies
+namespace Code.Living.Enemies
 {
 	public class Slime : EnemyScript
 	{
@@ -8,7 +8,7 @@ namespace Living.Enemies
 		{
 			TurnTowardsTarget();
 			Vector2 direction = (playerLocation.position - transform.position).normalized;
-			RigidBody.linearVelocity = new Vector2(direction.x * 5, 15);
+			GetRigidBody().linearVelocity = new Vector2(direction.x * 5, 15);
 		}
 	}
 }

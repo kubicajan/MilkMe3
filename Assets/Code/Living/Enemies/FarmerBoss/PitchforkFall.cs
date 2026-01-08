@@ -2,7 +2,7 @@ using System.Collections;
 using Helpers;
 using UnityEngine;
 
-namespace Living.Enemies.FarmerBoss
+namespace Code.Living.Enemies.FarmerBoss
 {
 	public class PitchforkFall : MonoBehaviour
 	{

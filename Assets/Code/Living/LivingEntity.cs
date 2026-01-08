@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Living
@@ -8,7 +10,7 @@ namespace Living
 		[SerializeField] public LayerMask hostileLayers;
 		[SerializeField] public LayerMask groundLayers;
 		[SerializeField] public LayerMask itemLayers;
-		protected Rigidbody2D RigidBody { get; private set; }
+		private Rigidbody2D RigidBody { get; set; }
 		protected BoxCollider2D BoxCollider { get; private set; }
 		public Coroutine movementCoroutine;
 
@@ -24,6 +26,16 @@ namespace Living
 		private int currentShieldHealth = 0;
 		private ParticleSystem currentShieldParticleEffect;
 		private CircleCollider2D currentShieldCollider;
+
+		protected virtual void Awake()
+		{
+			RigidBody = GetComponentInParent<Rigidbody2D>();
+		}
+
+		public Rigidbody2D GetRigidBody()
+		{
+			return RigidBody;
+		}
 
 		//todo: this should be done universally. A unit should have a list of things that it is immune/damagable by
 		//todo: it should check before triggering any damage
@@ -80,12 +92,11 @@ namespace Living
 			gameObject.SetActive(false);
 		}
 
-		protected void Init(int _health, Rigidbody2D _rigidBody2D, BoxCollider2D _boxCollider)
+		protected void Init(int _health, BoxCollider2D _boxCollider)
 		{
 			maximumHealth = _health;
 			currentHealth = maximumHealth;
 			BoxCollider = _boxCollider;
-			RigidBody = _rigidBody2D;
 		}
 
 		public void Immobilize(bool immobilize)

@@ -1,17 +1,17 @@
 using System;
 using System.Collections;
-using Code;
 using Helpers;
 using Helpers.CommonEnums;
+using Living;
 using UnityEngine;
-using UnityEngine.LowLevel;
 
-namespace Living.Enemies
+namespace Code.Living.Enemies
 {
 	public class EnemyScript : LivingEntity
 	{
 		[SerializeField] protected Transform groundCheck;
 		[SerializeField] protected Transform playerLocation;
+
 		protected float movementSpeed = 1f;
 		public ParticleSystem explosionParticles;
 		protected float lastDirection = 1;
@@ -23,7 +23,6 @@ namespace Living.Enemies
 			SetPlayerAsTarget();
 
 			Init(_health: 50,
-				_rigidBody2D: GetComponent<Rigidbody2D>(),
 				_boxCollider: GetComponent<BoxCollider2D>());
 		}
 
@@ -62,17 +61,34 @@ namespace Living.Enemies
 			return new Vector2(targetLocation.position.x, transform.position.y);
 		}
 
+		private Vector3 velocitySmooth;
+
 		public void Move()
 		{
+			Rigidbody2D rigidBody = GetRigidBody();
 			if (!IsImmobilized())
 			{
 				TurnTowardsTarget();
-				transform.position =
-					Vector3.MoveTowards(transform.position, GetMoveDestination(), movementSpeed * Time.deltaTime);
+
+				Vector3 moveDir = (GetMoveDestination() - rigidBody.position).normalized;
+				float distance = Vector3.Distance(rigidBody.position, GetMoveDestination());
+
+				// Compute target velocity based on distance
+				Vector3 targetVelocity = moveDir * movementSpeed;
+
+				// Smooth the velocity
+				rigidBody.linearVelocity =
+					Vector3.SmoothDamp(rigidBody.linearVelocity, targetVelocity, ref velocitySmooth, 0.05f);
+
+				// Optional: stop when close enough
+				if (distance < 0.1f)
+				{
+					rigidBody.linearVelocity = Vector3.zero;
+				}
 			}
 			else
 			{
-				if (IsGrounded() && RigidBody.linearVelocity == Vector2.zero)
+				if (IsGrounded() && rigidBody.linearVelocity == Vector2.zero)
 				{
 					Immobilize(false);
 				}
@@ -107,13 +123,13 @@ namespace Living.Enemies
 
 		public void LiftMeUp(int liftByThisMuch)
 		{
-			RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, RigidBody, transform, this));
+			RunMovementCoroutine(Common.LiftUp(liftByThisMuch, transform.position.y, GetRigidBody(), transform, this));
 		}
 
 		public void AttackMoveMe(float moveBy, float directionToMove)
 		{
 			RunMovementCoroutine(Common.WarriorMoveAttack(transform.position.x, moveBy, directionToMove, transform,
-				RigidBody, this));
+				GetRigidBody(), this));
 		}
 
 		public void StompMeDown(int stompSpeed)
@@ -125,11 +141,11 @@ namespace Living.Enemies
 		{
 			while (!IsGrounded())
 			{
-				RigidBody.linearVelocity = new Vector2(0, stompSpeed);
+				GetRigidBody().linearVelocity = new Vector2(0, stompSpeed);
 				yield return null;
 			}
 
-			RigidBody.linearVelocity = Vector2.zero;
+			GetRigidBody().linearVelocity = Vector2.zero;
 		}
 
 		private void RunMovementCoroutine(IEnumerator coroutine)

@@ -1,12 +1,13 @@
 using System.Collections;
-using Code;
 using Code.Items;
 using Helpers;
 using Helpers.CommonEnums;
+using Living;
+using Living.Enemies.WarriorBoss;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Living.Enemies.WarriorBoss
+namespace Code.Living.Enemies.WarriorBoss
 {
 	public class WarriorBoss : EnemyScript
 	{
@@ -18,10 +19,20 @@ namespace Living.Enemies.WarriorBoss
 		[SerializeField] private GameObject meteorPrefab;
 		private const float MELEE_ATTACK_RANGE = 3f;
 
-		private void Awake()
+		protected override void Awake()
 		{
+			base.Awake();
 			movementSpeed = 9f;
 			gameObject.tag = GameTag.Npc;
+		}
+
+		public override void DoDialog()
+		{
+			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
+			//GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
+
+			gameObject.tag = GameTag.Boss;
 		}
 
 		private float hoverStateTimer = 0f;
@@ -94,8 +105,8 @@ namespace Living.Enemies.WarriorBoss
 		protected override void Die()
 		{
 			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Death);
-			gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-			gameObject.GetComponent<Rigidbody2D>().gravityScale = 5;
+			GetRigidBody().bodyType = RigidbodyType2D.Dynamic;
+			GetRigidBody().gravityScale = 5;
 			StartCoroutine(DieCoroutine());
 		}
 
@@ -106,17 +117,8 @@ namespace Living.Enemies.WarriorBoss
 			gameObject.layer = LayerMask.NameToLayer(GameLayer.Prop);
 			gameObject.tag = GameTag.Prop;
 			//TODO:THIS WHOLE THING COULD BE REPLACED WITH AN IMAGE
-			GetComponent<Rigidbody2D>().simulated = false;
+			GetRigidBody().simulated = false;
 			StartCoroutine(ItemManager.Instance.SpawnItems(7, transform.position));
-		}
-
-		public override void DoDialog()
-		{
-			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
-			//GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
-
-			gameObject.tag = GameTag.Boss;
 		}
 
 		private bool CanAttack()
@@ -145,9 +147,15 @@ namespace Living.Enemies.WarriorBoss
 
 		public void StartFly()
 		{
-			float flySpeed = 25f;
-			StartCoroutine(FlyForSeconds(1, flySpeed, 0.4f));
+			StartCoroutine(FlyForSeconds(1, 25f, 0.4f));
 		}
+
+		public void StartFly(int direction, float flySpeed)
+		{
+			StartCoroutine(FlyForSeconds(direction, flySpeed, 0.4f));
+		}
+
+		private Vector3 velocitySmooth;
 
 		private IEnumerator FlyForSeconds(int direction, float maxSpeed, float duration)
 		{
@@ -161,19 +169,20 @@ namespace Living.Enemies.WarriorBoss
 				float easedT = Mathf.SmoothStep(1f, 0f, t);
 				float currentSpeed = maxSpeed * easedT;
 
-				Fly(direction, currentSpeed);
+				Vector3 targetVelocity = Vector3.up * (direction * currentSpeed);
 
-				elapsed += Time.deltaTime;
-				yield return null;
+				GetRigidBody().linearVelocity = Vector3.SmoothDamp(
+					GetRigidBody().linearVelocity,
+					targetVelocity,
+					ref velocitySmooth,
+					0.05f
+				);
+
+				elapsed += Time.fixedDeltaTime;
+				yield return new WaitForFixedUpdate();
 			}
-		}
 
-		public void Fly(int direction, float speed)
-		{
-			Vector3 targetPosition =
-				new Vector3(transform.position.x, transform.position.y + (10 * direction), transform.position.z);
-			transform.position =
-				Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+			GetRigidBody().linearVelocity = Vector3.zero;
 		}
 
 		private int GetRandomOneOrTwo()

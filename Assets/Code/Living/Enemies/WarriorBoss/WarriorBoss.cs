@@ -29,8 +29,8 @@ namespace Code.Living.Enemies.WarriorBoss
 		public override void DoDialog()
 		{
 			DialogManager.Instance.PopUpDialog("EW - WHAT IS THAT??", gameObject.transform.position);
-			//GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
-			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
+			GetComponent<Animator>().SetTrigger(WarriorBossTrigger.Annoyed);
+			//GetComponent<Animator>().SetTrigger(WarriorBossTrigger.SecondStage);
 
 			gameObject.tag = GameTag.Boss;
 		}

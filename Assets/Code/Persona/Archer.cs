@@ -87,18 +87,32 @@ namespace Code.Persona
 		public override void FirstAbility()
 		{
 			//StartCoroutine(ArrowRain());
-			StartCoroutine(SpawnTopHalfCircle());
+			SpawnTopHalfCircleOnEnemies();
+			// SpawnTopHalfCircleOnSelf();
 		}
 
-		private IEnumerator SpawnTopHalfCircle()
+		private void SpawnTopHalfCircleOnEnemies()
 		{
-			int spawnCount = 20;
+			Collider2D[] enemies = DetectEnemiesInRange(10);
+			foreach (Collider2D enemy in enemies)
+			{
+				StartCoroutine(SpawnTopHalfCircle(enemy.transform, 0.4f, 10));
+			}
+		}
+
+		private void SpawnTopHalfCircleOnSelf()
+		{
+			StartCoroutine(SpawnTopHalfCircle(transform, 0.15f, 20));
+		}
+
+		private IEnumerator SpawnTopHalfCircle(Transform target, float waitBetweenShots, int numberOfShots)
+		{
 			float radius = 3f;
 			float minDistance = 0.4f;
 
 			Vector2 lastSpawnPos = Vector2.zero;
 
-			for (int i = 0; i < spawnCount; i++)
+			for (int i = 0; i < numberOfShots; i++)
 			{
 				Vector2 spawnPos;
 				int attempts = 0;
@@ -109,19 +123,19 @@ namespace Code.Persona
 
 					float angle = Random.Range(minAngle, maxAngle);
 					Vector2 offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-					spawnPos = (Vector2)transform.position + offset;
+					spawnPos = (Vector2)target.position + offset;
 					attempts++; // Safety check to avoid infinite loop
 					if (attempts > 20) break;
 				} while (i > 0 && Vector2.Distance(spawnPos, lastSpawnPos) < minDistance);
 
 				// Direction toward the center
-				Vector2 direction = (Vector2)transform.position - spawnPos;
+				Vector2 direction = (Vector2)target.position - spawnPos;
 				float angleDeg = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 				Quaternion rotation = Quaternion.Euler(0f, 0f, angleDeg);
 				GameObject newArrow = Instantiate(arrowStrikePrefab, spawnPos, rotation);
-				newArrow.transform.parent = gameObject.transform.parent;
+				newArrow.transform.parent = target.parent;
 				lastSpawnPos = spawnPos;
-				yield return new WaitForSeconds(0.15f);
+				yield return new WaitForSeconds(waitBetweenShots);
 			}
 		}
 
